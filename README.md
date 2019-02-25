@@ -18,6 +18,7 @@ Data visualization project to explore global energy trends and their correlation
 
 ## Data Sources
 
+- [BP Energy Statistics](https://www.bp.com/en/global/corporate/energy-economics/statistical-review-of-world-energy.html)
 - [Renewable energy](https://ourworldindata.org/renewable-energy)
 - [Global Terrorism](https://www.start.umd.edu/gtd/)
 - [Education data](https://databank.worldbank.org/data/source/education-statistics-%5e-all-indicators)
