@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<style>
+
+.axis .domain {
+  display: none;
+}
+
+svg {
+  border: 0.5px solid lightgrey;
+}
+
+</style>
+
+<body>
+  <div id=#titleDiv>
+    <h1>View 3</h1>
+</body>
+
+<script>
+
+//margins and svg
+var margin = {top: 20, right: 20, bottom: 30, left: 40};
+
+var width = 1500 - margin.left - margin.right;
+var height = 700 - margin.top - margin.bottom;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//Scale definitions
+//For the country
+var x0 = d3.scaleBand()
+    .rangeRound([0, width])
+    .paddingInner(0.1);
+
+//For the metric
+var x1 = d3.scaleBand()
+    .padding(0.05);
+
+//for the y-axis
+var y = d3.scaleLinear()
+    .rangeRound([height, 0]);
+
+//For the country
+var z = d3.scaleOrdinal()
+    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+d3.csv("Data/data.csv", function(d, i, columns) {
+  d["Year"] = +d["Year"];
+  for (var i = 3, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]]/100;
+  return d;
+}, function(error, data) {
+  if (error) throw error;
+
+  console.log(data);
+  var cols = data.columns.slice(3,7);
+
+  data = data.filter(function(d) { 
+    if (["IND", "USA", "AUS", "GBR", "FRA", "DEU"].indexOf(d.Country_Code) >= 0 & d.Year == 2008) 
+    { return d;}
+});
+
+  console.log(data);
+  var keys = data.map(function(d) { return d.Country_Code; });
+  console.log(keys);
+
+  //Setting the domain
+  x0.domain(cols);
+  x1.domain(keys).rangeRound([0, x0.bandwidth()]);
+  y.domain([d3.min(data, function(d) { return d3.min(cols, function(cols) { return d[cols]; }); }), d3.max(data, function(d) { return d3.max(cols, function(cols) { return d[cols]; }); })]).nice();
+
+  console.log(x1("AUS"));
+  console.log(x1.bandwidth());
+  console.log(data.filter(function(d) { return d.Country_Code == "IND" })[0]['Pop_Growth']);
+
+  //Creating groups for bar
+  for(col in cols) {
+    var temp = svg.append("g")
+      .selectAll("g")
+      .data(data)
+      .enter().append("g")
+        .attr("transform", "translate(" + x0(cols[col]) + ",0)")
+      .selectAll("rect")
+      .data(function(d) {console.log({key: d['Country_Code'], value: d[cols[col]]}); return {key: d['Country_Code'], value: d[cols[col]]};});
+    console.log(temp);
+    temp = temp
+      .enter().append("rect");
+    console.log(temp);
+    temp
+        .attr("x", function(d) { console.log(x1(d.key)); return x1(d.key); })
+        .attr("y", function(d) { console.log(y(Math.max(0, d.value))); return y(Math.max(0, d.value)); })
+        .attr("width", x1.bandwidth())
+        .attr("height", function(d) { return Math.abs(y(0) - y(d.value)); })
+        .attr("fill", function(d) { return z(d.key); });
+  }
+  // svg.append("g")
+  //   .selectAll("g")
+  //   .data(data)
+  //   .enter().append("g")
+  //     .attr("transform", function(d) { return "translate(" + x0(d.Country_Code) + ",0)"; })
+  //   .selectAll("rect")
+  //   .data(function(d) { return keys.map(function(key) { return {key: key, value: d[key]}; }); })
+  //   .enter().append("rect")
+  //     .attr("x", function(d) { return x1(d.key); })
+  //     .attr("y", function(d) { return y(Math.max(0, d.value)); })
+  //     .attr("width", x1.bandwidth())
+  //     .attr("height", function(d) { return Math.abs(y(0) - y(d.value)); })
+  //     .attr("fill", function(d) { return z(d.key); });
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + y(0) + ")")
+      .call(d3.axisBottom(x0));
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(d3.axisLeft(y)
+      .tickFormat(d3.format(".0%")));
+
+    // .append("text")
+    //   .attr("x", 2)
+    //   .attr("y", y(y.ticks().pop()) + 0.5)
+    //   .attr("dy", "0.32em")
+    //   .attr("fill", "#000")
+    //   .attr("font-weight", "bold")
+    //   .attr("text-anchor", "start")
+    //   .text("Metric");
+
+  var legend = svg.append("g")
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 10)
+      .attr("text-anchor", "end")
+    .selectAll("g")
+    .data(keys.slice().reverse())
+    .enter().append("g")
+      .attr("transform", function(d, i) { return "translate("+ -1300 + "," + i * 20 + ")"; });
+
+  legend.append("rect")
+      .attr("x", width - 19)
+      .attr("width", 19)
+      .attr("height", 19)
+      .attr("fill", z);
+
+  legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9.5)
+      .attr("dy", "0.32em")
+      .text(function(d) { return d; });
+});
+
+</script>
