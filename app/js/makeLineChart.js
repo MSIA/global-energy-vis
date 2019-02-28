@@ -237,7 +237,7 @@ function makeLineChart(dataset, xName, yNames) {
 
     var yName, cY = null;
 
-    chart.objs.legend = chart.objs.mainDiv.append('div').attr("class", "legend");
+    chart.objs.legend = d3.select('#toggles').append('div').attr("class", "legend");
 
     function toggleSeries(yName) {
       cY = chart.groupObjs[yName];

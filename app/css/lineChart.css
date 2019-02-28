@@ -48,29 +48,31 @@
   stroke-width: 5px;
 }
 
-.chart-wrapper .legend  {
+.legend  {
     min-width: 200px;
-    display: flex;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    /* display: flex;
+    justify-content: flex-start; */
+    /* flex-wrap: wrap; */
     font-size: 16px;
-    padding: 10px 40px;
 }
-.chart-wrapper .legend > div {
+.legend-button {
+    display: block;
+}
+.legend > div {
     margin: 0px 25px 10px 0px;
     flex-grow: 0;
     cursor: pointer;
 }
-.chart-wrapper .legend .series-marker:hover {
+.legend .series-marker:hover {
     opacity: 0.8;
 }
-.chart-wrapper .legend p {
-    display:inline;
+.legend p {
+    display:inline-block;
     font-size: 0.8em;
     font-family: sans-serif;
     font-weight: 600;
 }
-.chart-wrapper .legend .series-marker {
+.legend .series-marker {
     height: 1em;
     width: 1em;
     border-radius: 35%;
@@ -85,21 +87,22 @@
   pointer-events: all;
 }
 
-.chart-wrapper .tooltip circle {
+.chart-wrapper .tool circle {
   fill: black;
   stroke: crimson;
   stroke-width: 2px;
   fill-opacity: 25%;
 }
-.chart-wrapper .tooltip rect {
+.chart-wrapper .tool rect {
     fill: #ecf0f4;
     opacity: 0.7;
     border-radius: 2px;
 }
-.chart-wrapper .tooltip text {
+.chart-wrapper .tool text {
     font-size: 14px;
+    z-index: 999;
 }
-.chart-wrapper .tooltip .line {
+.chart-wrapper .tool .line {
     stroke: steelblue;
     stroke-dasharray: 2,5;
     stroke-width: 2;
