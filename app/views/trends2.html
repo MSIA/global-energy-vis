@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Trends</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat|Playfair+Display" rel="stylesheet">
+
+
+  <!-- Custom external stylesheets -->
+  <link rel="stylesheet" href="../css/lineChart.css">
+
+  <style>
+    body {
+      margin-bottom: 100px;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .main {
+      padding: 20px;
+    }
+
+    .sidebox {
+      border-radius: 15px;
+      border-width: 1px;
+      border-style: solid;
+      padding: 10px;
+      height: 600px;
+      overflow-y: scroll;
+    }
+
+    .navbar {
+      font-family: 'Playfair Display', serif;
+      background-color: #173e43;
+      color: #dddfd4;
+    }
+
+    .navbar h1 {
+      font-size: 4em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navbar">
+    <h1>India</h1>
+  </div>
+  <div class="main">
+
+    <div class="row">
+      <div class="col-2">
+        <div id="wiki" class="sidebox">
+
+        </div>
+      </div>
+      <div class="col-8">
+        <div class="chart-wrapper" id="chart">
+
+        </div>
+      </div>
+      <div class="col-2">
+        <div id="toggles" class="sidebox">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Javascript Libraries -->
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<!-- Custom external scripts -->
+<script src="../js/makeLineChart.js"></script>
+<script src="../js/wikiLoad.js"></script>
+
+<!-- Custom in-page scripts -->
+<script>
+  wikiLoad('India');
+
+  d3.csv('../../data/energy_full.csv').then(ready)
+    .catch(e => console.error(e));
+
+  function ready(data) {
+    // console.log(data)
+    data = data.filter(d => d.Country == 'India')
+
+    data.forEach(d => {
+      d.Year = +d.Year;
+      d.co2_milTon = d.co2_milTon ? +d.co2_milTon : 0;
+      d.primary_con_mtoe = d.primary_con_mtoe ? +d.primary_con_mtoe : 0;
+      d.Date = new Date(d.Year, 0);
+    })
+
+    var chart = makeLineChart(data, 'Year', {
+      'CO2': { column: 'co2_milTon' },
+      'Consumption': { column: 'primary_con_mtoe' }
+    });
+    chart.bind({
+      selector: '#chart',
+      chartSize: { height: 550, width: parseInt(d3.select('.col-8').style('width')) },
+      axisLabels: { xAxis: 'Years', yAxis: 'Values' }
+    });
+    chart.render();
+    window.chart = chart
+  }
+</script>
+
+</html>
