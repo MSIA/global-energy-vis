@@ -89,6 +89,59 @@
 <!-- Custom in-page scripts -->
 <script>
   wikiLoad('India');
+
+  // Set SVG size
+  const margin = ({ top: 20, right: 20, bottom: 30, left: 40 });
+
+  let height = 550;
+  let width = 700;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('class', 'chart')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+  xScale = d3.scaleTime()
+    .range([0, width]);
+  yScale = d3.scaleLinear()
+    .range([height, 0]);
+
+  // Define xAxis and yAxis, will define associated scales inside ready function
+  let xAxis = d3.axisBottom(xScale);
+  let yAxis = d3.axisLeft(yScale);
+
+  // Define xAxisGroup and yAxisGroup. Will call the appropriate axis within ready function
+  let xAxisGroup = svg.append("g")
+    .attr("class", "x axis") //gives group the classes `x` and `axis`
+    .attr("transform", `translate(0, ${height})`);
+
+  let yAxisGroup = svg.append("g")
+    .attr("class", "y axis"); //gives group the classes `y` and `axis`
+
+  d3.csv('../../data/energy_full.csv').then(ready)
+    .catch(e => console.error(e));
+
+  function ready(data) {
+    // console.log(data)
+    data = data.filter(d => d.Country == 'India')
+
+    data.forEach(d => {
+      d.Year = +d.Year;
+      d.co2_milTon = +d.co2_milTon;
+      d.Date = new Date(d.Year, 0);
+    })
+    dates = data.map(d => d.Date);
+    window.data = data;
+    console.log(data);
+
+    xScale.domain(d3.extent(data, d => d.Date));
+    yScale.domain(d3.extent(data, d => d.co2_milTon));
+    xAxisGroup.call(xAxis);
+    yAxisGroup.call(yAxis);
+  }
+
 </script>
 
 </html>
