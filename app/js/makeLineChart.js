@@ -196,6 +196,7 @@ function makeLineChart(dataset, xName, yNames) {
       .style("padding-bottom", (chart.divHeight / chart.divWidth) * 100 + "%")
       .append("div").attr("class", "outer-box")
       .append("div").attr("class", "inner-box");
+      console.log('resize.' + chart.selector)
     chart.objs.chartDiv = d3.select(chart.selector);
     d3.select(window).on('resize.' + chart.selector, chart.update);
     chart.objs.g = chart.objs.chartDiv.append('svg')
