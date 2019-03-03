@@ -1,70 +1,1243 @@
-Country,u2017,id
-China,3132.2,CHN
-US,2234.9,USA
-India,753.7,IND
-Russian Federation,698.3,RUS
-Japan,456.4,JPN
-Canada,348.7,CAN
-Germany,335.1,DEU
-South Korea,295.9,KOR
-Brazil,294.4,BRA
-Saudi Arabia,268.3,SAU
-France,237.9,FRA
-United Kingdom,191.3,GBR
-Mexico,189.3,MEX
-Indonesia,175.2,IDN
-Turkey,157.7,TUR
-Italy,156,ITA
-Australia,139.4,AUS
-Spain,138.8,ESP
-Thailand,129.7,THA
-South Africa,120.6,ZAF
-Taiwan,115.1,TWN
-United Arab Emirates,108.7,ARE
-Poland,102.1,POL
-Malaysia,99.6,MYS
-Egypt,91.6,EGY
-Singapore,86.5,SGP
-Netherlands,86.1,NLD
-Argentina,85.9,ARG
-Ukraine,81.9,UKR
-Pakistan,80.9,PAK
-Vietnam,75.3,VNM
-Venezuela,74.2,VEN
-Kazakhstan,67.4,KAZ
-Belgium,62.3,BEL
-Western Africa,56.5,CAF
-Sweden,54.4,SWE
-Eastern Africa,53.4,CAF
-Algeria,53.2,DZA
-Iraq,49.2,IRQ
-Norway,47.5,NOR
-Philippines,43.3,PHL
-Colombia,42.6,COL
-Czech Republic,41.6,CZE
-Chile,38.3,CHL
-Austria,35.9,AUT
-Romania,33.9,ROU
-Bangladesh,33,BGD
-China Hong Kong SAR,30.9,HKG
-Finland,27.6,FIN
-Greece,27.6,GRC
-Portugal,26.4,PRT
-Switzerland,26.4,CHE
-Peru,25.9,PER
-Israel,25.8,ISR
-Hungary,23.2,HUN
-Belarus,23.2,BLR
-Middle Africa,23,CAF
-New Zealand,22.1,NZL
-Morocco,19.6,MAR
-Bulgaria,18.8,BGR
-Trinidad and Tobago,18.1,TTO
-Denmark,17.3,DNK
-Ecuador,16.5,ECU
-Slovakia,16.2,SVK
-Ireland,15.6,IRL
-Azerbaijan,13.9,AZE
-Sri Lanka,7.7,LKA
-Croatia,7.5,HRV
-Latvia,4.2,LVA
+Country,EnergyUsage,id,Year
+China,3132.2,CHN,2017
+US,2234.9,USA,2017
+India,753.7,IND,2017
+Russian Federation,698.3,RUS,2017
+Japan,456.4,JPN,2017
+Canada,348.7,CAN,2017
+Germany,335.1,DEU,2017
+South Korea,295.9,KOR,2017
+Brazil,294.4,BRA,2017
+Saudi Arabia,268.3,SAU,2017
+France,237.9,FRA,2017
+United Kingdom,191.3,GBR,2017
+Mexico,189.3,MEX,2017
+Indonesia,175.2,IDN,2017
+Turkey,157.7,TUR,2017
+Italy,156,ITA,2017
+Australia,139.4,AUS,2017
+Spain,138.8,ESP,2017
+Thailand,129.7,THA,2017
+South Africa,120.6,ZAF,2017
+Taiwan,115.1,TWN,2017
+United Arab Emirates,108.7,ARE,2017
+Poland,102.1,POL,2017
+Malaysia,99.6,MYS,2017
+Egypt,91.6,EGY,2017
+Singapore,86.5,SGP,2017
+Netherlands,86.1,NLD,2017
+Argentina,85.9,ARG,2017
+Ukraine,81.9,UKR,2017
+Pakistan,80.9,PAK,2017
+Vietnam,75.3,VNM,2017
+Venezuela,74.2,VEN,2017
+Kazakhstan,67.4,KAZ,2017
+Belgium,62.3,BEL,2017
+Western Africa,56.5,CAF,2017
+Sweden,54.4,SWE,2017
+Eastern Africa,53.4,CAF,2017
+Algeria,53.2,DZA,2017
+Iraq,49.2,IRQ,2017
+Norway,47.5,NOR,2017
+Philippines,43.3,PHL,2017
+Colombia,42.6,COL,2017
+Czech Republic,41.6,CZE,2017
+Chile,38.3,CHL,2017
+Austria,35.9,AUT,2017
+Romania,33.9,ROU,2017
+Bangladesh,33,BGD,2017
+China Hong Kong SAR,30.9,HKG,2017
+Finland,27.6,FIN,2017
+Greece,27.6,GRC,2017
+Portugal,26.4,PRT,2017
+Switzerland,26.4,CHE,2017
+Peru,25.9,PER,2017
+Israel,25.8,ISR,2017
+Hungary,23.2,HUN,2017
+Belarus,23.2,BLR,2017
+Middle Africa,23,CAF,2017
+New Zealand,22.1,NZL,2017
+Morocco,19.6,MAR,2017
+Bulgaria,18.8,BGR,2017
+Trinidad and Tobago,18.1,TTO,2017
+Denmark,17.3,DNK,2017
+Ecuador,16.5,ECU,2017
+Slovakia,16.2,SVK,2017
+Ireland,15.6,IRL,2017
+Azerbaijan,13.9,AZE,2017
+Sri Lanka,7.7,LKA,2017
+Croatia,7.5,HRV,2017
+Latvia,4.2,LVA,2017
+China,926,CHN,2016
+US,1229,USA,2016
+India,1837,IND,2016
+Russian Federation,194,RUS,2016
+Japan,1853,JPN,2016
+Canada,2071,CAN,2016
+Germany,2680,DEU,2016
+South Korea,37,KOR,2016
+Brazil,385,BRA,2016
+Saudi Arabia,2849,SAU,2016
+France,688,FRA,2016
+United Kingdom,2080,GBR,2016
+Mexico,845,MEX,2016
+Indonesia,2135,IDN,2016
+Turkey,918,TUR,2016
+Italy,816,ITA,2016
+Australia,1421,AUS,2016
+Spain,1888,ESP,2016
+Thailand,680,THA,2016
+South Africa,2619,ZAF,2016
+Taiwan,2031,TWN,2016
+United Arab Emirates,1267,ARE,2016
+Poland,2738,POL,2016
+Malaysia,2459,MYS,2016
+Egypt,207,EGY,2016
+Singapore,2842,SGP,2016
+Netherlands,2768,NLD,2016
+Argentina,293,ARG,2016
+Ukraine,1524,UKR,2016
+Pakistan,119,PAK,2016
+Vietnam,2718,VNM,2016
+Venezuela,100,VEN,2016
+Kazakhstan,473,KAZ,2016
+Belgium,2676,BEL,2016
+Western Africa,884,CAF,2016
+Sweden,1787,SWE,2016
+Eastern Africa,1675,CAF,2016
+Algeria,2406,DZA,2016
+Iraq,2336,IRQ,2016
+Norway,1255,NOR,2016
+Philippines,961,PHL,2016
+Colombia,831,COL,2016
+Czech Republic,2167,CZE,2016
+Chile,2393,CHL,2016
+Austria,857,AUT,2016
+Romania,2182,ROU,2016
+Bangladesh,2058,BGD,2016
+China Hong Kong SAR,2477,HKG,2016
+Finland,2536,FIN,2016
+Greece,1757,GRC,2016
+Portugal,1763,PRT,2016
+Switzerland,1831,CHE,2016
+Peru,151,PER,2016
+Israel,89,ISR,2016
+Hungary,341,HUN,2016
+Belarus,475,BLR,2016
+Middle Africa,1098,CAF,2016
+New Zealand,366,NZL,2016
+Morocco,1240,MAR,2016
+Bulgaria,298,BGR,2016
+Trinidad and Tobago,1838,TTO,2016
+Denmark,696,DNK,2016
+Ecuador,813,ECU,2016
+Slovakia,563,SVK,2016
+Ireland,1828,IRL,2016
+Azerbaijan,724,AZE,2016
+Sri Lanka,406,LKA,2016
+Croatia,1217,HRV,2016
+Latvia,1718,LVA,2016
+China,1419,CHN,2015
+US,1044,USA,2015
+India,2456,IND,2015
+Russian Federation,2378,RUS,2015
+Japan,792,JPN,2015
+Canada,1290,CAN,2015
+Germany,1880,DEU,2015
+South Korea,2922,KOR,2015
+Brazil,1557,BRA,2015
+Saudi Arabia,1414,SAU,2015
+France,2789,FRA,2015
+United Kingdom,2292,GBR,2015
+Mexico,2800,MEX,2015
+Indonesia,2332,IDN,2015
+Turkey,304,TUR,2015
+Italy,1403,ITA,2015
+Australia,2046,AUS,2015
+Spain,2716,ESP,2015
+Thailand,2193,THA,2015
+South Africa,916,ZAF,2015
+Taiwan,1513,TWN,2015
+United Arab Emirates,2783,ARE,2015
+Poland,1166,POL,2015
+Malaysia,1784,MYS,2015
+Egypt,2514,EGY,2015
+Singapore,2205,SGP,2015
+Netherlands,269,NLD,2015
+Argentina,262,ARG,2015
+Ukraine,2342,UKR,2015
+Pakistan,1004,PAK,2015
+Vietnam,197,VNM,2015
+Venezuela,2967,VEN,2015
+Kazakhstan,1371,KAZ,2015
+Belgium,413,BEL,2015
+Western Africa,149,CAF,2015
+Sweden,2499,SWE,2015
+Eastern Africa,2158,CAF,2015
+Algeria,2373,DZA,2015
+Iraq,81,IRQ,2015
+Norway,2625,NOR,2015
+Philippines,164,PHL,2015
+Colombia,333,COL,2015
+Czech Republic,2904,CZE,2015
+Chile,1142,CHL,2015
+Austria,1661,AUT,2015
+Romania,862,ROU,2015
+Bangladesh,1665,BGD,2015
+China Hong Kong SAR,2846,HKG,2015
+Finland,2504,FIN,2015
+Greece,655,GRC,2015
+Portugal,1147,PRT,2015
+Switzerland,1625,CHE,2015
+Peru,2809,PER,2015
+Israel,2212,ISR,2015
+Hungary,2359,HUN,2015
+Belarus,1385,BLR,2015
+Middle Africa,19,CAF,2015
+New Zealand,526,NZL,2015
+Morocco,1417,MAR,2015
+Bulgaria,530,BGR,2015
+Trinidad and Tobago,1105,TTO,2015
+Denmark,95,DNK,2015
+Ecuador,2641,ECU,2015
+Slovakia,2452,SVK,2015
+Ireland,2477,IRL,2015
+Azerbaijan,45,AZE,2015
+Sri Lanka,1754,LKA,2015
+Croatia,1599,HRV,2015
+Latvia,2989,LVA,2015
+China,2530,CHN,2014
+US,2232,USA,2014
+India,617,IND,2014
+Russian Federation,2867,RUS,2014
+Japan,1054,JPN,2014
+Canada,523,CAN,2014
+Germany,409,DEU,2014
+South Korea,829,KOR,2014
+Brazil,322,BRA,2014
+Saudi Arabia,117,SAU,2014
+France,686,FRA,2014
+United Kingdom,2976,GBR,2014
+Mexico,2177,MEX,2014
+Indonesia,2073,IDN,2014
+Turkey,755,TUR,2014
+Italy,2231,ITA,2014
+Australia,2088,AUS,2014
+Spain,2333,ESP,2014
+Thailand,1618,THA,2014
+South Africa,154,ZAF,2014
+Taiwan,647,TWN,2014
+United Arab Emirates,1502,ARE,2014
+Poland,18,POL,2014
+Malaysia,2340,MYS,2014
+Egypt,2295,EGY,2014
+Singapore,1045,SGP,2014
+Netherlands,2603,NLD,2014
+Argentina,1126,ARG,2014
+Ukraine,1171,UKR,2014
+Pakistan,2691,PAK,2014
+Vietnam,2594,VNM,2014
+Venezuela,2296,VEN,2014
+Kazakhstan,1123,KAZ,2014
+Belgium,72,BEL,2014
+Western Africa,2299,CAF,2014
+Sweden,2869,SWE,2014
+Eastern Africa,2189,CAF,2014
+Algeria,2687,DZA,2014
+Iraq,2381,IRQ,2014
+Norway,2344,NOR,2014
+Philippines,758,PHL,2014
+Colombia,168,COL,2014
+Czech Republic,1439,CZE,2014
+Chile,1230,CHL,2014
+Austria,2494,AUT,2014
+Romania,1835,ROU,2014
+Bangladesh,293,BGD,2014
+China Hong Kong SAR,2093,HKG,2014
+Finland,2606,FIN,2014
+Greece,2813,GRC,2014
+Portugal,1940,PRT,2014
+Switzerland,130,CHE,2014
+Peru,1698,PER,2014
+Israel,2526,ISR,2014
+Hungary,2062,HUN,2014
+Belarus,699,BLR,2014
+Middle Africa,760,CAF,2014
+New Zealand,2824,NZL,2014
+Morocco,2726,MAR,2014
+Bulgaria,151,BGR,2014
+Trinidad and Tobago,892,TTO,2014
+Denmark,2741,DNK,2014
+Ecuador,2522,ECU,2014
+Slovakia,2496,SVK,2014
+Ireland,427,IRL,2014
+Azerbaijan,1572,AZE,2014
+Sri Lanka,1276,LKA,2014
+Croatia,2202,HRV,2014
+Latvia,345,LVA,2014
+China,2201,CHN,2013
+US,719,USA,2013
+India,727,IND,2013
+Russian Federation,1320,RUS,2013
+Japan,2998,JPN,2013
+Canada,437,CAN,2013
+Germany,1521,DEU,2013
+South Korea,1350,KOR,2013
+Brazil,2012,BRA,2013
+Saudi Arabia,839,SAU,2013
+France,2249,FRA,2013
+United Kingdom,1483,GBR,2013
+Mexico,1182,MEX,2013
+Indonesia,1432,IDN,2013
+Turkey,108,TUR,2013
+Italy,2453,ITA,2013
+Australia,271,AUS,2013
+Spain,982,ESP,2013
+Thailand,2039,THA,2013
+South Africa,1965,ZAF,2013
+Taiwan,1062,TWN,2013
+United Arab Emirates,2350,ARE,2013
+Poland,541,POL,2013
+Malaysia,2797,MYS,2013
+Egypt,2396,EGY,2013
+Singapore,2275,SGP,2013
+Netherlands,2562,NLD,2013
+Argentina,1831,ARG,2013
+Ukraine,2890,UKR,2013
+Pakistan,1723,PAK,2013
+Vietnam,2231,VNM,2013
+Venezuela,1678,VEN,2013
+Kazakhstan,2569,KAZ,2013
+Belgium,131,BEL,2013
+Western Africa,431,CAF,2013
+Sweden,221,SWE,2013
+Eastern Africa,2852,CAF,2013
+Algeria,1436,DZA,2013
+Iraq,2019,IRQ,2013
+Norway,444,NOR,2013
+Philippines,2536,PHL,2013
+Colombia,1231,COL,2013
+Czech Republic,1192,CZE,2013
+Chile,993,CHL,2013
+Austria,1243,AUT,2013
+Romania,188,ROU,2013
+Bangladesh,1610,BGD,2013
+China Hong Kong SAR,323,HKG,2013
+Finland,1655,FIN,2013
+Greece,1788,GRC,2013
+Portugal,1348,PRT,2013
+Switzerland,1882,CHE,2013
+Peru,2568,PER,2013
+Israel,734,ISR,2013
+Hungary,2097,HUN,2013
+Belarus,98,BLR,2013
+Middle Africa,1416,CAF,2013
+New Zealand,1660,NZL,2013
+Morocco,2225,MAR,2013
+Bulgaria,2681,BGR,2013
+Trinidad and Tobago,12,TTO,2013
+Denmark,2942,DNK,2013
+Ecuador,990,ECU,2013
+Slovakia,2658,SVK,2013
+Ireland,1199,IRL,2013
+Azerbaijan,122,AZE,2013
+Sri Lanka,219,LKA,2013
+Croatia,2922,HRV,2013
+Latvia,2729,LVA,2013
+China,1824,CHN,2012
+US,2414,USA,2012
+India,558,IND,2012
+Russian Federation,1326,RUS,2012
+Japan,849,JPN,2012
+Canada,1911,CAN,2012
+Germany,1471,DEU,2012
+South Korea,1557,KOR,2012
+Brazil,1133,BRA,2012
+Saudi Arabia,677,SAU,2012
+France,709,FRA,2012
+United Kingdom,2649,GBR,2012
+Mexico,989,MEX,2012
+Indonesia,1927,IDN,2012
+Turkey,1095,TUR,2012
+Italy,2410,ITA,2012
+Australia,89,AUS,2012
+Spain,2281,ESP,2012
+Thailand,1592,THA,2012
+South Africa,2997,ZAF,2012
+Taiwan,611,TWN,2012
+United Arab Emirates,2625,ARE,2012
+Poland,2642,POL,2012
+Malaysia,1432,MYS,2012
+Egypt,823,EGY,2012
+Singapore,1660,SGP,2012
+Netherlands,2487,NLD,2012
+Argentina,1181,ARG,2012
+Ukraine,2544,UKR,2012
+Pakistan,2658,PAK,2012
+Vietnam,2152,VNM,2012
+Venezuela,1418,VEN,2012
+Kazakhstan,2411,KAZ,2012
+Belgium,469,BEL,2012
+Western Africa,940,CAF,2012
+Sweden,1701,SWE,2012
+Eastern Africa,2958,CAF,2012
+Algeria,1775,DZA,2012
+Iraq,579,IRQ,2012
+Norway,2828,NOR,2012
+Philippines,602,PHL,2012
+Colombia,2445,COL,2012
+Czech Republic,1303,CZE,2012
+Chile,722,CHL,2012
+Austria,666,AUT,2012
+Romania,1330,ROU,2012
+Bangladesh,684,BGD,2012
+China Hong Kong SAR,2155,HKG,2012
+Finland,2331,FIN,2012
+Greece,339,GRC,2012
+Portugal,2074,PRT,2012
+Switzerland,2919,CHE,2012
+Peru,575,PER,2012
+Israel,1003,ISR,2012
+Hungary,2253,HUN,2012
+Belarus,1078,BLR,2012
+Middle Africa,813,CAF,2012
+New Zealand,851,NZL,2012
+Morocco,419,MAR,2012
+Bulgaria,2961,BGR,2012
+Trinidad and Tobago,2407,TTO,2012
+Denmark,1051,DNK,2012
+Ecuador,2527,ECU,2012
+Slovakia,2215,SVK,2012
+Ireland,1743,IRL,2012
+Azerbaijan,938,AZE,2012
+Sri Lanka,1570,LKA,2012
+Croatia,1980,HRV,2012
+Latvia,1094,LVA,2012
+China,2633,CHN,2011
+US,1619,USA,2011
+India,674,IND,2011
+Russian Federation,790,RUS,2011
+Japan,2950,JPN,2011
+Canada,1869,CAN,2011
+Germany,2031,DEU,2011
+South Korea,294,KOR,2011
+Brazil,1261,BRA,2011
+Saudi Arabia,290,SAU,2011
+France,513,FRA,2011
+United Kingdom,2066,GBR,2011
+Mexico,584,MEX,2011
+Indonesia,1515,IDN,2011
+Turkey,444,TUR,2011
+Italy,888,ITA,2011
+Australia,242,AUS,2011
+Spain,2315,ESP,2011
+Thailand,1306,THA,2011
+South Africa,1995,ZAF,2011
+Taiwan,1768,TWN,2011
+United Arab Emirates,2210,ARE,2011
+Poland,1019,POL,2011
+Malaysia,2383,MYS,2011
+Egypt,194,EGY,2011
+Singapore,1152,SGP,2011
+Netherlands,538,NLD,2011
+Argentina,2546,ARG,2011
+Ukraine,2372,UKR,2011
+Pakistan,2742,PAK,2011
+Vietnam,2013,VNM,2011
+Venezuela,131,VEN,2011
+Kazakhstan,1436,KAZ,2011
+Belgium,2566,BEL,2011
+Western Africa,150,CAF,2011
+Sweden,1189,SWE,2011
+Eastern Africa,1081,CAF,2011
+Algeria,1808,DZA,2011
+Iraq,1363,IRQ,2011
+Norway,2603,NOR,2011
+Philippines,1383,PHL,2011
+Colombia,2154,COL,2011
+Czech Republic,1926,CZE,2011
+Chile,183,CHL,2011
+Austria,948,AUT,2011
+Romania,1776,ROU,2011
+Bangladesh,1771,BGD,2011
+China Hong Kong SAR,1035,HKG,2011
+Finland,2237,FIN,2011
+Greece,1977,GRC,2011
+Portugal,1822,PRT,2011
+Switzerland,1182,CHE,2011
+Peru,461,PER,2011
+Israel,676,ISR,2011
+Hungary,2636,HUN,2011
+Belarus,1133,BLR,2011
+Middle Africa,1175,CAF,2011
+New Zealand,1584,NZL,2011
+Morocco,2442,MAR,2011
+Bulgaria,934,BGR,2011
+Trinidad and Tobago,1949,TTO,2011
+Denmark,2898,DNK,2011
+Ecuador,1927,ECU,2011
+Slovakia,2131,SVK,2011
+Ireland,1221,IRL,2011
+Azerbaijan,717,AZE,2011
+Sri Lanka,692,LKA,2011
+Croatia,516,HRV,2011
+Latvia,396,LVA,2011
+China,535,CHN,2010
+US,1612,USA,2010
+India,1090,IND,2010
+Russian Federation,1758,RUS,2010
+Japan,1733,JPN,2010
+Canada,1180,CAN,2010
+Germany,1519,DEU,2010
+South Korea,2530,KOR,2010
+Brazil,1343,BRA,2010
+Saudi Arabia,685,SAU,2010
+France,2835,FRA,2010
+United Kingdom,1579,GBR,2010
+Mexico,1970,MEX,2010
+Indonesia,2970,IDN,2010
+Turkey,531,TUR,2010
+Italy,2917,ITA,2010
+Australia,2805,AUS,2010
+Spain,372,ESP,2010
+Thailand,1358,THA,2010
+South Africa,2447,ZAF,2010
+Taiwan,1505,TWN,2010
+United Arab Emirates,626,ARE,2010
+Poland,2994,POL,2010
+Malaysia,1070,MYS,2010
+Egypt,2708,EGY,2010
+Singapore,1807,SGP,2010
+Netherlands,2487,NLD,2010
+Argentina,1286,ARG,2010
+Ukraine,112,UKR,2010
+Pakistan,1420,PAK,2010
+Vietnam,1806,VNM,2010
+Venezuela,422,VEN,2010
+Kazakhstan,112,KAZ,2010
+Belgium,2643,BEL,2010
+Western Africa,2435,CAF,2010
+Sweden,2554,SWE,2010
+Eastern Africa,685,CAF,2010
+Algeria,2237,DZA,2010
+Iraq,846,IRQ,2010
+Norway,1989,NOR,2010
+Philippines,723,PHL,2010
+Colombia,564,COL,2010
+Czech Republic,601,CZE,2010
+Chile,113,CHL,2010
+Austria,1251,AUT,2010
+Romania,2961,ROU,2010
+Bangladesh,14,BGD,2010
+China Hong Kong SAR,636,HKG,2010
+Finland,862,FIN,2010
+Greece,746,GRC,2010
+Portugal,712,PRT,2010
+Switzerland,460,CHE,2010
+Peru,2153,PER,2010
+Israel,1265,ISR,2010
+Hungary,2602,HUN,2010
+Belarus,1392,BLR,2010
+Middle Africa,1193,CAF,2010
+New Zealand,2409,NZL,2010
+Morocco,1021,MAR,2010
+Bulgaria,234,BGR,2010
+Trinidad and Tobago,939,TTO,2010
+Denmark,408,DNK,2010
+Ecuador,2131,ECU,2010
+Slovakia,1062,SVK,2010
+Ireland,1532,IRL,2010
+Azerbaijan,1708,AZE,2010
+Sri Lanka,237,LKA,2010
+Croatia,1337,HRV,2010
+Latvia,1612,LVA,2010
+China,956,CHN,2009
+US,2462,USA,2009
+India,214,IND,2009
+Russian Federation,2189,RUS,2009
+Japan,2380,JPN,2009
+Canada,351,CAN,2009
+Germany,2361,DEU,2009
+South Korea,573,KOR,2009
+Brazil,1057,BRA,2009
+Saudi Arabia,1646,SAU,2009
+France,1381,FRA,2009
+United Kingdom,1300,GBR,2009
+Mexico,1693,MEX,2009
+Indonesia,651,IDN,2009
+Turkey,1931,TUR,2009
+Italy,2983,ITA,2009
+Australia,2687,AUS,2009
+Spain,1650,ESP,2009
+Thailand,725,THA,2009
+South Africa,2105,ZAF,2009
+Taiwan,809,TWN,2009
+United Arab Emirates,339,ARE,2009
+Poland,914,POL,2009
+Malaysia,1482,MYS,2009
+Egypt,583,EGY,2009
+Singapore,1201,SGP,2009
+Netherlands,325,NLD,2009
+Argentina,1137,ARG,2009
+Ukraine,394,UKR,2009
+Pakistan,1592,PAK,2009
+Vietnam,2537,VNM,2009
+Venezuela,2271,VEN,2009
+Kazakhstan,136,KAZ,2009
+Belgium,2203,BEL,2009
+Western Africa,387,CAF,2009
+Sweden,2777,SWE,2009
+Eastern Africa,2689,CAF,2009
+Algeria,76,DZA,2009
+Iraq,1858,IRQ,2009
+Norway,1771,NOR,2009
+Philippines,108,PHL,2009
+Colombia,1424,COL,2009
+Czech Republic,890,CZE,2009
+Chile,1547,CHL,2009
+Austria,630,AUT,2009
+Romania,516,ROU,2009
+Bangladesh,2230,BGD,2009
+China Hong Kong SAR,2659,HKG,2009
+Finland,2730,FIN,2009
+Greece,858,GRC,2009
+Portugal,1140,PRT,2009
+Switzerland,2443,CHE,2009
+Peru,910,PER,2009
+Israel,1656,ISR,2009
+Hungary,781,HUN,2009
+Belarus,691,BLR,2009
+Middle Africa,1059,CAF,2009
+New Zealand,1344,NZL,2009
+Morocco,748,MAR,2009
+Bulgaria,2047,BGR,2009
+Trinidad and Tobago,1841,TTO,2009
+Denmark,1567,DNK,2009
+Ecuador,2905,ECU,2009
+Slovakia,341,SVK,2009
+Ireland,35,IRL,2009
+Azerbaijan,2107,AZE,2009
+Sri Lanka,934,LKA,2009
+Croatia,1712,HRV,2009
+Latvia,1923,LVA,2009
+China,1538,CHN,2008
+US,1615,USA,2008
+India,2462,IND,2008
+Russian Federation,1045,RUS,2008
+Japan,863,JPN,2008
+Canada,2266,CAN,2008
+Germany,2756,DEU,2008
+South Korea,1657,KOR,2008
+Brazil,355,BRA,2008
+Saudi Arabia,1615,SAU,2008
+France,219,FRA,2008
+United Kingdom,2526,GBR,2008
+Mexico,2623,MEX,2008
+Indonesia,2725,IDN,2008
+Turkey,872,TUR,2008
+Italy,2719,ITA,2008
+Australia,40,AUS,2008
+Spain,2480,ESP,2008
+Thailand,2732,THA,2008
+South Africa,125,ZAF,2008
+Taiwan,1515,TWN,2008
+United Arab Emirates,576,ARE,2008
+Poland,2807,POL,2008
+Malaysia,158,MYS,2008
+Egypt,19,EGY,2008
+Singapore,1533,SGP,2008
+Netherlands,286,NLD,2008
+Argentina,2476,ARG,2008
+Ukraine,619,UKR,2008
+Pakistan,1205,PAK,2008
+Vietnam,2984,VNM,2008
+Venezuela,1519,VEN,2008
+Kazakhstan,2858,KAZ,2008
+Belgium,987,BEL,2008
+Western Africa,1542,CAF,2008
+Sweden,221,SWE,2008
+Eastern Africa,2575,CAF,2008
+Algeria,2639,DZA,2008
+Iraq,2037,IRQ,2008
+Norway,815,NOR,2008
+Philippines,671,PHL,2008
+Colombia,2137,COL,2008
+Czech Republic,25,CZE,2008
+Chile,1097,CHL,2008
+Austria,1100,AUT,2008
+Romania,2349,ROU,2008
+Bangladesh,2724,BGD,2008
+China Hong Kong SAR,175,HKG,2008
+Finland,2977,FIN,2008
+Greece,1805,GRC,2008
+Portugal,1929,PRT,2008
+Switzerland,645,CHE,2008
+Peru,775,PER,2008
+Israel,2809,ISR,2008
+Hungary,606,HUN,2008
+Belarus,869,BLR,2008
+Middle Africa,1286,CAF,2008
+New Zealand,720,NZL,2008
+Morocco,1698,MAR,2008
+Bulgaria,1951,BGR,2008
+Trinidad and Tobago,1249,TTO,2008
+Denmark,2362,DNK,2008
+Ecuador,682,ECU,2008
+Slovakia,222,SVK,2008
+Ireland,432,IRL,2008
+Azerbaijan,924,AZE,2008
+Sri Lanka,2341,LKA,2008
+Croatia,1611,HRV,2008
+Latvia,1216,LVA,2008
+China,286,CHN,2007
+US,1868,USA,2007
+India,314,IND,2007
+Russian Federation,1828,RUS,2007
+Japan,979,JPN,2007
+Canada,2431,CAN,2007
+Germany,2781,DEU,2007
+South Korea,1597,KOR,2007
+Brazil,2134,BRA,2007
+Saudi Arabia,1504,SAU,2007
+France,1772,FRA,2007
+United Kingdom,2940,GBR,2007
+Mexico,2322,MEX,2007
+Indonesia,902,IDN,2007
+Turkey,529,TUR,2007
+Italy,80,ITA,2007
+Australia,2502,AUS,2007
+Spain,1676,ESP,2007
+Thailand,1444,THA,2007
+South Africa,1620,ZAF,2007
+Taiwan,1822,TWN,2007
+United Arab Emirates,1348,ARE,2007
+Poland,1854,POL,2007
+Malaysia,585,MYS,2007
+Egypt,279,EGY,2007
+Singapore,1354,SGP,2007
+Netherlands,2313,NLD,2007
+Argentina,769,ARG,2007
+Ukraine,816,UKR,2007
+Pakistan,290,PAK,2007
+Vietnam,565,VNM,2007
+Venezuela,71,VEN,2007
+Kazakhstan,980,KAZ,2007
+Belgium,2321,BEL,2007
+Western Africa,385,CAF,2007
+Sweden,489,SWE,2007
+Eastern Africa,1123,CAF,2007
+Algeria,2626,DZA,2007
+Iraq,581,IRQ,2007
+Norway,2064,NOR,2007
+Philippines,1653,PHL,2007
+Colombia,1582,COL,2007
+Czech Republic,2536,CZE,2007
+Chile,165,CHL,2007
+Austria,1636,AUT,2007
+Romania,2681,ROU,2007
+Bangladesh,1364,BGD,2007
+China Hong Kong SAR,1557,HKG,2007
+Finland,1893,FIN,2007
+Greece,842,GRC,2007
+Portugal,1152,PRT,2007
+Switzerland,1560,CHE,2007
+Peru,295,PER,2007
+Israel,2380,ISR,2007
+Hungary,1322,HUN,2007
+Belarus,2133,BLR,2007
+Middle Africa,1483,CAF,2007
+New Zealand,2046,NZL,2007
+Morocco,1177,MAR,2007
+Bulgaria,2891,BGR,2007
+Trinidad and Tobago,2727,TTO,2007
+Denmark,150,DNK,2007
+Ecuador,371,ECU,2007
+Slovakia,1348,SVK,2007
+Ireland,208,IRL,2007
+Azerbaijan,1711,AZE,2007
+Sri Lanka,1912,LKA,2007
+Croatia,1264,HRV,2007
+Latvia,2589,LVA,2007
+China,2756,CHN,2006
+US,2357,USA,2006
+India,1821,IND,2006
+Russian Federation,1428,RUS,2006
+Japan,707,JPN,2006
+Canada,2952,CAN,2006
+Germany,575,DEU,2006
+South Korea,365,KOR,2006
+Brazil,1883,BRA,2006
+Saudi Arabia,527,SAU,2006
+France,145,FRA,2006
+United Kingdom,592,GBR,2006
+Mexico,2448,MEX,2006
+Indonesia,1164,IDN,2006
+Turkey,553,TUR,2006
+Italy,587,ITA,2006
+Australia,1837,AUS,2006
+Spain,1807,ESP,2006
+Thailand,2530,THA,2006
+South Africa,1484,ZAF,2006
+Taiwan,1466,TWN,2006
+United Arab Emirates,567,ARE,2006
+Poland,140,POL,2006
+Malaysia,2159,MYS,2006
+Egypt,814,EGY,2006
+Singapore,933,SGP,2006
+Netherlands,283,NLD,2006
+Argentina,1033,ARG,2006
+Ukraine,424,UKR,2006
+Pakistan,2298,PAK,2006
+Vietnam,194,VNM,2006
+Venezuela,56,VEN,2006
+Kazakhstan,2217,KAZ,2006
+Belgium,2448,BEL,2006
+Western Africa,1624,CAF,2006
+Sweden,2659,SWE,2006
+Eastern Africa,1547,CAF,2006
+Algeria,93,DZA,2006
+Iraq,87,IRQ,2006
+Norway,1916,NOR,2006
+Philippines,1662,PHL,2006
+Colombia,1708,COL,2006
+Czech Republic,2752,CZE,2006
+Chile,1030,CHL,2006
+Austria,565,AUT,2006
+Romania,2542,ROU,2006
+Bangladesh,2362,BGD,2006
+China Hong Kong SAR,818,HKG,2006
+Finland,336,FIN,2006
+Greece,2779,GRC,2006
+Portugal,1741,PRT,2006
+Switzerland,209,CHE,2006
+Peru,1170,PER,2006
+Israel,211,ISR,2006
+Hungary,2981,HUN,2006
+Belarus,2351,BLR,2006
+Middle Africa,2545,CAF,2006
+New Zealand,953,NZL,2006
+Morocco,1577,MAR,2006
+Bulgaria,2117,BGR,2006
+Trinidad and Tobago,1260,TTO,2006
+Denmark,1276,DNK,2006
+Ecuador,2271,ECU,2006
+Slovakia,545,SVK,2006
+Ireland,2170,IRL,2006
+Azerbaijan,1273,AZE,2006
+Sri Lanka,2966,LKA,2006
+Croatia,1587,HRV,2006
+Latvia,2300,LVA,2006
+China,1667,CHN,2005
+US,126,USA,2005
+India,2564,IND,2005
+Russian Federation,2551,RUS,2005
+Japan,197,JPN,2005
+Canada,1256,CAN,2005
+Germany,1430,DEU,2005
+South Korea,581,KOR,2005
+Brazil,2604,BRA,2005
+Saudi Arabia,1565,SAU,2005
+France,1443,FRA,2005
+United Kingdom,2349,GBR,2005
+Mexico,2744,MEX,2005
+Indonesia,34,IDN,2005
+Turkey,2633,TUR,2005
+Italy,1524,ITA,2005
+Australia,2234,AUS,2005
+Spain,224,ESP,2005
+Thailand,2033,THA,2005
+South Africa,2967,ZAF,2005
+Taiwan,1330,TWN,2005
+United Arab Emirates,2276,ARE,2005
+Poland,1633,POL,2005
+Malaysia,386,MYS,2005
+Egypt,1541,EGY,2005
+Singapore,2788,SGP,2005
+Netherlands,1246,NLD,2005
+Argentina,1109,ARG,2005
+Ukraine,1448,UKR,2005
+Pakistan,696,PAK,2005
+Vietnam,2465,VNM,2005
+Venezuela,1839,VEN,2005
+Kazakhstan,1691,KAZ,2005
+Belgium,145,BEL,2005
+Western Africa,1562,CAF,2005
+Sweden,2269,SWE,2005
+Eastern Africa,1495,CAF,2005
+Algeria,1538,DZA,2005
+Iraq,1038,IRQ,2005
+Norway,2809,NOR,2005
+Philippines,2854,PHL,2005
+Colombia,672,COL,2005
+Czech Republic,1161,CZE,2005
+Chile,2945,CHL,2005
+Austria,841,AUT,2005
+Romania,901,ROU,2005
+Bangladesh,259,BGD,2005
+China Hong Kong SAR,50,HKG,2005
+Finland,618,FIN,2005
+Greece,647,GRC,2005
+Portugal,1340,PRT,2005
+Switzerland,2092,CHE,2005
+Peru,1050,PER,2005
+Israel,301,ISR,2005
+Hungary,2326,HUN,2005
+Belarus,1984,BLR,2005
+Middle Africa,403,CAF,2005
+New Zealand,1057,NZL,2005
+Morocco,980,MAR,2005
+Bulgaria,541,BGR,2005
+Trinidad and Tobago,1555,TTO,2005
+Denmark,1223,DNK,2005
+Ecuador,50,ECU,2005
+Slovakia,1824,SVK,2005
+Ireland,1018,IRL,2005
+Azerbaijan,1754,AZE,2005
+Sri Lanka,2352,LKA,2005
+Croatia,2765,HRV,2005
+Latvia,2882,LVA,2005
+China,2460,CHN,2004
+US,1448,USA,2004
+India,2888,IND,2004
+Russian Federation,2735,RUS,2004
+Japan,1212,JPN,2004
+Canada,938,CAN,2004
+Germany,1739,DEU,2004
+South Korea,439,KOR,2004
+Brazil,1745,BRA,2004
+Saudi Arabia,461,SAU,2004
+France,191,FRA,2004
+United Kingdom,2593,GBR,2004
+Mexico,2145,MEX,2004
+Indonesia,783,IDN,2004
+Turkey,2856,TUR,2004
+Italy,1209,ITA,2004
+Australia,1020,AUS,2004
+Spain,1417,ESP,2004
+Thailand,369,THA,2004
+South Africa,1826,ZAF,2004
+Taiwan,1993,TWN,2004
+United Arab Emirates,98,ARE,2004
+Poland,153,POL,2004
+Malaysia,224,MYS,2004
+Egypt,1279,EGY,2004
+Singapore,543,SGP,2004
+Netherlands,908,NLD,2004
+Argentina,807,ARG,2004
+Ukraine,398,UKR,2004
+Pakistan,1176,PAK,2004
+Vietnam,2363,VNM,2004
+Venezuela,855,VEN,2004
+Kazakhstan,2846,KAZ,2004
+Belgium,1400,BEL,2004
+Western Africa,2817,CAF,2004
+Sweden,2559,SWE,2004
+Eastern Africa,487,CAF,2004
+Algeria,1261,DZA,2004
+Iraq,1981,IRQ,2004
+Norway,1694,NOR,2004
+Philippines,1238,PHL,2004
+Colombia,1640,COL,2004
+Czech Republic,1886,CZE,2004
+Chile,843,CHL,2004
+Austria,979,AUT,2004
+Romania,432,ROU,2004
+Bangladesh,2358,BGD,2004
+China Hong Kong SAR,148,HKG,2004
+Finland,492,FIN,2004
+Greece,969,GRC,2004
+Portugal,1486,PRT,2004
+Switzerland,1148,CHE,2004
+Peru,2738,PER,2004
+Israel,1270,ISR,2004
+Hungary,496,HUN,2004
+Belarus,143,BLR,2004
+Middle Africa,2809,CAF,2004
+New Zealand,2651,NZL,2004
+Morocco,2538,MAR,2004
+Bulgaria,2369,BGR,2004
+Trinidad and Tobago,2305,TTO,2004
+Denmark,155,DNK,2004
+Ecuador,1786,ECU,2004
+Slovakia,2761,SVK,2004
+Ireland,1034,IRL,2004
+Azerbaijan,541,AZE,2004
+Sri Lanka,2864,LKA,2004
+Croatia,1299,HRV,2004
+Latvia,2726,LVA,2004
+China,1704,CHN,2003
+US,746,USA,2003
+India,1405,IND,2003
+Russian Federation,985,RUS,2003
+Japan,989,JPN,2003
+Canada,1552,CAN,2003
+Germany,1778,DEU,2003
+South Korea,915,KOR,2003
+Brazil,2912,BRA,2003
+Saudi Arabia,2148,SAU,2003
+France,2976,FRA,2003
+United Kingdom,1402,GBR,2003
+Mexico,2709,MEX,2003
+Indonesia,1420,IDN,2003
+Turkey,2385,TUR,2003
+Italy,1833,ITA,2003
+Australia,1227,AUS,2003
+Spain,1941,ESP,2003
+Thailand,192,THA,2003
+South Africa,424,ZAF,2003
+Taiwan,2538,TWN,2003
+United Arab Emirates,436,ARE,2003
+Poland,1699,POL,2003
+Malaysia,890,MYS,2003
+Egypt,44,EGY,2003
+Singapore,792,SGP,2003
+Netherlands,2867,NLD,2003
+Argentina,2206,ARG,2003
+Ukraine,57,UKR,2003
+Pakistan,1859,PAK,2003
+Vietnam,2073,VNM,2003
+Venezuela,1698,VEN,2003
+Kazakhstan,2727,KAZ,2003
+Belgium,205,BEL,2003
+Western Africa,266,CAF,2003
+Sweden,1715,SWE,2003
+Eastern Africa,2485,CAF,2003
+Algeria,577,DZA,2003
+Iraq,1389,IRQ,2003
+Norway,832,NOR,2003
+Philippines,2589,PHL,2003
+Colombia,1471,COL,2003
+Czech Republic,329,CZE,2003
+Chile,807,CHL,2003
+Austria,2859,AUT,2003
+Romania,1030,ROU,2003
+Bangladesh,2705,BGD,2003
+China Hong Kong SAR,2503,HKG,2003
+Finland,228,FIN,2003
+Greece,1302,GRC,2003
+Portugal,12,PRT,2003
+Switzerland,2029,CHE,2003
+Peru,25,PER,2003
+Israel,2743,ISR,2003
+Hungary,2253,HUN,2003
+Belarus,2424,BLR,2003
+Middle Africa,782,CAF,2003
+New Zealand,815,NZL,2003
+Morocco,2757,MAR,2003
+Bulgaria,1933,BGR,2003
+Trinidad and Tobago,2887,TTO,2003
+Denmark,799,DNK,2003
+Ecuador,2562,ECU,2003
+Slovakia,508,SVK,2003
+Ireland,2333,IRL,2003
+Azerbaijan,1472,AZE,2003
+Sri Lanka,1730,LKA,2003
+Croatia,1220,HRV,2003
+Latvia,1086,LVA,2003
+China,1202,CHN,2002
+US,2028,USA,2002
+India,1582,IND,2002
+Russian Federation,884,RUS,2002
+Japan,1458,JPN,2002
+Canada,1644,CAN,2002
+Germany,1983,DEU,2002
+South Korea,2543,KOR,2002
+Brazil,186,BRA,2002
+Saudi Arabia,834,SAU,2002
+France,2983,FRA,2002
+United Kingdom,2898,GBR,2002
+Mexico,125,MEX,2002
+Indonesia,629,IDN,2002
+Turkey,2803,TUR,2002
+Italy,2559,ITA,2002
+Australia,2690,AUS,2002
+Spain,1788,ESP,2002
+Thailand,2726,THA,2002
+South Africa,43,ZAF,2002
+Taiwan,2555,TWN,2002
+United Arab Emirates,333,ARE,2002
+Poland,2817,POL,2002
+Malaysia,1762,MYS,2002
+Egypt,797,EGY,2002
+Singapore,380,SGP,2002
+Netherlands,373,NLD,2002
+Argentina,2960,ARG,2002
+Ukraine,740,UKR,2002
+Pakistan,2267,PAK,2002
+Vietnam,1418,VNM,2002
+Venezuela,1471,VEN,2002
+Kazakhstan,410,KAZ,2002
+Belgium,624,BEL,2002
+Western Africa,829,CAF,2002
+Sweden,2734,SWE,2002
+Eastern Africa,518,CAF,2002
+Algeria,616,DZA,2002
+Iraq,2877,IRQ,2002
+Norway,1093,NOR,2002
+Philippines,1492,PHL,2002
+Colombia,1822,COL,2002
+Czech Republic,112,CZE,2002
+Chile,1603,CHL,2002
+Austria,2310,AUT,2002
+Romania,949,ROU,2002
+Bangladesh,2660,BGD,2002
+China Hong Kong SAR,2458,HKG,2002
+Finland,2430,FIN,2002
+Greece,1218,GRC,2002
+Portugal,2342,PRT,2002
+Switzerland,12,CHE,2002
+Peru,1146,PER,2002
+Israel,826,ISR,2002
+Hungary,1561,HUN,2002
+Belarus,1353,BLR,2002
+Middle Africa,1938,CAF,2002
+New Zealand,1909,NZL,2002
+Morocco,2480,MAR,2002
+Bulgaria,1299,BGR,2002
+Trinidad and Tobago,1101,TTO,2002
+Denmark,2424,DNK,2002
+Ecuador,686,ECU,2002
+Slovakia,1559,SVK,2002
+Ireland,220,IRL,2002
+Azerbaijan,2123,AZE,2002
+Sri Lanka,2475,LKA,2002
+Croatia,713,HRV,2002
+Latvia,2351,LVA,2002
+China,225,CHN,2001
+US,121,USA,2001
+India,2660,IND,2001
+Russian Federation,423,RUS,2001
+Japan,1016,JPN,2001
+Canada,1830,CAN,2001
+Germany,2769,DEU,2001
+South Korea,1019,KOR,2001
+Brazil,648,BRA,2001
+Saudi Arabia,1556,SAU,2001
+France,2050,FRA,2001
+United Kingdom,559,GBR,2001
+Mexico,1225,MEX,2001
+Indonesia,2136,IDN,2001
+Turkey,534,TUR,2001
+Italy,1081,ITA,2001
+Australia,266,AUS,2001
+Spain,784,ESP,2001
+Thailand,2594,THA,2001
+South Africa,1211,ZAF,2001
+Taiwan,2894,TWN,2001
+United Arab Emirates,1176,ARE,2001
+Poland,350,POL,2001
+Malaysia,2015,MYS,2001
+Egypt,823,EGY,2001
+Singapore,2242,SGP,2001
+Netherlands,1220,NLD,2001
+Argentina,260,ARG,2001
+Ukraine,859,UKR,2001
+Pakistan,815,PAK,2001
+Vietnam,1368,VNM,2001
+Venezuela,1351,VEN,2001
+Kazakhstan,236,KAZ,2001
+Belgium,485,BEL,2001
+Western Africa,1643,CAF,2001
+Sweden,2965,SWE,2001
+Eastern Africa,1791,CAF,2001
+Algeria,1139,DZA,2001
+Iraq,820,IRQ,2001
+Norway,2333,NOR,2001
+Philippines,1089,PHL,2001
+Colombia,2587,COL,2001
+Czech Republic,489,CZE,2001
+Chile,746,CHL,2001
+Austria,148,AUT,2001
+Romania,2633,ROU,2001
+Bangladesh,2020,BGD,2001
+China Hong Kong SAR,720,HKG,2001
+Finland,206,FIN,2001
+Greece,1483,GRC,2001
+Portugal,1466,PRT,2001
+Switzerland,803,CHE,2001
+Peru,364,PER,2001
+Israel,700,ISR,2001
+Hungary,2963,HUN,2001
+Belarus,1841,BLR,2001
+Middle Africa,1079,CAF,2001
+New Zealand,2965,NZL,2001
+Morocco,1382,MAR,2001
+Bulgaria,460,BGR,2001
+Trinidad and Tobago,969,TTO,2001
+Denmark,168,DNK,2001
+Ecuador,2759,ECU,2001
+Slovakia,1446,SVK,2001
+Ireland,1609,IRL,2001
+Azerbaijan,99,AZE,2001
+Sri Lanka,985,LKA,2001
+Croatia,990,HRV,2001
+Latvia,412,LVA,2001
+China,242,CHN,2000
+US,828,USA,2000
+India,2825,IND,2000
+Russian Federation,1597,RUS,2000
+Japan,2871,JPN,2000
+Canada,239,CAN,2000
+Germany,203,DEU,2000
+South Korea,1620,KOR,2000
+Brazil,2798,BRA,2000
+Saudi Arabia,658,SAU,2000
+France,2910,FRA,2000
+United Kingdom,1435,GBR,2000
+Mexico,809,MEX,2000
+Indonesia,2116,IDN,2000
+Turkey,2721,TUR,2000
+Italy,2414,ITA,2000
+Australia,45,AUS,2000
+Spain,470,ESP,2000
+Thailand,2098,THA,2000
+South Africa,1655,ZAF,2000
+Taiwan,1976,TWN,2000
+United Arab Emirates,260,ARE,2000
+Poland,2147,POL,2000
+Malaysia,125,MYS,2000
+Egypt,54,EGY,2000
+Singapore,2432,SGP,2000
+Netherlands,1135,NLD,2000
+Argentina,2157,ARG,2000
+Ukraine,2447,UKR,2000
+Pakistan,1399,PAK,2000
+Vietnam,1178,VNM,2000
+Venezuela,2504,VEN,2000
+Kazakhstan,1145,KAZ,2000
+Belgium,1168,BEL,2000
+Western Africa,125,CAF,2000
+Sweden,1043,SWE,2000
+Eastern Africa,1012,CAF,2000
+Algeria,1894,DZA,2000
+Iraq,86,IRQ,2000
+Norway,1031,NOR,2000
+Philippines,1457,PHL,2000
+Colombia,240,COL,2000
+Czech Republic,1577,CZE,2000
+Chile,672,CHL,2000
+Austria,32,AUT,2000
+Romania,2806,ROU,2000
+Bangladesh,132,BGD,2000
+China Hong Kong SAR,2135,HKG,2000
+Finland,2014,FIN,2000
+Greece,2688,GRC,2000
+Portugal,1429,PRT,2000
+Switzerland,1437,CHE,2000
+Peru,2047,PER,2000
+Israel,2765,ISR,2000
+Hungary,1879,HUN,2000
+Belarus,2616,BLR,2000
+Middle Africa,488,CAF,2000
+New Zealand,2305,NZL,2000
+Morocco,457,MAR,2000
+Bulgaria,2724,BGR,2000
+Trinidad and Tobago,2043,TTO,2000
+Denmark,2954,DNK,2000
+Ecuador,2222,ECU,2000
+Slovakia,1056,SVK,2000
+Ireland,281,IRL,2000
+Azerbaijan,2877,AZE,2000
+Sri Lanka,2437,LKA,2000
+Croatia,2816,HRV,2000
+Latvia,1103,LVA,2000
