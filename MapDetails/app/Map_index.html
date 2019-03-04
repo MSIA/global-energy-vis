@@ -245,21 +245,163 @@ var path = d3.geoPath().projection(projection);
 
 svg.call(tip);
 
+var initial_flag = 0;
+
 function ready(ndata, usage) {
+
+usage.forEach(function(d) {
+    d.Year = +d.Year;
+    d.EnergyUsage = +d.EnergyUsage;   
+  });
+
+if(initial_flag == 0) {
+
+usage1 = usage.filter( d=> d.Year == d3.min(usage, function (d) {return d.Year}));
+
+}
+
+initial_flag = 1;
+
+
   var usageById = {}; 
   var lusageById = {};
-  usage.forEach(function(d) { usageById[d.id] = +d.EnergyUsage; });
+  usage1.forEach(function(d) { usageById[d.id] = +d.EnergyUsage; });
   ndata.features.forEach(function(d) { d.EnergyUsage = usageById[d.id] });
   
-  usage.forEach(function(d) {lusageById[d.id] = Math.log(+d.EnergyUsage)});
+  usage1.forEach(function(d) {lusageById[d.id] = Math.log(+d.EnergyUsage)});
   
   var data = ndata;
- 
-//console.log(data.features);  
+  
+plotting (data.features, lusageById)
+
+//All slider stuff here
+var formatDateIntoYear = d3.timeFormat("%Y");
+var formatDate = d3.timeFormat("%b %Y");
+var parseDate = d3.timeParse("%m/%d/%y");
+
+var startDate = d3.min(usage, function (d) {return d.Year}),
+    endDate = d3.max(usage, function (d) {return d.Year});
+
+var svgslider = d3.select("#vis")
+    .append("svg")
+    .attr("width",4/5 * (width + margin.left + margin.right))
+    .attr("height", height/3);  
+
+////////// slider //////////
+
+var moving = false;
+var currentValue = startDate;
+var targetValue = width*4/5;
+
+var playButton = d3.select("#play-button");
+    
+var x = d3.scaleLinear()
+    .domain([startDate, endDate])
+    .range([0, targetValue])
+    .clamp(true);
+
+
+var slider = svgslider.append("g")
+    .attr("class", "slider")
+    .attr("transform", "translate(" + margin.left + "," + height/5 + ")");
+	
+slider.append("line")
+    .attr("class", "track")
+    .attr("x1", x.range()[0])
+    .attr("x2", x.range()[1])
+  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+    .attr("class", "track-inset")
+  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+    .attr("class", "track-overlay")
+    .call(d3.drag()
+        .on("start.interrupt", function() { slider.interrupt(); })
+        .on("start drag", function() {
+          currentValue = d3.event.x;
+          update(x.invert(currentValue)); 
+        })
+    );
+
+slider.insert("g", ".track-overlay")
+    .attr("class", "ticks")
+    .attr("transform", "translate(0," + 18 + ")")
+  .selectAll("text")
+    .data(x.ticks(20))
+    .enter()
+    .append("text")
+    .attr("x", x)
+    .attr("y", 10)
+    .attr("text-anchor", "middle")
+    .text(function(d) { return d; })
+	.attr("font-size","20px");
+
+var handle = slider.insert("circle", ".track-overlay")
+    .attr("class", "handle")
+    .attr("r", 9);
+
+playButton
+    .on("click", function() {
+    var button = d3.select(this);
+    if (button.text() == "Pause") {
+      moving = false;
+      clearInterval(timer);
+      // timer = 0;
+      button.text("Play");
+    } else {
+      moving = true;
+      timer = setInterval(step, 0.01);
+      button.text("Pause");
+    }
+    console.log("Slider moving: " + moving);
+  })
+
+
+function update(h) {
+  // update position and text of label according to slider scale
+  handle.attr("cx", x(h));
+  
+
+  // filter data set and redraw plot
+  var usage1 = usage.filter(function(d) {
+    return d.Year == Math.round(h);
+  })
+  usage1.forEach(function(d) {lusageById[d.id] = Math.log(+d.EnergyUsage)});
+  plotting(data.features, lusageById);
+  console.log(Math.round(h));
+  
+}
+
+function step() {
+  update(x.invert(currentValue));
+  currentValue = currentValue + (targetValue/100);
+  if (currentValue > targetValue) {
+    moving = false;
+    currentValue = startDate;
+    clearInterval(timer);
+    // timer = 0;
+    playButton.text("Play");
+    console.log("Slider moving: " + moving);
+  }
+}
+
+//All slider stuff ends here
+
+
+}
+
+Promise.all([
+  d3.json("http://enjalot.github.io/wwsd/data/world/world-110m.geojson"),
+  d3.csv("http://localhost:8000/data/Global_Energy_Usage_2.csv") 
+]).then( function(data){ready(data[0], data[1])});
+
+
+function plotting (givendata, lusageById) {
+
+	
+
   svg.append("g")
       .attr("class", "countries")
     .selectAll("path")
-      .data(data.features)
+      .data(givendata)
     .enter().append("path")
       .attr("d", path)
 	  .style("fill", function(d){ if(lusageById[d.id] >0) {return testColor(lusageById[d.id]); } else { return "#eee";}})
@@ -288,109 +430,14 @@ function ready(ndata, usage) {
         });
 
   svg.append("path")
-      .datum(topojson.mesh(data.features, function(a, b) { return a.id !== b.id; }))
+      .datum(topojson.mesh(givendata, function(a, b) { return a.id !== b.id; }))
        // .datum(topojson.mesh(data.features, function(a, b) { return a !== b; }))
       .attr("class", "names")
       .attr("d", path);
+
+
 }
 
-Promise.all([
-  d3.json("http://enjalot.github.io/wwsd/data/world/world-110m.geojson"),
-  d3.csv("http://localhost:8000/data/Global_Energy_Usage_2.csv",) 
-]).then( function(data){ready(data[0], data[1]);
-
-
-
-//All slider stuff here
-var formatDateIntoYear = d3.timeFormat("%Y");
-var formatDate = d3.timeFormat("%b %Y");
-var parseDate = d3.timeParse("%m/%d/%y");
-
-var startDate = new Date("2004-11-01"),
-    endDate = new Date("2017-04-01");
-
-
-var svgslider = d3.select("#vis")
-    .append("svg")
-    .attr("width",4/5 * (width + margin.left + margin.right))
-    .attr("height", height/3);  
-
-////////// slider //////////
-
-var moving = false;
-var currentValue = 0;
-var targetValue = width*4/5;
-
-var playButton = d3.select("#play-button");
-    
-var x = d3.scaleTime()
-    .domain([startDate, endDate])
-    .range([0, targetValue])
-    .clamp(true);
-
-var slider = svgslider.append("g")
-    .attr("class", "slider")
-    .attr("transform", "translate(" + margin.left + "," + height/5 + ")");
-	
-slider.append("line")
-    .attr("class", "track")
-    .attr("x1", x.range()[0])
-    .attr("x2", x.range()[1])
-  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
-    .attr("class", "track-inset")
-  .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
-    .attr("class", "track-overlay")
-    .call(d3.drag()
-        .on("start.interrupt", function() { slider.interrupt(); })
-        .on("start drag", function() {
-          currentValue = d3.event.x;
-          update(x.invert(currentValue)); 
-        })
-    );
-
-slider.insert("g", ".track-overlay")
-    .attr("class", "ticks")
-    .attr("transform", "translate(0," + 18 + ")")
-  .selectAll("text")
-    .data(x.ticks(10))
-    .enter()
-    .append("text")
-    .attr("x", x)
-    .attr("y", 10)
-    .attr("text-anchor", "middle")
-    .text(function(d) { return formatDateIntoYear(d); })
-	.attr("font-size","20px");
-
-var handle = slider.insert("circle", ".track-overlay")
-    .attr("class", "handle")
-    .attr("r", 9);
-/*
-var label = slider.append("text")  
-    .attr("class", "label")
-    .attr("text-anchor", "middle")
-    .text(formatDate(startDate))
-    .attr("transform", "translate(0," + (-25) + ")")
-	.attr("font-size","18px");
-*/
-	
-function update(h) {
-  // update position and text of label according to slider scale
-  handle.attr("cx", x(h));
-  label
-    .attr("x", x(h))
-    .text(formatDate(h));
-
-  // filter data set and redraw plot
-  var newData = dataset.filter(function(d) {
-    return d.date < h;
-  })
-  drawPlot(newData);
-}
-
-
-
-
-//All slider stuff ends here
 
 
 
