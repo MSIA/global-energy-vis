@@ -1,180 +1,3 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<style>
-
-/* All Slider stuff */
-
-	#play-button {
-      position: absolute;
-      top: 1050px;
-      left: 25px;
-      background: #f08080;
-      padding-right: 26px;
-      border-radius: 3px;
-      border: none;
-      color: white;
-      margin: 0;
-      padding: 0 12px;
-      width: 120px;
-      cursor: pointer;
-      height: 60px;
-    }
-
-    #play-button:hover {
-      background-color: #696969;
-    }   
-
-	.ticks {
-      font-size: 10px;
-    }
-
-    .track,
-    .track-inset,
-    .track-overlay {
-      stroke-linecap: round;
-    }
-
-    .track {
-      stroke: #000;
-      stroke-opacity: 0.3;
-      stroke-width: 10px;
-    }
-
-    .track-inset {
-      stroke: #dcdcdc;
-      stroke-width: 8px;
-    }
-
-    .track-overlay {
-      pointer-events: stroke;
-      stroke-width: 50px;
-      stroke: transparent;
-      cursor: crosshair;
-    }
-
-    .handle {
-      fill: #fff;
-      stroke: #000;
-      stroke-opacity: 0.5;
-      stroke-width: 1.25px;
-    }
-
-/* All slider stuff ends here */
-
-
-
-  .names {
-  fill: none;
-  stroke: #fff;
-  stroke-linejoin: round;
-  }
-  .legendThreshold {
-      font-size: 12px;
-      font-family: sans-serif;
-  }
-
-    /* Tooltip CSS */
-    .d3-tip {
-    line-height: 1.5;
-    font-weight: 400;
-    font-family:"avenir next", Arial, sans-serif;
-    padding: 6px;
-    background: rgba(0, 0, 0, 0.6);
-    color: #FFA500;
-    border-radius: 1px;
-    pointer-events: none;
-    }
-
-    /* Creates a small triangle extender for the tooltip */
-    .d3-tip:after {      
-      box-sizing: border-box;
-      display: inline;
-      font-size: 8px;
-      width: 100%;
-      line-height: 1.5;
-      color: rgba(0, 0, 0, 0.6);
-      position: absolute;
-      pointer-events: none;
-      
-    }
-
-    /* Northward tooltips */
-    .d3-tip.n:after {
-      content: "\25BC";
-      margin: -1px 0 0 0;
-      top: 100%;
-      left: 0;
-      text-align: center;
-    }
-
-    /* Eastward tooltips */
-    .d3-tip.e:after {
-      content: "\25C0";
-      margin: -4px 0 0 0;
-      top: 50%;
-      left: -8px;
-    }
-
-    /* Southward tooltips */
-    .d3-tip.s:after {
-      content: "\25B2";
-      margin: 0 0 1px 0;
-      top: -8px;
-      left: 0;
-      text-align: center;
-    }
-
-    /* Westward tooltips */
-    .d3-tip.w:after {
-      content: "\25B6";
-      margin: -4px 0 0 -1px;
-      top: 50%;
-      left: 100%;
-    }
-
-/*    text{
-      pointer-events:none;
-    }*/
-
-    .details{
-      color:white;
-    }
-
-</style>
-</style>
-<body>
-    <div class="container">
-        <div class="row">
-          <h3 class="nine columns">Energy use statistics map</h3>
-          <select id="select-key" class="three columns">
-            <option value="u2017" selected="selected">Energy in %</option>
-            <option value="r2017">Renewable area in %</option>
-            <!-- <option value="Education">%</option> -->
-            <!-- <option value="Population">Population %</option> -->
-          </select>
-        </div>
-
-  
-<svg id = "gradientBox" width="960" height="100"></svg>
-
-<svg id = "mapBox"></svg>
-
-<div id="vis">
-  <button id="play-button">Play</button>
-</div>
-
-
-<svg width="960" height="500"></svg>
-<script src="http://d3js.org/d3.v5.min.js"></script>
-<script src="http://d3js.org/topojson.v1.min.js"></script>
-<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-<script src="http://localhost:8000/d3-tip.js"></script>
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
-<script>
-
-//d3.csv("http://localhost:8000/data/Global_Energy_Usage_2.csv", startValues)
-
 var currentKey='u2017';
 var currentYear=2000;
 var startYear = 2000;
@@ -194,7 +17,7 @@ var svg = d3.select("#gradientBox"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
 
-/*	
+/*
 var dintColor = d3.scaleSequential(d3.interpolateReds)
     .domain([d3.min(data, function(d){ return Math.log(d.u2017)}), 9]);
 */
@@ -212,7 +35,7 @@ var legendTicks = 4;
 var tip = d3.tip()
             .attr('class', 'd3-tip')
             .offset([-10, 0])
-            .html(function(d) { 
+            .html(function(d) {
               return "<strong>Country: </strong><span class='details'>" + d.properties.name + "<br></span>" + "<strong>Energy Usage: </strong><span class='details'>" + format(d[currentKey]) +"</span>";
             })
 
@@ -229,14 +52,14 @@ var defs = g.append("defs");
 //Append a linearGradient element to the defs and give it a unique id
 var linearGradient = defs.append("linearGradient")
 						 .attr("id", "linear-gradient");
-	
+
 //Horizontal gradient
 linearGradient
     .attr("x1", "0%")
     .attr("y1", "0%")
     .attr("x2", "100%")
     .attr("y2", "0%");
-	
+
 //Set the color for the start (0%)
 linearGradient.append("stop")
               .attr("offset", "0%")
@@ -246,7 +69,7 @@ linearGradient.append("stop")
 linearGradient.append("stop")
               .attr("offset", "100%")
               .attr("stop-color", "#8b0000"); //dark blue
-	
+
 //Draw the rectangle and fill with gradient
 svg.append("rect")
     .attr("width", legendWidth)
@@ -270,7 +93,7 @@ var svg = d3.select("#mapBox")
             .attr("height", height)
 			.append('g')
 			 .attr('class','map');
-			 
+
 var projection = d3.geoMercator()
                    .scale(100)
                    .translate( [width / 2, (height / 1.5) + 100]);
@@ -284,7 +107,7 @@ svg.call(tip);
 var svgslider = d3.select("#vis")
     .append("svg")
     .attr("width",4/5 * (width + margin.left + margin.right))
-    .attr("height", height);  
+    .attr("height", height);
 
 ////////// slider //////////
 
@@ -294,7 +117,7 @@ var currentValue = 0;
 var targetValue = width*4/5;
 
 var playButton = d3.select("#play-button");
-    
+
 var x = d3.scaleLinear()
     .domain([startYear, endYear])
     .range([0, targetValue])
@@ -305,7 +128,7 @@ var slider = svgslider.append("g")
     .attr("class", "slider")
     .attr("transform", "translate(" + margin.left + "," + height/5 + ")");
 
-	
+
 slider.append("line")
     .attr("class", "track")
     .attr("x1", x.range()[0])
@@ -317,10 +140,10 @@ slider.append("line")
     .call(d3.drag()
         .on("start.interrupt", function() { slider.interrupt(); })
         .on("start drag", function() {
-          
+
 		  currentValue = d3.event.x;
-          update(x.invert(currentValue)); 
-		  
+          update(x.invert(currentValue));
+
 		  //console.log(x.invert(currentYear));
 		  //console.log(currentYear);
 		  //console.log(d3.event.x);
@@ -359,7 +182,7 @@ playButton
     }
     //console.log("Slider moving: " + moving);
   })
-  
+
   function update(h) {
   // update position and text of label according to slider scale
   handle.attr("cx", x(h));
@@ -368,17 +191,17 @@ playButton
   // filter data set and redraw plot
   currentYear = Math.round(h);
   console.log(currentYear);
-  
+
   call_promise();
-  
+
 }
 
 function step() {
-  
+
   //console.log(x.invert(currentYear));
   update(x.invert(currentValue));
   currentValue = currentValue + (targetValue / (endYear - startYear));
-  
+
   if (currentValue  > targetValue) {
     moving = false;
     currentValue = 0;
@@ -393,27 +216,27 @@ function step() {
 //SLIDEREnd//
 
 function ready(ndata, usage, currentKey, currentYear) {
-	 
-	  var usageById = {}; 
+
+	  var usageById = {};
 	  var lusageById = {};
-	  
+
 	  usage.forEach(function(d) { d.Year = +d.Year;});
-	  
+
 	  usage = usage.filter( d=> d.Year == currentYear);
-	  
+
 	  usage.forEach(function(d) { usageById[d.id] = +d[currentKey]; });
 	  ndata.features.forEach(function(d) { d[currentKey] = usageById[d.id] });
 	  usage.forEach(function(d) {lusageById[d.id] = Math.log(+d[currentKey])});
-	  
+
 	  var data = ndata;
     // console.log(lusageById);
-	 
+
 	 var minE = d3.min(usage, function(d) { return +d[currentKey]; });
 	 var maxE = d3.max(usage, function(d) { return +d[currentKey]; });
    // console.log(minE);
-	  
+
 	  var intColor2 = d3.scaleSequential(d3.interpolateReds)
-						.domain([Math.log(minE), Math.log(maxE)]);				
+						.domain([Math.log(minE), Math.log(maxE)]);
 
    //console.log(intColor2(Math.log(minE)));
    //console.log(intColor2(Math.log(maxE)));
@@ -430,8 +253,8 @@ function ready(ndata, usage, currentKey, currentYear) {
 		.attr("transform", "translate("+(600 + legendWidth/2)+"," + (50 + legendHeight) + ")")
 		.call(xAxis);
 
-	 
-	//console.log(data.features);  
+
+	//console.log(data.features);
 	  svg.append("g")
 		  .attr("class", "countries")
 		  .selectAll("path")
@@ -470,15 +293,10 @@ function ready(ndata, usage, currentKey, currentYear) {
 function call_promise() {
 Promise.all([
   d3.json("http://enjalot.github.io/wwsd/data/world/world-110m.geojson"),
-  d3.csv("http://localhost:8000/data/Global_Energy_Usage_2.csv"),
+  d3.csv("/data/Global_Energy_Usage_2.csv"),
   currentKey,
   currentYear
 ]).then( function(data){ready(data[0], data[1],data[2],data[3])});
 }
 
 call_promise();
-</script>
-</body>
-
-
-</html>
