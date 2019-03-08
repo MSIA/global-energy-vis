@@ -59,7 +59,6 @@ d3.csv("Data/data.csv", function(d, i, columns) {
 }, function(error, data) {
   if (error) throw error;
 
-  console.log(data);
   var cols = data.columns.slice(3,7);
 
   data = data.filter(function(d) { 
@@ -69,6 +68,7 @@ d3.csv("Data/data.csv", function(d, i, columns) {
 
   console.log(data);
   var keys = data.map(function(d) { return d.Country_Code; });
+  console.log(cols);
   console.log(keys);
 
   //Setting the domain
@@ -76,43 +76,27 @@ d3.csv("Data/data.csv", function(d, i, columns) {
   x1.domain(keys).rangeRound([0, x0.bandwidth()]);
   y.domain([d3.min(data, function(d) { return d3.min(cols, function(cols) { return d[cols]; }); }), d3.max(data, function(d) { return d3.max(cols, function(cols) { return d[cols]; }); })]).nice();
 
-  console.log(x1("AUS"));
-  console.log(x1.bandwidth());
-  console.log(data.filter(function(d) { return d.Country_Code == "IND" })[0]['Pop_Growth']);
+  var dat_t = cols.map(function(col) {
+    return {metric: col , sub: data.map(function(d) {return {key: d['Country_Code'], value:d[col]}})};
+  });
+
+  console.log(dat_t);
 
   //Creating groups for bar
-  for(col in cols) {
-    var temp = svg.append("g")
-      .selectAll("g")
-      .data(data)
-      .enter().append("g")
-        .attr("transform", "translate(" + x0(cols[col]) + ",0)")
-      .selectAll("rect")
-      .data(function(d) {console.log({key: d['Country_Code'], value: d[cols[col]]}); return {key: d['Country_Code'], value: d[cols[col]]};});
-    console.log(temp);
-    temp = temp
-      .enter().append("rect");
-    console.log(temp);
-    temp
-        .attr("x", function(d) { console.log(x1(d.key)); return x1(d.key); })
-        .attr("y", function(d) { console.log(y(Math.max(0, d.value))); return y(Math.max(0, d.value)); })
-        .attr("width", x1.bandwidth())
-        .attr("height", function(d) { return Math.abs(y(0) - y(d.value)); })
-        .attr("fill", function(d) { return z(d.key); });
-  }
-  // svg.append("g")
-  //   .selectAll("g")
-  //   .data(data)
-  //   .enter().append("g")
-  //     .attr("transform", function(d) { return "translate(" + x0(d.Country_Code) + ",0)"; })
-  //   .selectAll("rect")
-  //   .data(function(d) { return keys.map(function(key) { return {key: key, value: d[key]}; }); })
-  //   .enter().append("rect")
-  //     .attr("x", function(d) { return x1(d.key); })
-  //     .attr("y", function(d) { return y(Math.max(0, d.value)); })
-  //     .attr("width", x1.bandwidth())
-  //     .attr("height", function(d) { return Math.abs(y(0) - y(d.value)); })
-  //     .attr("fill", function(d) { return z(d.key); });
+
+  svg.append("g")
+    .selectAll("g")
+    .data(dat_t)
+    .enter().append("g")
+      .attr("transform", function(d) { return "translate(" + x0(d.metric) + ",0)"; })
+    .selectAll("rect")
+    .data(function(d) { return d.sub;})
+    .enter().append("rect")
+      .attr("x", function(d) { return x1(d.key); })
+      .attr("y", function(d) { return y(Math.max(0, d.value)); })
+      .attr("width", x1.bandwidth())
+      .attr("height", function(d) { return Math.abs(y(0) - y(d.value)); })
+      .attr("fill", function(d) { return z(d.key); });
 
   svg.append("g")
       .attr("class", "x axis")
@@ -138,9 +122,9 @@ d3.csv("Data/data.csv", function(d, i, columns) {
       .attr("font-size", 10)
       .attr("text-anchor", "end")
     .selectAll("g")
-    .data(keys.slice().reverse())
+    .data(keys.slice())
     .enter().append("g")
-      .attr("transform", function(d, i) { return "translate("+ -1300 + "," + i * 20 + ")"; });
+      .attr("transform", function(d, i) { return "translate("+ (-300 + i*60) + "," + 0 + ")"; });
 
   legend.append("rect")
       .attr("x", width - 19)

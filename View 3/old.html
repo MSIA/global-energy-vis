@@ -83,9 +83,7 @@ d3.csv("Data/data.csv", function(d, i, columns) {
     .enter().append("g")
       .attr("transform", function(d) { return "translate(" + x0(d.Country_Code) + ",0)"; })
     .selectAll("rect")
-    .data(function(d) { return keys.map(function(key) { console.log({key: key, value: d[key]}); return {key: key, value: d[key]}; }); });
-    console.log(temp);
-  temp
+    .data(function(d) { return keys.map(function(key) { return {key: key, value: d[key]}; }); })
     .enter().append("rect")
       .attr("x", function(d) { return x1(d.key); })
       .attr("y", function(d) { return y(Math.max(0, d.value)); })
