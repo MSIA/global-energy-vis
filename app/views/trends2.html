@@ -11,11 +11,11 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat|Playfair+Display" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Playfair+Display" rel="stylesheet">
 
 
   <!-- Custom external stylesheets -->
-  <link rel="stylesheet" href="../css/lineChart.css">
+  <link rel="stylesheet" href="../css/trends.css">
 
   <style>
     body {
@@ -31,7 +31,7 @@
       border-radius: 15px;
       border-width: 1px;
       border-style: solid;
-      padding: 10px;
+      padding: 5px;
       height: 600px;
       overflow-y: scroll;
     }
@@ -50,7 +50,7 @@
 
 <body>
   <div class="navbar">
-    <h1>India</h1>
+    <h1></h1>
   </div>
   <div class="main">
 
@@ -61,7 +61,10 @@
         </div>
       </div>
       <div class="col-8">
-        <div class="chart-wrapper" id="chart">
+        <div class="chart-wrapper" id="chart1">
+
+        </div>
+        <div class="chart-wrapper" id="chart2">
 
         </div>
       </div>
@@ -84,12 +87,15 @@
   integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 <!-- Custom external scripts -->
-<script src="../js/makeLineChart.js"></script>
 <script src="../js/wikiLoad.js"></script>
+<script src="../js/makeLineChart.js"></script>
 
 <!-- Custom in-page scripts -->
 <script>
-  wikiLoad('India');
+  const Country = 'India'
+
+  $('.navbar>h1').text(Country);
+  wikiLoad(Country);
 
   d3.csv('../../data/energy_full.csv').then(ready)
     .catch(e => console.error(e));
@@ -98,24 +104,38 @@
     // console.log(data)
     data = data.filter(d => d.Country == 'India')
 
-    data.forEach(d => {
-      d.Year = +d.Year;
-      d.co2_milTon = d.co2_milTon ? +d.co2_milTon : 0;
-      d.primary_con_mtoe = d.primary_con_mtoe ? +d.primary_con_mtoe : 0;
-      d.Date = new Date(d.Year, 0);
+    // Reformat data
+    data = data.map(d => {
+      return {
+        Year: +d.Year,
+        co2_milTon: d.co2_milTon ? +d.co2_milTon : null,
+        primary_con_mtoe: +d.primary_con_mtoe,
+        elec_gen_twh: d.elec_gen_twh ? +d.elec_gen_twh : null,
+        hydro_gen_twh: +d.hydro_gen_twh
+      }
     })
 
     var chart = makeLineChart(data, 'Year', {
-      'CO2': { column: 'co2_milTon' },
-      'Consumption': { column: 'primary_con_mtoe' }
+      'CO2': { column: 'co2_milTon', description: 'Description for CO2; Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+      'Consumption': { column: 'primary_con_mtoe', description: 'Description for Consumption; Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }
     });
     chart.bind({
-      selector: '#chart',
-      chartSize: { height: 550, width: parseInt(d3.select('.col-8').style('width')) },
+      selector: '#chart1',
+      chartSize: { height: 300, width: parseInt(d3.select('.col-8').style('width')) },
       axisLabels: { xAxis: 'Years', yAxis: 'Values' }
     });
     chart.render();
-    window.chart = chart
+
+    chart = makeLineChart(data, 'Year', {
+      'Electric': { column: 'elec_gen_twh', description: 'Description for Electric; Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+      'Hydro': { column: 'hydro_gen_twh', description: 'Description for Hydro; Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }
+    });
+    chart.bind({
+      selector: '#chart2',
+      chartSize: { height: 300, width: parseInt(d3.select('.col-8').style('width')) },
+      axisLabels: { xAxis: 'Years', yAxis: 'Values' }
+    });
+    chart.render();
   }
 </script>
 

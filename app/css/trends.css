@@ -48,7 +48,7 @@
 }
 
 .legend  {
-    min-width: 200px;
+    /* min-width: 200px; */
     /* display: flex;
     justify-content: flex-start; */
     /* flex-wrap: wrap; */
@@ -58,7 +58,7 @@
     display: block;
 }
 .legend > div {
-    margin: 0px 25px 10px 0px;
+    margin: 0px 0px 10px 0px;
     flex-grow: 0;
     cursor: pointer;
 }
@@ -66,10 +66,13 @@
     opacity: 0.8;
 }
 .legend p {
-    display:inline-block;
+    font-size: 0.6em;
+    font-family: 'Montserrat', sans-serif;
+}
+.legend h4 {
     font-size: 0.8em;
-    font-family: sans-serif;
-    font-weight: 600;
+    display:inline-block;
+    font-weight: 700;
 }
 .legend .series-marker {
     height: 1em;
@@ -87,9 +90,8 @@
 }
 
 .chart-wrapper .tool circle {
-  fill: black;
-  stroke: crimson;
-  stroke-width: 2px;
+  stroke: black;
+  stroke-width: 1px;
   fill-opacity: 25%;
 }
 .chart-wrapper .tool rect {

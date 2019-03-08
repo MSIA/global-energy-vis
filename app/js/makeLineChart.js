@@ -1,3 +1,4 @@
+// Ref: https://blockbuilder.org/asielen/50a527004cb79facf219
 function makeLineChart(dataset, xName, yNames) {
   let chart = {};
   chart.data = dataset;
@@ -9,7 +10,7 @@ function makeLineChart(dataset, xName, yNames) {
     xAxis: null, yAxis: null, tooltip: null, legend: null
   };
 
-  let colorFunct = d3.scaleOrdinal(d3.schemeCategory10);
+  let colorFunct = d3.scaleOrdinal(d3.schemeSet2);
   function updateColorFunction(colorOptions) {
     /*
      * Takes either a list of colors, a function or an object with the mapping already in place
@@ -43,6 +44,7 @@ function makeLineChart(dataset, xName, yNames) {
   chart.xFormatter = chart.formatAsNumber;
   chart.yFormatter = chart.formatAsFloat;
 
+  // Will return a list of accessors for each series being charted
   function getYFuncts() {
     let yFuncts = [];
     for (let yName in chart.groupObjs) {
@@ -54,6 +56,7 @@ function makeLineChart(dataset, xName, yNames) {
     return yFuncts;
   }
 
+  // Get the global maximum across all y values on chart
   function getYMax() {
     return d3.max(getYFuncts().map(function (fn) {
       return d3.max(chart.data, fn);
@@ -61,21 +64,29 @@ function makeLineChart(dataset, xName, yNames) {
   }
 
   function prepareData() {
+    // Accessor for x dimension
     chart.xFunct = function (d) { return d[xName] };
     chart.bisectYear = d3.bisector(chart.xFunct).left;
 
     let yName, cY;
+    // Create a "group object" for each series
     for (yName in chart.yNames) {
-      chart.groupObjs[yName] = { yFunct: null, visible: null, objs: {} };
+      chart.groupObjs[yName] = {
+        yFunct: null,
+        visible: null,
+        description: chart.yNames[yName].description,
+        objs: {}
+      };
     }
 
+    // Creates an accessor function for a series
     function getYFn(column) {
       return function (d) {
         return d[column];
       };
     }
 
-    chart.yFuncts = [];
+    // Populate the chart's y-value accessors
     for (yName in chart.yNames) {
       cY = chart.groupObjs[yName];
       cY.visible = true;
@@ -185,8 +196,9 @@ function makeLineChart(dataset, xName, yNames) {
       var cY = chart.groupObjs[yName];
       cY.objs.line = { g: null, series: null };
       cY.objs.line.series = d3.line()
-        .curve(d3.curveCardinal)
-        .x(function (d) { return chart.xScale(chart.xFunct(d)); })
+        .defined(d => d != null)
+        // .curve(d3.curveCardinal)
+        .x(d => chart.xScale(chart.xFunct(d)))
         .y(getYScaleFn(yName));
     }
     chart.objs.mainDiv.style("max-width", chart.divWidth + "px");
@@ -207,7 +219,8 @@ function makeLineChart(dataset, xName, yNames) {
       .attr('transform', `translate(${chart.margin.left}, ${chart.margin.top})`);
 
     chart.objs.axes = {};
-    chart.objs.axes.g = chart.objs.g.append('g').attr('class', 'axis');
+    chart.objs.axes.g = chart.objs.g.append('g')
+      .attr('class', 'axis');
 
     chart.objs.axes.x = chart.objs.axes.g.append('g')
       .attr('class', 'x axis')
@@ -267,29 +280,49 @@ function makeLineChart(dataset, xName, yNames) {
         }).on("mousemove", mouseHover);
 
       cY.objs.legend = {};
-      cY.objs.legend.div = chart.objs.legend.append('div').on("click", getToggleFn(yName));
+      cY.objs.legend.div = chart.objs.legend.append('div')
+        .attr('class', 'legend-button')
+        .on("click", getToggleFn(yName));
       cY.objs.legend.icon = cY.objs.legend.div.append('div')
         .attr("class", "series-marker")
         .style("background-color", colorFunct(yName));
-      cY.objs.legend.text = cY.objs.legend.div.append('p').text(yName);
+      cY.objs.legend.title = cY.objs.legend.div.append('h4').text(yName);
+      cY.objs.legend.description = cY.objs.legend.div.append('p').text(cY.description);
 
     }
 
     // Draw tooltips
     // There must be a better way so we don't need a second loop. Issue is draw order so tool tips are on top
-    chart.objs.tooltip = chart.objs.g.append("g").attr("class", "tooltip").style("display", "none");
+    chart.objs.tooltip = chart.objs.g.append("g")
+      .attr("class", "tool")
+      .style("display", "none");
     // Year label
-    chart.objs.tooltip.append("text").attr("class", "year").attr("x", 9).attr("y", 7);
+    chart.objs.tooltip.append("text")
+      .attr("class", "year")
+      .attr("x", 9)
+      .attr("y", 7);
     // Focus line
-    chart.objs.tooltip.append("line").attr("class", "line").attr("y1", 0).attr("y2", chart.height);
+    chart.objs.tooltip.append("line")
+      .attr("class", "line")
+      .attr("y1", 0)
+      .attr("y2", chart.height);
 
     for (yName in chart.groupObjs) {
       cY = chart.groupObjs[yName];
       //Add tooltip elements
-      var tooltip = chart.objs.tooltip.append("g");
-      cY.objs.circle = tooltip.append("circle").attr("r", 5);
-      cY.objs.rect = tooltip.append("rect").attr("x", 8).attr("y", "-5").attr("width", 22).attr("height", '0.75em');
-      cY.objs.text = tooltip.append("text").attr("x", 9).attr("dy", ".35em").attr("class", "value");
+      let tooltip = chart.objs.tooltip.append("g");
+      cY.objs.circle = tooltip.append("circle")
+        .attr("r", 5)
+        .style('fill', colorFunct(yName));
+      cY.objs.rect = tooltip.append("rect")
+        .attr("x", 9)
+        .attr("y", "-5")
+        .attr("width", 50)
+        .attr("height", '0.75em');
+      cY.objs.text = tooltip.append("text")
+        .attr("x", 9)
+        .attr("dy", ".35em")
+        .attr("class", "value");
       cY.objs.tooltip = tooltip;
     }
 
@@ -308,15 +341,14 @@ function makeLineChart(dataset, xName, yNames) {
     return chart;
   }
 
-
-
   function mouseHover() {
-    var x0 = chart.xScale.invert(d3.mouse(this)[0]), i = chart.bisectYear(dataset, x0, 1), d0 = chart.data[i - 1], d1 = chart.data[i];
-    try {
-      var d = x0 - chart.xFunct(d0) > chart.xFunct(d1) - x0 ? d1 : d0;
-    } catch (e) { return; }
-    var minY = chart.height;
-    var yName, cY;
+    let x0 = chart.xScale.invert(d3.mouse(this)[0]),
+      i = chart.bisectYear(dataset, x0, 1),
+      d0 = chart.data[i - 1],
+      d1 = chart.data[i];
+    let d = x0 - chart.xFunct(d0) > chart.xFunct(d1) - x0 ? d1 : d0;
+    let minY = chart.height;
+    let yName, cY;
     for (yName in chart.groupObjs) {
       cY = chart.groupObjs[yName];
       if (cY.visible == false) { continue }
@@ -327,8 +359,11 @@ function makeLineChart(dataset, xName, yNames) {
       minY = Math.min(minY, chart.yScale(cY.yFunct(d)));
     }
 
-    chart.objs.tooltip.select(".tooltip .line").attr("transform", "translate(" + chart.xScale(chart.xFunct(d)) + ")").attr("y1", minY);
-    chart.objs.tooltip.select(".tooltip .year").text("Year: " + chart.xFormatter(chart.xFunct(d)));
+    chart.objs.tooltip.select(".tool .line")
+      .attr("transform", `translate(${chart.xScale(chart.xFunct(d))})`)
+      .attr("y1", minY);
+    chart.objs.tooltip.select(".tool .year")
+      .text("Year: " + chart.xFormatter(chart.xFunct(d)));
   }
 
   return chart;
