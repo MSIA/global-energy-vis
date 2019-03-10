@@ -144,7 +144,7 @@ function makeLineChart(dataset, xName, yNames) {
       if (bindOptions.margin) {
         chart.margin = margin;
       } else {
-        chart.margin = { top: 15, right: 60, bottom: 30, left: 50 };
+        chart.margin = { top: 10, right: 50, bottom: 45, left: 60 };
       }
       if (bindOptions.chartSize) {
         chart.divWidth = bindOptions.chartSize.width;
@@ -227,23 +227,25 @@ function makeLineChart(dataset, xName, yNames) {
       .attr('transform', `translate(0, ${chart.height})`)
       .call(chart.objs.xAxis)
       .append('text')
-      .attr('class', 'label')
-      .attr('x', chart.width / 2)
-      .attr('y', 30)
-      .style('text-anchor', 'middle')
-      .text(chart.xAxisLabel);
+        .attr('class', 'label')
+        .attr('x', chart.width / 2)
+        .attr('y', 30)
+        .attr('fill', 'currentColor')
+        .style('text-anchor', 'middle')
+        .text(chart.xAxisLabel);
 
     chart.objs.axes.y = chart.objs.axes.g.append('g')
       .attr('class', 'y axis')
       .call(chart.objs.yAxis)
       .append('text')
-      .attr('class', 'label')
-      .attr("transform", "rotate(-90)")
-      .attr("y", -42)
-      .attr("x", -chart.height / 2)
-      .attr("dy", ".71em")
-      .style("text-anchor", "middle")
-      .text(chart.yAxisLabel);
+        .attr('class', 'label')
+        .attr("transform", "rotate(-90)")
+        .attr("y", -45)
+        .attr("x", -chart.height / 2)
+        .attr("dy", ".71em")
+        .attr('fill', 'currentColor')
+        .style("text-anchor", "middle")
+        .text(chart.yAxisLabel);
 
     return chart;
   }

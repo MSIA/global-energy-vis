@@ -11,7 +11,7 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Playfair+Display" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Playfair+Display:400,700" rel="stylesheet">
 
 
   <!-- Custom external stylesheets -->
@@ -21,6 +21,7 @@
     body {
       margin-bottom: 100px;
       font-family: 'Montserrat', sans-serif;
+      background-color:rgb(250, 250, 250)
     }
 
     .main {
@@ -28,14 +29,21 @@
     }
 
     .sidebox {
-      border-radius: 15px;
-      border-width: 1px;
+      border-radius: 10px;
+      border-width: 2px;
       border-style: solid;
       padding: 5px;
       height: 600px;
       overflow-y: scroll;
+      background-color:rgb(240, 240, 240)
+    }
+    #wiki {
+      font-size: 0.75em
     }
 
+    h4 {
+      font-family: 'Playfair Display', serif;
+    }
     .navbar {
       font-family: 'Playfair Display', serif;
       background-color: #173e43;
@@ -56,8 +64,13 @@
 
     <div class="row">
       <div class="col-2">
-        <div id="wiki" class="sidebox">
+        <div class="sidebox">
+          <h4 style="border-bottom: solid black 1px">
+            From Wikipedia
+          </h4>
+          <div id="wiki">
 
+          </div>
         </div>
       </div>
       <div class="col-8">
@@ -97,12 +110,11 @@
   $('.navbar>h1').text(Country);
   wikiLoad(Country);
 
-  d3.csv('../../data/energy_full.csv').then(ready)
+  d3.csv('../../data/full.csv').then(ready)
     .catch(e => console.error(e));
-
   function ready(data) {
-    // console.log(data)
     data = data.filter(d => d.Country == 'India')
+    console.log(data)
 
     // Reformat data
     data = data.map(d => {
@@ -122,7 +134,8 @@
     chart.bind({
       selector: '#chart1',
       chartSize: { height: 300, width: parseInt(d3.select('.col-8').style('width')) },
-      axisLabels: { xAxis: 'Years', yAxis: 'Values' }
+      axisLabels: { xAxis: 'Year', yAxis: 'Values' },
+      colors: ['blue', 'red']
     });
     chart.render();
 
@@ -133,7 +146,8 @@
     chart.bind({
       selector: '#chart2',
       chartSize: { height: 300, width: parseInt(d3.select('.col-8').style('width')) },
-      axisLabels: { xAxis: 'Years', yAxis: 'Values' }
+      axisLabels: { xAxis: 'Year', yAxis: 'Values' },
+      colors: ['green', 'orange']
     });
     chart.render();
   }
