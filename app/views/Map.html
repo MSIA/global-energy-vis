@@ -19,22 +19,22 @@
 <body>
     <div class="container">
         <div class="row">
-          <h3 class="nine columns">Energy use statistics map</h3>
+          <h3 class="nine columns">Global Report</h3>
           <select id="select-key" class="three columns">
-            <option value="u2017" selected="selected">Energy in %</option>
-            <option value="r2017">Renewable area in %</option>
+            <option value="Pop_T" selected="selected">Population</option>
+			<option value="GDP">GDP</option>
+			<option value="GDP_PerCap">GDP Per Capita</option>
+			<option value="Emp_rate_T">Employment Rate</option>
+			<option value="primary_con_mtoe">Primary Energy Consumption</option>
             <!-- <option value="Education">%</option> -->
             <!-- <option value="Population">Population %</option> -->
           </select>
         </div>
 
-
-<svg id = "gradientBox" width="960" height="100"></svg>
-
 <svg id = "mapBox"></svg>
 
 <div id="vis">
-  <button id="play-button">Play</button>
+  <button id="play-button" style="height:50px;width:75px">Play</button> 
 </div>
 
 
