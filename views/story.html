@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Index</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat|Playfair+Display" rel="stylesheet">
+
+  <!-- Custom external stylesheets -->
+  <!-- <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="/stylesheets/story.css"> -->
+
+  <style>
+    #sections {
+      position: relative;
+      display: inline-block;
+      width: 250px;
+      top: 60px;
+      z-index: 90;
+    }
+
+    .step {
+      margin-bottom: 200px;
+    }
+
+    #vis {
+      display: inline-block;
+      position: fixed;
+      top: 60px;
+      z-index: 1;
+      margin-left: 0;
+
+      height: 600px;
+      width: 600px;
+      background-color: #ddd;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div id='graphic'>
+      <div id='sections'>
+        <section class="step">
+          <div class="title">
+            <h1>Lighting up the world</h1>
+            <h3>How energy usage has changed over the course of modern history</h3>
+          </div>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia velit vitae dolore, qui harum vero
+            repellendus
+            beatae quae, ipsam consequuntur iste. Culpa, aliquam. Similique molestias eius earum consectetur. Quam, rem.
+          </p>
+        </section>
+        <section class="step">
+          <h1>1</h1>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia velit vitae dolore, qui harum vero
+            repellendus
+            beatae quae, ipsam consequuntur iste. Culpa, aliquam. Similique molestias eius earum consectetur. Quam, rem.
+          </p>
+        </section>
+        <section class="step">
+          <h1>2</h1>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia velit vitae dolore, qui harum vero
+            repellendus
+            beatae quae, ipsam consequuntur iste. Culpa, aliquam. Similique molestias eius earum consectetur. Quam, rem.
+          </p>
+        </section>
+        <section class="step">
+          <h1>3</h1>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia velit vitae dolore, qui harum vero
+            repellendus
+            beatae quae, ipsam consequuntur iste. Culpa, aliquam. Similique molestias eius earum consectetur. Quam, rem.
+          </p>
+        </section>
+        <section class="step">
+          <h1>4</h1>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia velit vitae dolore, qui harum vero
+            repellendus
+            beatae quae, ipsam consequuntur iste. Culpa, aliquam. Similique molestias eius earum consectetur. Quam, rem.
+          </p>
+        </section>
+      </div>
+      <div id='vis'>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Javascript Libraries -->
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<!-- Custom external scripts -->
+<!-- <script src="/javascripts/script.js"></script> -->
+
+<!-- Custom in-page scripts -->
+<script>
+  let sections = d3.selectAll('.step')
+  sectionPositions = [];
+  var startPos;
+  sections.each(function (d, i) {
+    var top = this.getBoundingClientRect().top;
+
+    if (i === 0) {
+      startPos = top;
+    }
+    sectionPositions.push(top - startPos);
+  });
+
+  d3.select(window)
+    .on("scroll.scroller", position);
+
+  function position() {
+    let pos = window.pageYOffset - 10;
+    console.log(pos);
+    
+    var sectionIndex = d3.bisect(sectionPositions, pos);
+    sectionIndex = Math.min(sections.size() - 1, sectionIndex);
+
+    if (currentIndex !== sectionIndex) {
+      dispatch.active(sectionIndex);
+      currentIndex = sectionIndex;
+    }
+  }
+</script>
+
+</html>

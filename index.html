@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Index</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat|Playfair+Display" rel="stylesheet">
+
+  <!-- Custom external stylesheets -->
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <link rel="stylesheet" href="/stylesheets/landing.css">
+</head>
+
+<body>
+  <div class="bg">
+    <div class="container vertical-center">
+      <div class="row">
+        <div class="col-md-6">
+          <h1>Warming up to New Energies</h1>
+          <div class="text">
+            <p>
+              Welcome and thank you for taking the time to explore our world's relationship with energy. This platform
+              is here for you to learn more about the world's use of energy and to offer new, global perspectives. We
+              hope that the data speaks to you and inspires new thought and perhaps even sparks a passion.
+            </p>
+          </div>
+          <div class="button mx-auto">
+            <a class="btn btn-light text-center block" href="#">Begin</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!-- Javascript Libraries -->
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+  integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<!-- Custom external scripts -->
+<script src="/javascripts/script.js"></script>
+
+<!-- Custom in-page scripts -->
+<script>
+  $(function () {
+    $('.text')
+      // .css({ 'top': '30px' })
+      // .css({ 'display': 'none' })
+      .animate({ 'top': 0 }, { "duration": 3000, "queue": false })
+      .css('visibility', 'visible').hide().fadeIn(3000);
+    $('.button').delay(6000).animate({'opacity':1}, 2000)
+  });
+</script>
+
+</html>
