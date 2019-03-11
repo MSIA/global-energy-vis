@@ -47,8 +47,10 @@ var tip = d3
 
 var margin = { top: 40, right: 20, bottom: 40, left: 20 };
 var width = document.getElementById('map').clientWidth - margin.left - margin.right;
-var height = width / 5 * 3 - margin.top - margin.bottom;
+var height = width / 2.2 - margin.top - margin.bottom;
 
+console.log(width);
+console.log(height);
 d3.select('#play-button').style('top', height);
 
 var path = d3.geoPath();
@@ -121,6 +123,7 @@ scales.forEach((scale, i) => {
 //SLIDERBeg//
 
 let slideWidth = width * 4 / 5;
+console.log(slideWidth);
 var svgslider = d3
   .select('#vis')
   .append('svg')
@@ -134,6 +137,7 @@ var moving = false;
 var currentYear = startYear;
 var currentValue = 0;
 var targetValue = slideWidth - 20;
+console.log(targetValue);
 
 var playButton = d3.select('#play-button');
 
@@ -171,9 +175,10 @@ function update(h) {
 
 function step() {
   update(x.invert(currentValue));
-  currentValue = Math.round((currentValue + targetValue / (endYear - startYear))*100)/100;
-
-  if (currentValue > targetValue) {
+  currentValue = Math.round((currentValue + targetValue / (endYear - startYear)));
+  console.log(x.invert(currentValue));
+  console.log(currentValue);
+  if (currentValue > targetValue+20) {
     moving = false;
     currentValue = 0;
     clearInterval(timer);
@@ -315,7 +320,7 @@ function ready(currentKey, currentYear) {
         slider.interrupt();
       })
       .on('start drag', function() {
-        currentValue = d3.event.x;
+        currentValue = d3.event.x;  console.log(d3.event.x); console.log(x.invert(currentValue));
         update(x.invert(currentValue));
       })
   );
