@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Montserrat:300" rel="stylesheet">
+
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://unpkg.com/d3-simple-slider"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-crossorigin="anonymous"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css"
-rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<link href="https://fonts.googleapis.com/css?family=Montserrat:300" rel="stylesheet">
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
 
 <style>
 
@@ -53,6 +54,12 @@ svg {
   fill: #626065;
 }
 
+#metrics {
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  fill: #626065;
+}
+
 </style>
 
 <body>
@@ -62,13 +69,16 @@ svg {
   <div id="countries">
     <u>Choose 4 countries:</u>
   </div>
+  <div id="metrics">
+    <u>Choose 4 metrics:</u>
+  </div>
 </body>
 
 <script>
 
 //defining the dataswap function
 
-function dataswap(yearGroup, newCountries, svg) {
+function dataswap(yearGroup, newMetrics, newCountries, svg) {
 
   //filter countries
   thisDataYears = datMaster.filter(function(d) {
@@ -82,8 +92,9 @@ function dataswap(yearGroup, newCountries, svg) {
     {return d;}
   });
 
+  x0.domain(newMetrics);
   x1.domain(newCountries).rangeRound([0, x0.bandwidth()]);
-  y.domain([d3.min(thisDataYears, function(d) { return d3.min(cols, function(cols) { return d[cols]; }); }), d3.max(thisDataYears, function(d) { return d3.max(cols, function(cols) { return d[cols]; }); })]).nice();
+  y.domain([d3.min(thisDataYears, function(d) { return d3.min(newMetrics, function(newMetrics) { return d[newMetrics]; }); }), d3.max(thisDataYears, function(d) { return d3.max(newMetrics, function(newMetrics) { return d[newMetrics]; }); })]).nice();
 
   svg.selectAll(".yAxis")
     .call(d3.axisLeft(y)
@@ -94,7 +105,7 @@ function dataswap(yearGroup, newCountries, svg) {
     .call(d3.axisBottom(x0));
 
   //restructuring data
-  thisDat_t = cols.map( function(col) {
+  thisDat_t = newMetrics.map( function(col) {
     return {metric: col , sub: newCountries.map( function(k) {
       var val = thisData.filter(function(d) {
         if(d['Country_Name'] == k) {
@@ -107,6 +118,7 @@ function dataswap(yearGroup, newCountries, svg) {
   //Updating barGroup
   svg.selectAll('.overallMetric')
     .data(thisDat_t)
+    .attr("transform", function(d) { return "translate(" + x0(d.metric) + ",0)"; })
     .selectAll('rect')
     .data(function(d) { return d.sub;})
     .transition()
@@ -128,7 +140,6 @@ function dataswap(yearGroup, newCountries, svg) {
     .duration(1000)
     .text(function(d) { return d; });
 
-
 }
 
 d3.csv("Data/data.csv", function(d, i, columns) {
@@ -138,16 +149,16 @@ d3.csv("Data/data.csv", function(d, i, columns) {
 }, function(error, dat) {
   if (error) throw error;
 
-datMaster = dat;
-var countryList = d3.set(dat.map(function(d) { return d.Country_Name })).values();
-countryList.unshift("");
-var yearList = d3.set(dat.map(function(d) { return d.Year })).values();
+  datMaster = dat;
+  var countryList = d3.set(dat.map(function(d) { return d.Country_Name })).values();
+  countryList.unshift("");
+  var yearList = d3.set(dat.map(function(d) { return d.Year })).values();
 
-var countryIncluded = ["France", "India", "United Kingdom", "United States"];
+  var countryIncluded = ["France", "India", "United Kingdom", "United States"];
 
-var dropdown = d3.select('#countries');
+  var dropdown = d3.select('#countries');
 
-dropdown
+  dropdown
     .append("select")
     .attr('class','country1')
     .selectAll('option')
@@ -156,72 +167,131 @@ dropdown
     .attr("value", function(d){return d;})
 		.text(function (d) { return d; });
 
-$('.country1').select2({placeholder: "France"});
+  $('.country1').select2({placeholder: "France"});
 
-dropdown
-  .append("select")
-  .attr('class','country2')
-  .selectAll('option')
-	.data(countryList).enter()
-	.append('option')
-  .attr("value", function(d){return d;})
-	.text(function (d) { return d; });
+  dropdown
+    .append("select")
+    .attr('class','country2')
+    .selectAll('option')
+    .data(countryList).enter()
+    .append('option')
+    .attr("value", function(d){return d;})
+    .text(function (d) { return d; });
 
-$('.country2').select2({placeholder: "India"});
+  $('.country2').select2({placeholder: "India"});
 
-dropdown
-  .append("select")
-  .attr('class','country3')
-  .selectAll('option')
-	.data(countryList).enter()
-	.append('option')
-  .attr("value", function(d){return d;})
-	.text(function (d) { return d; });
+  dropdown
+    .append("select")
+    .attr('class','country3')
+    .selectAll('option')
+    .data(countryList).enter()
+    .append('option')
+    .attr("value", function(d){return d;})
+    .text(function (d) { return d; });
 
-$('.country3').select2({placeholder: "United Kingdom"});
+  $('.country3').select2({placeholder: "United Kingdom"});
 
-dropdown
-  .append("select")
-  .attr('class','country4')
-  .selectAll('option')
-	.data(countryList).enter()
-	.append('option')
-  .attr("value", function(d){return d;})
-	.text(function (d) { return d; });
+  dropdown
+    .append("select")
+    .attr('class','country4')
+    .selectAll('option')
+    .data(countryList).enter()
+    .append('option')
+    .attr("value", function(d){return d;})
+    .text(function (d) { return d; });
 
-$('.country4').select2({placeholder: "United States"});
+  $('.country4').select2({placeholder: "United States"});
 
-//margins and svg
-var margin = {top: 80, right: 20, bottom: 40, left: 40};
+  //dropdowns for metrics
 
-var width = 1580 - margin.left - margin.right;
-var height = 750 - margin.top - margin.bottom;
+  var metricList = ["",'Education_Exp', 'GDP_Growth', 'Health_Exp', 'Pop_Growth'];
+  var cols = ['Education_Exp', 'GDP_Growth', 'Health_Exp', 'Pop_Growth'];
 
-var svg1 = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom );
+  var mapping = [{key: "Education_Exp", value: "EdAbs"}, {key: "GDP_Growth", value: "GDPAbs"}, {key: "Pop_Growth", value: "PopAbs"}, {key: "Health_Exp", value: "HeaAbs"}];
 
-var svg = svg1
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  var dropdown2 = d3.select('#metrics');
 
-//Scale definitions
-//For the country
-x0 = d3.scaleBand()
-    .rangeRound([0, width])
-    .paddingInner(0.1);
+  dropdown2
+    .append("select")
+    .attr('class','metric1')
+    .selectAll('option')
+	  .data(metricList).enter()
+	  .append('option')
+    .attr("value", function(d){return d;})
+		.text(function (d) { return d; });
 
-//For the metric
-x1 = d3.scaleBand()
-    .padding(0.05);
+  $('.metric1').select2({placeholder: "Education_Exp"});
 
-//for the y-axis
-y = d3.scaleLinear()
-    .rangeRound([height, 0]);
+  dropdown2
+    .append("select")
+    .attr('class','metric2')
+    .selectAll('option')
+    .data(metricList).enter()
+    .append('option')
+    .attr("value", function(d){return d;})
+    .text(function (d) { return d; });
 
-//For the country
-z = d3.scaleOrdinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+  $('.metric2').select2({placeholder: "GDP_Growth"});
+
+  dropdown2
+    .append("select")
+    .attr('class','metric3')
+    .selectAll('option')
+    .data(metricList).enter()
+    .append('option')
+    .attr("value", function(d){return d;})
+    .text(function (d) { return d; });
+
+  $('.metric3').select2({placeholder: "Health_Exp"});
+
+  dropdown2
+    .append("select")
+    .attr('class','metric4')
+    .selectAll('option')
+    .data(metricList).enter()
+    .append('option')
+    .attr("value", function(d){return d;})
+    .text(function (d) { return d; });
+
+  $('.metric4').select2({placeholder: "Pop_Growth"});
+
+
+  //margins and svg
+  var margin = {top: 80, right: 20, bottom: 40, left: 40};
+
+  var width = 1580 - margin.left - margin.right;
+  var height = 720 - margin.top - margin.bottom;
+
+  var svg1 = d3.select("body").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom );
+
+  var svg = svg1
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  //Scale definitions
+  //For the country
+  x0 = d3.scaleBand()
+      .rangeRound([0, width])
+      .paddingInner(0.1);
+
+  //For the metric
+  x1 = d3.scaleBand()
+      .padding(0.05);
+
+  //for the y-axis
+  y = d3.scaleLinear()
+      .rangeRound([height, 0]);
+
+  //For the country
+  z = d3.scaleOrdinal()
+      .range(["#b3de69","#fccde5","#bc80bd","#ffed6f"]);
+
+  //tooltip
+  // tip = d3.tip()
+  // .attr('class', 'd3-tip')
+  // .offset([-10, 0]);
 
   var yearNow = svg1.append("text")
     .attr('class','value-time')
@@ -255,7 +325,7 @@ z = d3.scaleOrdinal()
 
   function changeYear() {
     yearNow.text(sliderTime.value());
-    dataswap(sliderTime.value(), countryIncluded, svg);
+    dataswap(sliderTime.value(), cols, countryIncluded, svg);
   };
 
   var gTime = svg1.append("g")
@@ -269,24 +339,42 @@ z = d3.scaleOrdinal()
   $('.country1').on('change', function (e) {
   var c1 = $(".country1 option:selected").text();
   countryIncluded[0] = c1;
-  dataswap(sliderTime.value(), countryIncluded, svg);} );
+  dataswap(sliderTime.value(), cols, countryIncluded, svg);} );
 
   $('.country2').on('change', function (e) {
   var c2 = $(".country2 option:selected").text();
   countryIncluded[1] = c2;
-  dataswap(sliderTime.value(), countryIncluded, svg);} );
+  dataswap(sliderTime.value(), cols, countryIncluded, svg);} );
 
   $('.country3').on('change', function (e) {
   var c3 = $(".country3 option:selected").text();
   countryIncluded[2] = c3;
-  dataswap(sliderTime.value(), countryIncluded, svg);} );
+  dataswap(sliderTime.value(), cols, countryIncluded, svg);} );
 
   $('.country4').on('change', function (e) {
   var c4 = $(".country4 option:selected").text();
   countryIncluded[3] = c4;
-  dataswap(sliderTime.value(), countryIncluded, svg);} );
+  dataswap(sliderTime.value(), cols, countryIncluded, svg);} );
 
-  cols = ['Education_Exp', 'GDP_Growth', 'Health_Exp', 'Pop_Growth'];
+  $('.metric1').on('change', function (e) {
+  var c1 = $(".metric1 option:selected").text();
+  cols[0] = c1;
+  dataswap(sliderTime.value(), cols, countryIncluded, svg);} );
+
+  $('.metric2').on('change', function (e) {
+  var c2 = $(".metric2 option:selected").text();
+  cols[1] = c2;
+  dataswap(sliderTime.value(), cols, countryIncluded, svg);} );
+
+  $('.metric3').on('change', function (e) {
+  var c3 = $(".metric3 option:selected").text();
+  cols[2] = c3;
+  dataswap(sliderTime.value(), cols, countryIncluded, svg);} );
+
+  $('.metric4').on('change', function (e) {
+  var c4 = $(".metric4 option:selected").text();
+  cols[3] = c4;
+  dataswap(sliderTime.value(), cols, countryIncluded, svg);} );
 
   var dataYears = dat.filter(function(d) {
     if (countryIncluded.indexOf(d.Country_Name) >= 0)
@@ -333,6 +421,10 @@ z = d3.scaleOrdinal()
       .attr("height", function(d) { return Math.abs(y(0) - y(d.value)); })
       .attr("fill", function(d) { return z(d.key); });
 
+  // tip
+  //   .html(function(d) {
+  //   return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";});
+  
   //Updating x and y axis
   svg.append("g")
       .attr("class", "xAxis")
@@ -353,7 +445,7 @@ z = d3.scaleOrdinal()
     .data(countryIncluded.slice())
     .enter().append("g")
     .attr('class', 'legend')
-      .attr("transform", function(d, i) { return "translate("+ (-350 + i*100) + "," + 0 + ")"; });
+      .attr("transform", function(d, i) { return "translate("+ (-500 + i*150) + "," + 0 + ")"; });
 
   legend.append("rect")
       .attr("x", width - 19)
