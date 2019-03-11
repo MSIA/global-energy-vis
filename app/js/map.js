@@ -15,10 +15,13 @@ var maxE;
 var intColor2;
 
 var numberFormat = d3.format(',.2f');
+var dropdown={'Pop_T':'Population','GDP':'GDP','GDP_PerCap':'GDP Per Capita','Emp_rate_T':'Employment Rate','primary_con_mtoe':'Primary Energy Consumption'};
+
+
 
 d3.select('#select-key').on('change', function(a) {
   currentKey = d3.select(this).property('value');
-  currentLabel = d3.select(this).property('value'); //find a way to find the name instead of the value property
+  currentLabel = dropdown[currentKey]; //find a way to find the name instead of the value property
 
   ready(currentKey, currentYear);
 });
