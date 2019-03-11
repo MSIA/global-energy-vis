@@ -146,9 +146,10 @@ d3.csv("Data/data.csv", function(d, i, columns) {
   d["Year"] = +d["Year"];
   for (var i = 3, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]]/100;
   return d;
-}).then((dat) => {
-  //if (error) throw error;
+}).then(ready) 
+.catch(e => console.error(e));
 
+function ready(dat) {
   datMaster = dat;
   var countryList = d3.set(dat.map(function(d) { return d.Country_Name })).values();
   countryList.unshift("");
@@ -288,10 +289,6 @@ d3.csv("Data/data.csv", function(d, i, columns) {
   z = d3.scaleOrdinal()
       .range(["#b3de69","#fccde5","#bc80bd","#ffed6f"]);
 
-  //tooltip
-  // tip = d3.tip()
-  // .attr('class', 'd3-tip')
-  // .offset([-10, 0]);
 
   var yearNow = svg1.append("text")
     .attr('class','value-time')
@@ -421,10 +418,7 @@ d3.csv("Data/data.csv", function(d, i, columns) {
       .attr("height", function(d) { return Math.abs(y(0) - y(d.value)); })
       .attr("fill", function(d) { return z(d.key); });
 
-  // tip
-  //   .html(function(d) {
-  //   return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";});
-  
+
   //Updating x and y axis
   svg.append("g")
       .attr("class", "xAxis")
@@ -461,6 +455,13 @@ d3.csv("Data/data.csv", function(d, i, columns) {
       .style('fill','#626065')
       .text(function(d) { return d; });
 
-});
+  //tooltip
+  tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function(d) {
+    return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";});
+
+};
 
 </script>
