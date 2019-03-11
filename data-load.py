@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import os
 
 co2_milTon = pd.read_csv('./data/co2-emissions-milTon.csv')
@@ -52,3 +51,12 @@ data = pd.merge(data, geo_cap_gw, how='outer', on=['Country', 'Year'])
 data = data.rename(columns={'Region_x': 'Region'}).drop(columns='Region_y')
 data = data.replace({'-':np.nan, '^':np.nan})
 data.sort_values(['Country', 'Year']).to_csv('./data/energy_full.csv', index=False)
+
+energy = pd.read_csv('./data/energy_full.csv')
+indicators = pd.read_csv('./data/indicators.csv')
+key = pd.read_csv('~/Desktop/legend.csv')
+key.head()
+energy = pd.merge(energy, key.iloc[:, 0:3], how='inner', left_on='Country', right_on='Energy_Country')
+pd.merge(energy, indicators, how='left',
+         left_on=['Code', 'Year'],
+         right_on=['Country_Code', 'Year']).to_csv('./data/full.csv')
