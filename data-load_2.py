@@ -35,5 +35,6 @@ for i in col_list:
 full3=pd.merge(full2,renew_new3,on=['Country_Code','Year'],how='left') 
 full3['Pop_Tm']=full3['Pop_T']/float(10**6)
 full3['GDP_b']=full3['GDP']/float(10**9)
-full3['primary_con_toe']=full3['primary_con_mtoe']/full3['Pop_Tm']   
+full3['primary_con_toe']=full3['primary_con_mtoe']/full3['Pop_Tm']
+full4=full3.loc[~full3['Country_Code'].isin(['OED','EMU','PSS']),:]   
 full3.to_csv('./data/full_v2.csv',index=False)
