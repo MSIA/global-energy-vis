@@ -122,7 +122,7 @@ function update(h) {
 
 function step() {
   update(x.invert(currentValue));
-  currentValue = currentValue + targetValue / (endYear - startYear);
+  currentValue = Math.round((currentValue + targetValue / (endYear - startYear))*100)/100;
 
   if (currentValue > targetValue) {
     moving = false;
@@ -208,9 +208,9 @@ function ready(currentKey, currentYear) {
     });
     intColor2 = d3
       .scaleSequential(d3.interpolateReds)
-      .domain([Math.log(minE), Math.log(maxE)]);
+      //.domain([Math.log(minE), Math.log(maxE)]);
     //.domain([Math.cbrt(minE), Math.cbrt(maxE)]);
-    //.domain([minE, maxE]);
+    .domain([minE, maxE]);
   }
 
   if (currentYear == 0) {
@@ -293,7 +293,7 @@ function ready(currentKey, currentYear) {
     .data(geo_data.features)
     .style('fill', function(d) {
       if (lusageById[d.id] > 0) {
-        return intColor2(lusageById[d.id]);
+        return intColor2(usageById[d.id]);
       } else {
         return '#eee';
       }
