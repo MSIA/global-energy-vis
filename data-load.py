@@ -60,3 +60,13 @@ energy = pd.merge(energy, key.iloc[:, 0:3], how='inner', left_on='Country', righ
 pd.merge(energy, indicators, how='left',
          left_on=['Code', 'Year'],
          right_on=['Country_Code', 'Year']).to_csv('./data/full.csv')
+
+full = pd.read_csv('./data/full.csv')
+full = full[pd.notnull(full['Country_Code'])]
+
+renew_new = pd.read_csv('./data/renewable_percent.csv')
+
+
+
+
+
