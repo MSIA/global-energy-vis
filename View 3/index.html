@@ -31,7 +31,7 @@
 select {
   overflow: auto;
   position: absolute;
-  width: 200px;
+  width: 300px;
   height: 20px;
 }
 svg {
@@ -102,7 +102,8 @@ function dataswap(yearGroup, newMetrics, newCountries, svg) {
 
   svg.selectAll(".xAxis")
     .attr("transform", "translate(0," + (y(0)) + ")")
-    .call(d3.axisBottom(x0));
+    .call(d3.axisBottom(x0)
+    .tickFormat(function(d) { return mapping[d]; }));
 
   //restructuring data
   thisDat_t = newMetrics.map( function(col) {
@@ -142,9 +143,9 @@ function dataswap(yearGroup, newMetrics, newCountries, svg) {
 
 }
 
-d3.csv("Data/data.csv", function(d, i, columns) {
-  d["Year"] = +d["Year"];
-  for (var i = 3, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]]/100;
+d3.csv("Data/full_v2.csv", function(d, i, columns) {
+  for (var i = 3, n = 19; i < n; ++i) d[columns[i]] = +d[columns[i]];
+  for (var i = 25, n = 38; i < n; ++i) d[columns[i]] = +d[columns[i]];
   return d;
 }).then(ready) 
 .catch(e => console.error(e));
@@ -208,7 +209,8 @@ function ready(dat) {
   var metricList = ["",'Education_Exp', 'GDP_Growth', 'Health_Exp', 'Pop_Growth'];
   var cols = ['Education_Exp', 'GDP_Growth', 'Health_Exp', 'Pop_Growth'];
 
-  var mapping = [{key: "Education_Exp", value: "EdAbs"}, {key: "GDP_Growth", value: "GDPAbs"}, {key: "Pop_Growth", value: "PopAbs"}, {key: "Health_Exp", value: "HeaAbs"}];
+  mapping = {"Education_Exp": "Education Expenditure", "GDP_Growth": "GDP Growth", "Pop_Growth": "Population Growth", "Health_Exp": "Health Expenditure"};
+  var mappingRev = {"Education Expenditure": "Education_Exp", "GDP Growth": "GDP_Growth", "Population Growth": "Pop_Growth", "Health Expenditure": "Health_Exp"};
 
   var dropdown2 = d3.select('#metrics');
 
@@ -219,9 +221,9 @@ function ready(dat) {
 	  .data(metricList).enter()
 	  .append('option')
     .attr("value", function(d){return d;})
-		.text(function (d) { return d; });
+		.text(function (d) { return mapping[d]; });
 
-  $('.metric1').select2({placeholder: "Education_Exp"});
+  $('.metric1').select2({placeholder: "Education Expenditure"});
 
   dropdown2
     .append("select")
@@ -230,9 +232,9 @@ function ready(dat) {
     .data(metricList).enter()
     .append('option')
     .attr("value", function(d){return d;})
-    .text(function (d) { return d; });
+    .text(function (d) { return mapping[d]; });
 
-  $('.metric2').select2({placeholder: "GDP_Growth"});
+  $('.metric2').select2({placeholder: "GDP Growth"});
 
   dropdown2
     .append("select")
@@ -241,9 +243,9 @@ function ready(dat) {
     .data(metricList).enter()
     .append('option')
     .attr("value", function(d){return d;})
-    .text(function (d) { return d; });
+    .text(function (d) { return mapping[d]; });
 
-  $('.metric3').select2({placeholder: "Health_Exp"});
+  $('.metric3').select2({placeholder: "Health Expenditure"});
 
   dropdown2
     .append("select")
@@ -252,9 +254,9 @@ function ready(dat) {
     .data(metricList).enter()
     .append('option')
     .attr("value", function(d){return d;})
-    .text(function (d) { return d; });
+    .text(function (d) { return mapping[d]; });
 
-  $('.metric4').select2({placeholder: "Pop_Growth"});
+  $('.metric4').select2({placeholder: "Population Growth"});
 
 
   //margins and svg
@@ -355,22 +357,22 @@ function ready(dat) {
 
   $('.metric1').on('change', function (e) {
   var c1 = $(".metric1 option:selected").text();
-  cols[0] = c1;
+  cols[0] = mappingRev[c1];
   dataswap(sliderTime.value(), cols, countryIncluded, svg);} );
 
   $('.metric2').on('change', function (e) {
   var c2 = $(".metric2 option:selected").text();
-  cols[1] = c2;
+  cols[1] = mappingRev[c2];
   dataswap(sliderTime.value(), cols, countryIncluded, svg);} );
 
   $('.metric3').on('change', function (e) {
   var c3 = $(".metric3 option:selected").text();
-  cols[2] = c3;
+  cols[2] = mappingRev[c3];
   dataswap(sliderTime.value(), cols, countryIncluded, svg);} );
 
   $('.metric4').on('change', function (e) {
   var c4 = $(".metric4 option:selected").text();
-  cols[3] = c4;
+  cols[3] = mappingRev[c4];
   dataswap(sliderTime.value(), cols, countryIncluded, svg);} );
 
   var dataYears = dat.filter(function(d) {
@@ -423,7 +425,8 @@ function ready(dat) {
   svg.append("g")
       .attr("class", "xAxis")
       .attr("transform", "translate(0," + (y(0)) + ")")
-      .call(d3.axisBottom(x0));
+      .call(d3.axisBottom(x0)
+      .tickFormat(function(d) { return mapping[d]; }));
 
   svg.append("g")
       .attr("class", "yAxis")
@@ -456,11 +459,11 @@ function ready(dat) {
       .text(function(d) { return d; });
 
   //tooltip
-  tip = d3.tip()
-    .attr('class', 'd3-tip')
-    .offset([-10, 0])
-    .html(function(d) {
-    return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";});
+  // tip = d3.tip()
+  //   .attr('class', 'd3-tip')
+  //   .offset([-10, 0])
+  //   .html(function(d) {
+  //   return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";});
 
 };
 
