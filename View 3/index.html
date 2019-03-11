@@ -4,7 +4,7 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css?family=Montserrat:300" rel="stylesheet">
 
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://unpkg.com/d3-simple-slider"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
@@ -146,8 +146,8 @@ d3.csv("Data/data.csv", function(d, i, columns) {
   d["Year"] = +d["Year"];
   for (var i = 3, n = columns.length; i < n; ++i) d[columns[i]] = +d[columns[i]]/100;
   return d;
-}, function(error, dat) {
-  if (error) throw error;
+}).then((dat) => {
+  //if (error) throw error;
 
   datMaster = dat;
   var countryList = d3.set(dat.map(function(d) { return d.Country_Name })).values();
