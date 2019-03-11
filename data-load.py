@@ -64,4 +64,9 @@ pd.merge(energy, indicators, how='left',
 full = pd.read_csv('./data/full.csv')
 full = full[pd.notnull(full['Country_Code'])]
 
+renew_new = pd.read_csv('./data/renewable_percent.csv')
+
+
+
+
 
