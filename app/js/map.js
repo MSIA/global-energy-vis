@@ -15,7 +15,7 @@ var maxE;
 var intColor2;
 
 var numberFormat = d3.format(',.2f');
-var dropdown={'Pop_T':'Population','GDP':'GDP','GDP_PerCap':'GDP Per Capita','Emp_rate_T':'Employment Rate','primary_con_mtoe':'Primary Energy Consumption'};
+var dropdown={'primary_con_toe':'Primary Energy Consumption per Capita','GDP_PerCap':'GDP Per Capita','renewable_percentage':'Percentage Renewable Energy Consumption'};
 
 
 
@@ -156,9 +156,9 @@ var handle = slider
 function first_func(ndata, full) {
   geo_data = ndata;
   full_data = full;
-  currentKey = 'Pop_T';
+  currentKey = 'renewable_percentage';
   currentYear = 0;
-  currentLabel = 'Population';
+  currentLabel = 'Percentage Renewable Energy Consumption';
 
   svg
     .append('g')
@@ -197,7 +197,7 @@ function ready(currentKey, currentYear) {
     endYear = d3.max(full_cur, function(d) {
       return +d.Year;
     });
-
+	currentYear = endYear;
     currentKeyPrev = currentKey;
 
     minE = d3.min(full_cur, function(d) {
@@ -264,9 +264,6 @@ function ready(currentKey, currentYear) {
       })
       .on('start drag', function() {
         currentValue = d3.event.x;
-				// console.log(currentValue);
-				console.log(d3.event.x);
-        console.log(x.invert(currentValue));
         update(x.invert(currentValue));
       })
   );
@@ -274,7 +271,6 @@ function ready(currentKey, currentYear) {
   var usageById = {};
   var lusageById = {};
   full_data2 = full_cur.filter(d => d.Year == currentYear);
-
   full_data2.forEach(function(d) {
     usageById[d.Code] = +d[currentKey];
   });
@@ -292,7 +288,7 @@ function ready(currentKey, currentYear) {
     .selectAll('path')
     .data(geo_data.features)
     .style('fill', function(d) {
-      if (lusageById[d.id] > 0) {
+      if (usageById[d.id] > 0) {
         return intColor2(usageById[d.id]);
       } else {
         return '#eee';
@@ -318,8 +314,9 @@ function ready(currentKey, currentYear) {
 }
 
 Promise.all([
-  d3.json('http://enjalot.github.io/wwsd/data/world/world-110m.geojson'),
-  d3.csv('/data/full.csv')
+  //d3.json('http://enjalot.github.io/wwsd/data/world/world-110m.geojson'),
+  d3.json('/data/countries.json'),
+  d3.csv('/data/full_v2.csv')
 ]).then(function(data) {
   first_func(data[0], data[1]);
 });
