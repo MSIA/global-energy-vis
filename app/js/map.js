@@ -13,16 +13,17 @@ var full_cur;
 var minE;
 var maxE;
 var intColor2;
-
+var currentLabelUnit;
 var numberFormat = d3.format(',.2f');
 var dropdown={'primary_con_toe':'Primary Energy Consumption per Capita','GDP_PerCap':'GDP Per Capita','renewable_percentage':'Percentage Renewable Energy Consumption'};
+var dropdownUnit={'primary_con_toe':'Primary Energy Consumption per Capita (tonnes of oil equivalent)','GDP_PerCap':'GDP Per Capita (USD)','renewable_percentage':'Percentage Renewable Energy Consumption'};
 
 
 
 d3.select('#select-key').on('change', function(a) {
   currentKey = d3.select(this).property('value');
   currentLabel = dropdown[currentKey]; //find a way to find the name instead of the value property
-
+  currentLabelUnit = dropdownUnit[currentKey];
   ready(currentKey, currentYear);
 });
 
@@ -68,6 +69,40 @@ var projection = d3
 var path = d3.geoPath().projection(projection);
 
 svg.call(tip);
+
+const swidth = 480;
+const sheight = 250;
+const smargin = 20;
+const sbarWidth = 10;
+const snumBars = (swidth - 2 * smargin) / sbarWidth;
+const sbarHeight = 25;
+
+const sstart = 1;
+const send = (swidth - 2 * smargin);//250
+const spoints = d3.range(sstart, send, sbarWidth)
+const linScale = d3.scaleLinear().domain([sstart, send]);
+const LegendcolorScale = d3.scaleSequential(
+        (d) => d3.interpolateReds(linScale(d))
+      );
+
+const scales = [LegendcolorScale];
+	
+scales.forEach((scale, i) => {
+	//d3.select('#mapBox')
+	svg
+	.append('g')
+	.attr('id','legend')
+          .attr('class', 'scale-' + i)
+          .attr('transform', 'translate(' + (smargin+ width/2) + ',' +  (2 * smargin + i * 3 * sbarHeight) + ')')
+        .selectAll('bars').data(spoints).enter()
+        .append('rect')
+          .attr('y', 0)
+          .attr('x', (d, i) => i * sbarWidth)
+          .attr('width', sbarWidth)
+          .attr('height', sbarHeight)
+          .attr('fill', scale)});
+		  
+ 
 
 //SLIDERBeg//
 
@@ -159,6 +194,7 @@ function first_func(ndata, full) {
   currentKey = 'renewable_percentage';
   currentYear = 0;
   currentLabel = 'Percentage Renewable Energy Consumption';
+  currentLabelUnit = 'Percentage Renewable Energy Consumption';
 
   svg
     .append('g')
@@ -211,6 +247,14 @@ function ready(currentKey, currentYear) {
       //.domain([Math.log(minE), Math.log(maxE)]);
     //.domain([Math.cbrt(minE), Math.cbrt(maxE)]);
     .domain([minE, maxE]);
+	console.log(currentLabel);
+	d3.selectAll('#legendText').remove();
+		svg.append('text')
+	   .attr('id','legendText')
+	   .attr('x',(smargin+ width/2))
+	   .attr('y',(2 * smargin + 3 * sbarHeight)-90)
+	   //.text('Metric');
+	   .text(currentLabelUnit);
   }
 
   if (currentYear == 0) {
@@ -250,7 +294,7 @@ function ready(currentKey, currentYear) {
       .text(function(d) {
         return d;
       })
-      .attr('font-size', '8px');
+      .attr('font-size', '10px');
 
     startYearPrev = startYear;
     endYearPrev = endYear;
