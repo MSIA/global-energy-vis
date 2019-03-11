@@ -32,5 +32,8 @@ col_list=['Education_Exp', 'GDP_Growth','Health_Exp','Emp_rate_M', 'Emp_rate_F',
 for i in col_list:
     full2.loc[:,i]=full2.loc[:,i]/100
     
-full3=pd.merge(full2,renew_new3,on=['Country_Code','Year'],how='left')    
-full3.to_csv('./data/full_v2.csv')
+full3=pd.merge(full2,renew_new3,on=['Country_Code','Year'],how='left') 
+full3['Pop_Tm']=full3['Pop_T']/float(10**6)
+full3['GDP_b']=full3['GDP']/float(10**9)
+full3['primary_con_toe']=full3['primary_con_mtoe']/full3['Pop_Tm']   
+full3.to_csv('./data/full_v2.csv',index=False)
