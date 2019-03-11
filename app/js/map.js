@@ -60,6 +60,9 @@ var svg = d3
   .append('g')
 		.attr('class', 'map')
 		.attr('transform', `translate(${margin.left}, ${margin.top})`);
+		
+var legend = d3.select('#legendBox').attr('width',width/2).attr('height',100).attr('transform','translate ('+width/2+','+(0)+')');
+							        //.attr('transform','translate (0,0)');
 
 var projection = d3
   .geoMercator()
@@ -87,13 +90,24 @@ const LegendcolorScale = d3.scaleSequential(
 
 const scales = [LegendcolorScale];
 	
+
+var legendXScale = d3.scaleLinear()
+					 .range([0, (swidth - 2 * smargin)])
+
+var LegendXAxis = d3.axisBottom()
+                   //.scale(legendXScale)
+				   .ticks(4);
+				   
+var xAxisGroup = legend.append("g")
+    .attr("class", "x axis") //gives group the classes `x` and `axis`
+	.attr('transform', 'translate(' + (smargin) + ',' +  (smargin+sbarHeight * 2) + ')');								   
+	
 scales.forEach((scale, i) => {
-	//d3.select('#mapBox')
-	svg
+	legend
 	.append('g')
 	.attr('id','legend')
           .attr('class', 'scale-' + i)
-          .attr('transform', 'translate(' + (smargin+ width/2) + ',' +  (2 * smargin + i * 3 * sbarHeight) + ')')
+          .attr('transform', 'translate(' + (smargin) + ',' +  (2 * smargin + i * 3 * sbarHeight) + ')')
         .selectAll('bars').data(spoints).enter()
         .append('rect')
           .attr('y', 0)
@@ -247,11 +261,19 @@ function ready(currentKey, currentYear) {
       //.domain([Math.log(minE), Math.log(maxE)]);
     //.domain([Math.cbrt(minE), Math.cbrt(maxE)]);
     .domain([minE, maxE]);
-	console.log(currentLabel);
+
+	legendXScale.domain([minE,maxE]);
+	LegendXAxis.scale(legendXScale);
+
+	xAxisGroup
+    .transition()
+    .duration(500)	
+	.call(LegendXAxis)				
+
 	d3.selectAll('#legendText').remove();
-		svg.append('text')
+		legend.append('text')
 	   .attr('id','legendText')
-	   .attr('x',(smargin+ width/2))
+	   .attr('x',(smargin))
 	   .attr('y',(2 * smargin + 3 * sbarHeight)-90)
 	   //.text('Metric');
 	   .text(currentLabelUnit);
@@ -264,20 +286,6 @@ function ready(currentKey, currentYear) {
   if ((startYear != startYearPrev) | (endYear != endYearPrev)) {
     x.domain([startYear, endYear]);
 
-    /*
-					x.domain([startYear, endYear])
-					 .range([0, targetValue])
-					 .clamp(true);
-
-					slider.append("line")
-							.attr("class", "track")
-							.attr("x1", x.range()[0])
-							.attr("x2", x.range()[1])
-							.select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
-							.attr("class", "track-inset")
-							.select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
-							.attr("class", "track-overlay")
-		*/
     d3.selectAll('#sliderTick').remove();
     slider
       .insert('g', '.track-overlay')
