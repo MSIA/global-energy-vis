@@ -16,38 +16,37 @@
   <link rel="stylesheet" href="/app/css/map.css">
 </head>
 <meta charset="utf-8">
+
 <body>
-    <div class="container">
-        <div class="row">
-          <h3 class="nine columns">Global Report</h3>
-          <select id="select-key" class="three columns">
-            <option value="Pop_T" selected="selected">Population</option>
-			<option value="GDP">GDP</option>
-			<option value="GDP_PerCap">GDP Per Capita</option>
-			<option value="Emp_rate_T">Employment Rate</option>
-			<option value="primary_con_mtoe">Primary Energy Consumption</option>
-            <!-- <option value="Education">%</option> -->
-            <!-- <option value="Population">Population %</option> -->
-          </select>
-        </div>
+  <h3>Global Report</h3>
+  <select id="select-key">
+    <option value="Pop_T" selected="selected">Population</option>
+    <option value="GDP">GDP</option>
+    <option value="GDP_PerCap">GDP Per Capita</option>
+    <option value="Emp_rate_T">Employment Rate</option>
+    <option value="primary_con_mtoe">Primary Energy Consumption</option>
+    <!-- <option value="Education">%</option> -->
+    <!-- <option value="Population">Population %</option> -->
+  </select>
+  <div id="map">
+    <svg id="mapBox">
 
-<svg id = "mapBox"></svg>
+    </svg>
+  </div>
+  <div class="row">
+    <div id="vis">
+      <button id="play-button" style="height:50px;width:75px">Play</button>
+    </div>
+  </div>
 
-<div id="vis">
-  <button id="play-button" style="height:50px;width:75px">Play</button> 
-</div>
-
-
-<svg width="960" height="500"></svg>
-
-<!-- Javascripts -->
-<script src="http://d3js.org/d3.v5.min.js"></script>
-<script src="http://d3js.org/topojson.v1.min.js"></script>
-<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
-<script src="/app/js/d3-tip.js"></script>
-<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
-<script src="/app/js/map.js"></script>
+  <!-- Javascripts -->
+  <script src="http://d3js.org/d3.v5.min.js"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+  <script src="/app/js/d3-tip.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
+  <script src="/app/js/map.js"></script>
 </body>
 
 
