@@ -15,11 +15,19 @@
 
   .yAxis text {
     fill: #626065;
+    font-family: 'Montserrat', sans-serif;
     font-size: 12px !important;
   }
 
   .xAxis text {
     fill: #626065;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px !important;
+  }
+
+  .barsText {
+    fill: #343434;
+    font-family: 'Montserrat', sans-serif;
     font-size: 12px !important;
   }
 
@@ -32,6 +40,15 @@
     position: absolute;
     width: 300px;
     height: 20px;
+  }
+
+  .value-time {
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .yearName {
+    font-family: 'Montserrat', sans-serif;
+
   }
 
   svg {
@@ -108,8 +125,7 @@
         { return d[newMetrics];
         });
       })]).nice();
-      console.log(y.domain());
-      
+
 
     svg.selectAll(".yAxis")
       .call(d3.axisLeft(y)
@@ -129,7 +145,7 @@
               return d;
             }
           });
-          return { key: k, value: val[0][col], ttval: val[0][absMapping[col]] }
+          return { key: k, value: val[0][col], ttval: val[0][absMapping[col]] , ttName: absMapping[col]};
         })
       };
     });
@@ -159,11 +175,33 @@
       .duration(1000)
       .text(function (d) { return d; });
 
+    //Updating text
+    svg.selectAll('.overallMetric')
+      .data(thisDat_t)
+      .selectAll('text')
+      .data(function (d) { return d.sub; })
+      .transition()
+      .duration(1000)
+      .attr('dx',function (d) { return x1(d.key) -30; })
+      .attr('dy',function (d) { return y(Math.max(0, d.value)) -10; })
+      .text(function(d) {
+        if(d.ttName == "renewable_percentage") {
+          return ("% of Renewable Energy: " + d3.format(".0%")(d.ttval));
+        }
+        else if(d.ttName == "Pop_Tm") {
+          return ("Population (in M): " + d3.format(".1f")(d.ttval));
+        }
+        else {
+          return (mappingText[d.ttName] + ": " + d3.format("$.2f")(d.ttval))
+        }
+      return d.ttval})
+      .style('opacity', 0);
+
   }
 
   d3.csv("/data/full.csv", function (d, i, columns) {
-    for (var i = 3, n = 19; i < n; ++i) d[columns[i]] = +d[columns[i]];
-    for (var i = 25, n = 38; i < n; ++i) d[columns[i]] = +d[columns[i]];
+    for (var i = 1, n = 17; i < n; ++i) d[columns[i]] = +d[columns[i]];
+    for (var i = 20, n = 31; i < n; ++i) d[columns[i]] = +d[columns[i]];
     d['EdExp'] = d["Education_Exp"] * d["GDP_PerCap"];
     d["HealthExp"] = d["Health_Exp"] * d["GDP_PerCap"];
     return d;
@@ -278,9 +316,9 @@
 
     $('.metric4').select2({ placeholder: "Population Growth" });
 
-    absMapping = { "Education_Exp": "EdExp", "GDP_Growth": "GDP_PerCap", "Pop_Growth": "Pop_T", "Health_Exp": "HealthExp", "renewable_percentage": "renewable_percentage" };
+    absMapping = { "Education_Exp": "EdExp", "GDP_Growth": "GDP_PerCap", "Pop_Growth": "Pop_Tm", "Health_Exp": "HealthExp", "renewable_percentage": "renewable_percentage" };
     //margins and svg
-    var margin = { top: 80, right: 20, bottom: 40, left: 50 };
+    var margin = { top: 80, right: 30, bottom: 40, left: 50 };
 
     var width = 1580 - margin.left - margin.right;
     var height = 720 - margin.top - margin.bottom;
@@ -315,7 +353,7 @@
     var yearNow = svg1.append("text")
       .attr('class', 'value-time')
       .attr('dx', 202)
-      .attr('dy', 50)
+      .attr('dy', 60)
       .attr("font-family", "sans-serif")
       .attr("font-size", 14)
       .style('fill', '#626065')
@@ -324,7 +362,7 @@
     svg1.append("text")
       .attr('class', 'yearName')
       .attr('dx', 200)
-      .attr('dy', 30)
+      .attr('dy', 40)
       .attr("font-family", "sans-serif")
       .attr("font-size", 18)
       .style('fill', '#626065')
@@ -426,7 +464,6 @@
           return d[cols];
         });
       })]).nice();
-      console.log(y.domain())
 
     //Restructuring data
     var dat_t = cols.map(function (col) {
@@ -437,7 +474,7 @@
               return d;
             }
           });
-          return { key: k, value: val[0][col], ttval: val[0][absMapping[col]] }
+          return { key: k, value: val[0][col], ttval: val[0][absMapping[col]], ttName: absMapping[col] };
         })
       };
     });
@@ -453,13 +490,61 @@
       .attr("transform", function (d) { return "translate(" + x0(d.metric) + ",0)"; })
       .selectAll("rect")
       .data(function (d) { return d.sub; })
-      .enter().append("rect")
+      .enter().append("g")
+      .attr('class','metCountry')
+      .append("rect")
       .attr("x", function (d) { return x1(d.key); })
       .attr("y", function (d) { return y(Math.max(0, d.value)); })
       .attr("width", x1.bandwidth())
       .attr("height", function (d) { return Math.abs(y(0) - y(d.value)); })
       .attr("fill", function (d) { return z(d.key); });
 
+    mappingText = {"EdExp": "Expenditure per capita", "GDP_PerCap": "GDP per capita", "Pop_Tm" :"Population (in millions)", "HealthExp": "Expenditure per capita", "renewable_percentage": "% of Renewable Energy" };
+
+    svg.selectAll('.metCountry')
+      .append('text')
+      .attr('class', 'barsText')
+      .attr('dx',function (d) { return x1(d.key) -30; })
+      .attr('dy',function (d) { return y(Math.max(0, d.value)) -10; })
+      .text(function(d) {
+        if(d.ttName == "renewable_percentage") {
+          return ("% of Renewable Energy: " + d3.format(".0%")(d.ttval));
+        }
+        else if(d.ttName == "Pop_Tm") {
+          return ("Population (in M): " + d3.format(".1f")(d.ttval));
+        }
+        else {
+          return (mappingText[d.ttName] + ": " + d3.format("$.2f")(d.ttval))
+        }
+      return d.ttval})
+      .style('opacity', 0);
+
+    svg.selectAll('.metCountry')
+        .on('mouseenter', function() {
+          // define hover events
+          d3.select(this)
+            .select('text')
+            .transition()
+            .duration(0)
+            .style('opacity', 1)
+
+          d3.select(this).moveToFront();
+        })
+        .on('mouseleave', function() {
+          // define mouseleave events
+          d3.select(this)
+            .select('text')
+            .transition()
+            .style('opacity', 0)
+        })
+
+    //Move to front function
+
+    d3.selection.prototype.moveToFront = function() {  
+      return this.each(function(){
+        this.parentNode.appendChild(this);
+      });
+    };
 
     //Updating x and y axis
     svg.append("g")
@@ -475,7 +560,7 @@
 
     //Creating a legend
     var legend = svg.append("g")
-      .attr("font-family", "sans-serif")
+      .attr("font-family", "Montserrat")
       .attr("font-size", 10)
       .attr("text-anchor", "end")
       .selectAll("g")
