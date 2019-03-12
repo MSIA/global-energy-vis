@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Map</title>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+  <!-- Custom external stylesheets -->
+  <link rel="stylesheet" href="/app/css/map.css">
+</head>
+<meta charset="utf-8">
+
+<body>
+  <h3>Global Report</h3>
+  <select id="select-key">
+    <option value="primary_con_toe">Primary Energy Consumption per Capita</option>
+	<option value="renewable_percentage" selected="selected">Percentage Renewable Energy Consumption</option>
+    <option value="GDP_PerCap">GDP Per Capita</option>
+    <!-- <option value="Education">%</option> -->
+    <!-- <option value="Population">Population %</option> -->
+  </select>
+  
+   <div id="legend">
+    <svg id="legendBox">
+
+    </svg>
+  <div id="map">
+    <svg id="mapBox">
+
+    </svg>
+	
+
+  </div>
+  <div class="row">
+    <div id="vis">
+      <button id="play-button" style="height:50px;width:75px">Play</button>
+    </div>
+  </div>
+
+  <!-- Javascripts -->
+  <script src="http://d3js.org/d3.v5.min.js"></script>
+  <script src="http://d3js.org/topojson.v1.min.js"></script>
+  <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+  <script src="/app/js/d3-tip.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.js"></script>
+  <script src="/app/js/map.js"></script>
+</body>
+
+
+</html>
