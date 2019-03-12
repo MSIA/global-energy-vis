@@ -15,12 +15,12 @@ var maxE;
 var intColor2;
 var currentLabelUnit;
 var numberFormat = d3.format(',.2f');
-var dropdown={'primary_con_toe':'Primary Energy Consumption per Capita','GDP_PerCap':'GDP Per Capita','renewable_percentage':'Percentage Renewable Energy Consumption'};
-var dropdownUnit={'primary_con_toe':'Primary Energy Consumption per Capita (tonnes of oil equivalent)','GDP_PerCap':'GDP Per Capita (USD)','renewable_percentage':'Percentage Renewable Energy Consumption'};
+var dropdown = { 'primary_con_toe': 'Primary Energy Consumption per Capita', 'GDP_PerCap': 'GDP Per Capita', 'renewable_percentage': 'Percentage Renewable Energy Consumption' };
+var dropdownUnit = { 'primary_con_toe': 'Primary Energy Consumption per Capita (tonnes of oil equivalent)', 'GDP_PerCap': 'GDP Per Capita (USD)', 'renewable_percentage': 'Percentage Renewable Energy Consumption' };
 
 
 
-d3.select('#select-key').on('change', function(a) {
+d3.select('#select-key').on('change', function (a) {
   currentKey = d3.select(this).property('value');
   currentLabel = dropdown[currentKey]; //find a way to find the name instead of the value property
   currentLabelUnit = dropdownUnit[currentKey];
@@ -32,7 +32,7 @@ var tip = d3
   .tip()
   .attr('class', 'd3-tip')
   .offset([-10, 0])
-  .html(function(d) {
+  .html(function (d) {
     return (
       "<strong>Country: </strong><span class='details'>" +
       d.properties.name +
@@ -47,9 +47,10 @@ var tip = d3
 
 var margin = { top: 40, right: 20, bottom: 40, left: 20 };
 var width = document.getElementById('map').clientWidth - margin.left - margin.right;
-var height = width / 2.2 - margin.top - margin.bottom;
+var height = width / 1.75 - margin.top - margin.bottom;
+console.log(height);
+height = Math.min(height, 600);
 
-console.log(width);
 console.log(height);
 d3.select('#play-button').style('top', height);
 
@@ -60,11 +61,11 @@ var svg = d3
   .attr('width', width)
   .attr('height', height)
   .append('g')
-		.attr('class', 'map')
-		.attr('transform', `translate(${margin.left}, ${margin.top})`);
-		
-var legend = d3.select('#legendBox').attr('width',width/2).attr('height',100).attr('transform','translate ('+width/2+','+(0)+')');
-							        //.attr('transform','translate (0,0)');
+  .attr('class', 'map')
+  .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+var legend = d3.select('#legendBox').attr('width', width / 2).attr('height', 100).attr('transform', 'translate (' + width / 2 + ',' + (0) + ')');
+//.attr('transform','translate (0,0)');
 
 var projection = d3
   .geoMercator()
@@ -87,49 +88,49 @@ const send = (swidth - 2 * smargin);//250
 const spoints = d3.range(sstart, send, sbarWidth)
 const linScale = d3.scaleLinear().domain([sstart, send]);
 const LegendcolorScale = d3.scaleSequential(
-        (d) => d3.interpolateReds(linScale(d))
-      );
+  (d) => d3.interpolateReds(linScale(d))
+);
 
 const scales = [LegendcolorScale];
-	
+
 
 var legendXScale = d3.scaleLinear()
-					 .range([0, (swidth - 2 * smargin)])
+  .range([0, (swidth - 2 * smargin)])
 
 var LegendXAxis = d3.axisBottom()
-                   //.scale(legendXScale)
-				   .ticks(4);
-				   
+  //.scale(legendXScale)
+  .ticks(4);
+
 var xAxisGroup = legend.append("g")
-    .attr("class", "x axis") //gives group the classes `x` and `axis`
-	.attr('transform', 'translate(' + (smargin) + ',' +  (smargin+sbarHeight * 2) + ')');								   
-	
+  .attr("class", "x axis") //gives group the classes `x` and `axis`
+  .attr('transform', 'translate(' + (smargin) + ',' + (smargin + sbarHeight * 2) + ')');
+
 scales.forEach((scale, i) => {
-	legend
-	.append('g')
-	.attr('id','legend')
-          .attr('class', 'scale-' + i)
-          .attr('transform', 'translate(' + (smargin) + ',' +  (2 * smargin + i * 3 * sbarHeight) + ')')
-        .selectAll('bars').data(spoints).enter()
-        .append('rect')
-          .attr('y', 0)
-          .attr('x', (d, i) => i * sbarWidth)
-          .attr('width', sbarWidth)
-          .attr('height', sbarHeight)
-          .attr('fill', scale)});
-		  
- 
+  legend
+    .append('g')
+    .attr('id', 'legend')
+    .attr('class', 'scale-' + i)
+    .attr('transform', 'translate(' + (smargin) + ',' + (2 * smargin + i * 3 * sbarHeight) + ')')
+    .selectAll('bars').data(spoints).enter()
+    .append('rect')
+    .attr('y', 0)
+    .attr('x', (d, i) => i * sbarWidth)
+    .attr('width', sbarWidth)
+    .attr('height', sbarHeight)
+    .attr('fill', scale)
+});
+
+
 
 //SLIDERBeg//
 
 let slideWidth = width * 4 / 5;
-console.log(slideWidth);
 var svgslider = d3
   .select('#vis')
   .append('svg')
   .attr('width', slideWidth)
-	.attr('height', 50)
-	.style('cursor', 'pointer');
+  .attr('height', 50)
+  .style('cursor', 'pointer');
 
 ////////// slider //////////
 
@@ -137,7 +138,6 @@ var moving = false;
 var currentYear = startYear;
 var currentValue = 0;
 var targetValue = slideWidth - 20;
-console.log(targetValue);
 
 var playButton = d3.select('#play-button');
 
@@ -149,9 +149,9 @@ x = d3
 var slider = svgslider
   .append('g')
   .attr('class', 'slider')
-	.attr('transform', `translate(10, 10)`);
+  .attr('transform', `translate(10, 10)`);
 
-playButton.on('click', function() {
+playButton.on('click', function () {
   var button = d3.select(this);
   if (button.text() == 'Pause') {
     moving = false;
@@ -176,9 +176,7 @@ function update(h) {
 function step() {
   update(x.invert(currentValue));
   currentValue = Math.round((currentValue + targetValue / (endYear - startYear)));
-  console.log(x.invert(currentValue));
-  console.log(currentValue);
-  if (currentValue > targetValue+20) {
+  if (currentValue > targetValue + 20) {
     moving = false;
     currentValue = 0;
     clearInterval(timer);
@@ -192,11 +190,11 @@ slider
   .attr('class', 'track')
   .attr('x1', x.range()[0])
   .attr('x2', x.range()[1])
-  .select(function() {
+  .select(function () {
     return this.parentNode.appendChild(this.cloneNode(true));
   })
   .attr('class', 'track-inset')
-  .select(function() {
+  .select(function () {
     return this.parentNode.appendChild(this.cloneNode(true));
   })
   .attr('class', 'track-overlay');
@@ -230,14 +228,14 @@ function first_func(ndata, full) {
   svg
     .append('path')
     .datum(
-      topojson.mesh(ndata.features, function(a, b) {
+      topojson.mesh(ndata.features, function (a, b) {
         return a.id !== b.id;
       })
     )
     .attr('class', 'names')
     .attr('d', path);
 
-  full_data.forEach(function(d) {
+  full_data.forEach(function (d) {
     d.Year = +d.Year;
   });
   ready(currentKey, currentYear);
@@ -246,42 +244,42 @@ function first_func(ndata, full) {
 function ready(currentKey, currentYear) {
   if (currentKey != currentKeyPrev) {
     full_cur = full_data.filter(d => d[currentKey] > 0);
-    startYear = d3.min(full_cur, function(d) {
+    startYear = d3.min(full_cur, function (d) {
       return +d.Year;
     });
-    endYear = d3.max(full_cur, function(d) {
+    endYear = d3.max(full_cur, function (d) {
       return +d.Year;
     });
-	currentYear = endYear;
+    currentYear = endYear;
     currentKeyPrev = currentKey;
 
-    minE = d3.min(full_cur, function(d) {
+    minE = d3.min(full_cur, function (d) {
       return +d[currentKey];
     });
-    maxE = d3.max(full_cur, function(d) {
+    maxE = d3.max(full_cur, function (d) {
       return +d[currentKey];
     });
     intColor2 = d3
       .scaleSequential(d3.interpolateReds)
       //.domain([Math.log(minE), Math.log(maxE)]);
-    //.domain([Math.cbrt(minE), Math.cbrt(maxE)]);
-    .domain([minE, maxE]);
+      //.domain([Math.cbrt(minE), Math.cbrt(maxE)]);
+      .domain([minE, maxE]);
 
-	legendXScale.domain([minE,maxE]);
-	LegendXAxis.scale(legendXScale);
+    legendXScale.domain([minE, maxE]);
+    LegendXAxis.scale(legendXScale);
 
-	xAxisGroup
-    .transition()
-    .duration(500)	
-	.call(LegendXAxis)				
+    xAxisGroup
+      .transition()
+      .duration(500)
+      .call(LegendXAxis)
 
-	d3.selectAll('#legendText').remove();
-		legend.append('text')
-	   .attr('id','legendText')
-	   .attr('x',(smargin))
-	   .attr('y',(2 * smargin + 3 * sbarHeight)-90)
-	   //.text('Metric');
-	   .text(currentLabelUnit);
+    d3.selectAll('#legendText').remove();
+    legend.append('text')
+      .attr('id', 'legendText')
+      .attr('x', (smargin))
+      .attr('y', (2 * smargin + 3 * sbarHeight) - 90)
+      //.text('Metric');
+      .text(currentLabelUnit);
   }
 
   if (currentYear == 0) {
@@ -304,7 +302,7 @@ function ready(currentKey, currentYear) {
       .attr('x', x)
       .attr('y', 10)
       .attr('text-anchor', 'middle')
-      .text(function(d) {
+      .text(function (d) {
         return d;
       })
       .attr('font-size', '10px');
@@ -316,11 +314,11 @@ function ready(currentKey, currentYear) {
   slider.call(
     d3
       .drag()
-      .on('start.interrupt', function() {
+      .on('start.interrupt', function () {
         slider.interrupt();
       })
-      .on('start drag', function() {
-        currentValue = d3.event.x;  console.log(d3.event.x); console.log(x.invert(currentValue));
+      .on('start drag', function () {
+        currentValue = d3.event.x;
         update(x.invert(currentValue));
       })
   );
@@ -328,23 +326,23 @@ function ready(currentKey, currentYear) {
   var usageById = {};
   var lusageById = {};
   full_data2 = full_cur.filter(d => d.Year == currentYear);
-  full_data2.forEach(function(d) {
+  full_data2.forEach(function (d) {
     usageById[d.Code] = +d[currentKey];
   });
 
   //geo_data.features.forEach(function(d) { d[currentKey] = usageById[d.id] });
-  geo_data.features.forEach(function(d) {
+  geo_data.features.forEach(function (d) {
     d.currentKey = usageById[d.id];
   });
 
-  full_data2.forEach(function(d) {
+  full_data2.forEach(function (d) {
     lusageById[d.Code] = Math.log(+d[currentKey]);
   });
 
   svg
     .selectAll('path')
     .data(geo_data.features)
-    .style('fill', function(d) {
+    .style('fill', function (d) {
       if (usageById[d.id] > 0) {
         return intColor2(usageById[d.id]);
       } else {
@@ -353,7 +351,7 @@ function ready(currentKey, currentYear) {
     })
     .style('stroke', 'white')
     .style('stroke-width', 0.3)
-    .on('mouseover', function(d) {
+    .on('mouseover', function (d) {
       if (d.currentKey > 0) {
         tip.show(d);
         d3.select(this)
@@ -361,19 +359,19 @@ function ready(currentKey, currentYear) {
           .style('stroke-width', 3);
       }
     })
-    .on('mouseout', function(d) {
+    .on('mouseout', function (d) {
       tip.hide(d);
       d3.select(this)
         .style('stroke', 'white')
         .style('stroke-width', 0.3);
-		})
-		.on('click', d => window.open(`/trends/${d.id}`));
+    })
+    .on('click', d => window.open(`/trends/${d.properties.name}`));
 }
 
 Promise.all([
   //d3.json('http://enjalot.github.io/wwsd/data/world/world-110m.geojson'),
   d3.json('/data/countries.json'),
-  d3.csv('/data/full_v2.csv')
-]).then(function(data) {
+  d3.csv('/data/full.csv')
+]).then(function (data) {
   first_func(data[0], data[1]);
 });
