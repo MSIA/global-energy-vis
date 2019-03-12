@@ -97,7 +97,19 @@
 
     x0.domain(newMetrics);
     x1.domain(newCountries).rangeRound([0, x0.bandwidth()]);
-    y.domain([d3.min(thisDataYears, function (d) { return d3.min(newMetrics, function (newMetrics) { return d[newMetrics]; }); }), d3.max(thisDataYears, function (d) { return d3.max(newMetrics, function (newMetrics) { return d[newMetrics]; }); })]).nice();
+    y.domain([
+      d3.min(thisDataYears, function (d) {
+        return d3.min(newMetrics, function (newMetrics) {
+          return d[newMetrics];
+        });
+      }),
+      d3.max(thisDataYears, function (d) {
+        return d3.max(newMetrics, function (newMetrics)
+        { return d[newMetrics];
+        });
+      })]).nice();
+      console.log(y.domain());
+      
 
     svg.selectAll(".yAxis")
       .call(d3.axisLeft(y)
@@ -403,7 +415,18 @@
     //Setting the domain
     x0.domain(cols);
     x1.domain(countryIncluded).rangeRound([0, x0.bandwidth()]);
-    y.domain([d3.min(dataYears, function (d) { return d3.min(cols, function (cols) { return d[cols]; }); }), d3.max(dataYears, function (d) { return d3.max(cols, function (cols) { return d[cols]; }); })]).nice();
+    y.domain([
+      d3.min(dataYears, function (d) {
+        return d3.min(cols, function (cols) {
+          return d[cols];
+        });
+      }),
+      d3.max(dataYears, function (d) {
+        return d3.max(cols, function (cols) {
+          return d[cols];
+        });
+      })]).nice();
+      console.log(y.domain())
 
     //Restructuring data
     var dat_t = cols.map(function (col) {
