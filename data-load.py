@@ -54,7 +54,7 @@ data.sort_values(['Country', 'Year']).to_csv('./data/energy_full.csv', index=Fal
 
 energy = pd.read_csv('./data/energy_full.csv')
 indicators = pd.read_csv('./data/indicators.csv')
-key = pd.read_csv('~/Desktop/legend.csv')
+key = pd.read_csv('./data/legend.csv')
 key.head()
 energy = pd.merge(energy, key.iloc[:, 0:3], how='inner', left_on='Country', right_on='Energy_Country')
 pd.merge(energy, indicators, how='left',
