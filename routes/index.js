@@ -11,8 +11,13 @@ router.get('/story', (req, res) => res.render('story'));
 router.get('/map', (req, res) => res.render('map'));
 
 router.get('/trends/:country', (req, res) => {
-  console.log(req.params.country)
+  console.log(req.params.country);
   res.render('trends', { country: req.params.country });
+});
+
+router.get('/compare/:country', (req, res) => {
+  console.log(req.params.country);
+  res.render('compare', { country: req.params.country });
 });
 
 module.exports = router;
