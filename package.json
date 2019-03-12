@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "build": "webpack"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -11,6 +12,7 @@
     "ejs": "^2.6.1",
     "eslint": "^5.14.1",
     "express": "~4.16.0",
+    "express-favicon": "^2.0.1",
     "heroku-ssl-redirect": "0.0.4",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
