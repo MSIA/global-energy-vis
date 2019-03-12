@@ -8,7 +8,7 @@
 <script src="https://unpkg.com/d3-simple-slider"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
-<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script src="tooltip.js"></script>
 
 
 <style>
@@ -118,7 +118,7 @@ function dataswap(yearGroup, newMetrics, newCountries, svg) {
           return d;
         }
       });
-      return {key: k, value: val[0][col]}})};
+      return {key: k, value: val[0][col], ttval: val[0][absMapping[col]]}})};
   });
 
   //Updating barGroup
@@ -151,6 +151,8 @@ function dataswap(yearGroup, newMetrics, newCountries, svg) {
 d3.csv("Data/full_v2.csv", function(d, i, columns) {
   for (var i = 3, n = 19; i < n; ++i) d[columns[i]] = +d[columns[i]];
   for (var i = 25, n = 38; i < n; ++i) d[columns[i]] = +d[columns[i]];
+  d['EdExp'] = d["Education_Exp"] * d["GDP_PerCap"];
+  d["HealthExp"] = d["Health_Exp"] * d["GDP_PerCap"];
   return d;
 }).then(ready) 
 .catch(e => console.error(e));
@@ -211,11 +213,11 @@ function ready(dat) {
 
   //dropdowns for metrics
 
-  var metricList = ["",'Education_Exp', 'GDP_Growth', 'Health_Exp', 'Pop_Growth'];
-  var cols = ['Education_Exp', 'GDP_Growth', 'Health_Exp', 'Pop_Growth'];
+  var metricList = ["",'renewable_percentage','Education_Exp', 'GDP_Growth', 'Health_Exp', 'Pop_Growth'];
+  var cols = ['renewable_percentage', 'GDP_Growth', 'Health_Exp', 'Pop_Growth'];
 
-  mapping = {"Education_Exp": "Education Expenditure", "GDP_Growth": "GDP Growth", "Pop_Growth": "Population Growth", "Health_Exp": "Health Expenditure"};
-  var mappingRev = {"Education Expenditure": "Education_Exp", "GDP Growth": "GDP_Growth", "Population Growth": "Pop_Growth", "Health Expenditure": "Health_Exp"};
+  mapping = {"Education_Exp": "Education Expenditure", "GDP_Growth": "GDP Growth", "Pop_Growth": "Population Growth", "Health_Exp": "Health Expenditure", "renewable_percentage":"% Renewable Energy"};
+  var mappingRev = {"Education Expenditure": "Education_Exp", "GDP Growth": "GDP_Growth", "Population Growth": "Pop_Growth", "Health Expenditure": "Health_Exp", "% Renewable Energy":"renewable_percentage"};
 
   var dropdown2 = d3.select('#metrics');
 
@@ -228,7 +230,7 @@ function ready(dat) {
     .attr("value", function(d){return d;})
 		.text(function (d) { return mapping[d]; });
 
-  $('.metric1').select2({placeholder: "Education Expenditure"});
+  $('.metric1').select2({placeholder: "% Renewable Energy"});
 
   dropdown2
     .append("select")
@@ -263,7 +265,7 @@ function ready(dat) {
 
   $('.metric4').select2({placeholder: "Population Growth"});
 
-
+  absMapping = {"Education_Exp": "EdExp", "GDP_Growth": "GDP_PerCap", "Pop_Growth": "Pop_T", "Health_Exp": "HealthExp", "renewable_percentage":"renewable_percentage"};
   //margins and svg
   var margin = {top: 80, right: 20, bottom: 40, left: 50};
 
@@ -404,7 +406,7 @@ function ready(dat) {
           return d;
         }
       });
-      return {key: k, value: val[0][col]}})};
+    return {key: k, value: val[0][col], ttval: val[0][absMapping[col]]}})};
   });
 
   //Creating groups for bar
@@ -463,12 +465,7 @@ function ready(dat) {
       .style('fill','#626065')
       .text(function(d) { return d; });
 
-  //tooltip
-  // tip = d3.tip()
-  //   .attr('class', 'd3-tip')
-  //   .offset([-10, 0])
-  //   .html(function(d) {
-  //   return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";});
+  // svg.call(tooltip) // draws the tooltip;
 
 };
 
