@@ -31,6 +31,12 @@
     font-size: 12px !important;
   }
 
+  .countryText {
+    fill: #343434;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px !important;
+  }
+
   .names {
     font-size: 12px !important;
   }
@@ -76,6 +82,12 @@
     font-family: 'Montserrat', sans-serif;
     fill: #626065;
   }
+
+  .countryURL {
+    visibility: hidden;
+    font-size: 4px !important;
+  }
+
 </style>
 
 <body>
@@ -88,6 +100,7 @@
   <div id="metrics">
     <u>Choose 4 metrics:</u>
   </div>
+  <div class="countryURL"><%=country%></div>
 </body>
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -111,6 +124,9 @@
     thisData = thisDataYears.filter(function (d) {
       if (d.Year == yearGroup) { return d; }
     });
+
+    z = d3.scaleOrdinal()
+      .range(["#b3de69", "#fccde5", "#bc80bd", "#ffed6f"]);
 
     x0.domain(newMetrics);
     x1.domain(newCountries).rangeRound([0, x0.bandwidth()]);
@@ -161,7 +177,8 @@
       .attr("x", function (d) { return x1(d.key); })
       .attr("y", function (d) { return y(Math.max(0, d.value)); })
       .attr("width", x1.bandwidth())
-      .attr("height", function (d) { return Math.abs(y(0) - y(d.value)); });
+      .attr("height", function (d) { return Math.abs(y(0) - y(d.value)); })
+      .attr("fill", function (d) { return z(d.key); });
 
     //Updating legend
     svg.selectAll('.legend')
@@ -178,7 +195,7 @@
     //Updating text
     svg.selectAll('.overallMetric')
       .data(thisDat_t)
-      .selectAll('text')
+      .selectAll('.barsText')
       .data(function (d) { return d.sub; })
       .transition()
       .duration(1000)
@@ -195,6 +212,19 @@
           return (mappingText[d.ttName] + ": " + d3.format("$.2f")(d.ttval))
         }
       return d.ttval})
+      .style('opacity', 0);
+
+    svg.selectAll('.overallMetric')
+      .data(thisDat_t)
+      .selectAll('.countryText')
+      .data(function (d) { return d.sub; })
+      .transition()
+      .duration(1000)
+      .attr('dx',function (d) { return x1(d.key) -30; })
+      .attr('dy',function (d) { return y(Math.max(0, d.value)) -20; })
+      .text(function(d) {
+        return d.key;
+      })
       .style('opacity', 0);
 
   }
@@ -214,20 +244,27 @@
     countryList.unshift("");
     var yearList = d3.set(dat.map(function (d) { return d.Year })).values();
 
+    var firstCountry = $('.countryURL')[0]['textContent'];
     var countryIncluded = ["France", "India", "United Kingdom", "United States"];
+
+    if (countryIncluded.indexOf(firstCountry) >= 0) {
+      countryIncluded[countryIncluded.indexOf(firstCountry)] = countryIncluded[0];
+    }
+    countryIncluded[0] = firstCountry;
 
     var dropdown = d3.select('#countries');
 
     dropdown
       .append("select")
       .attr('class', 'country1')
+      .attr('disabled',false)
       .selectAll('option')
       .data(countryList).enter()
       .append('option')
       .attr("value", function (d) { return d; })
       .text(function (d) { return d; });
 
-    $('.country1').select2({ placeholder: "France" });
+    $('.country1').select2({ placeholder: countryIncluded[0] });
 
     dropdown
       .append("select")
@@ -238,7 +275,7 @@
       .attr("value", function (d) { return d; })
       .text(function (d) { return d; });
 
-    $('.country2').select2({ placeholder: "India" });
+    $('.country2').select2({ placeholder: countryIncluded[1] });
 
     dropdown
       .append("select")
@@ -249,7 +286,7 @@
       .attr("value", function (d) { return d; })
       .text(function (d) { return d; });
 
-    $('.country3').select2({ placeholder: "United Kingdom" });
+    $('.country3').select2({ placeholder: countryIncluded[2] });
 
     dropdown
       .append("select")
@@ -260,7 +297,7 @@
       .attr("value", function (d) { return d; })
       .text(function (d) { return d; });
 
-    $('.country4').select2({ placeholder: "United States" });
+    $('.country4').select2({ placeholder: countryIncluded[3] });
 
     //dropdowns for metrics
 
@@ -489,7 +526,7 @@
       .attr('class', 'overallMetric')
       .attr("transform", function (d) { return "translate(" + x0(d.metric) + ",0)"; })
       .selectAll("rect")
-      .data(function (d) { return d.sub; })
+      .data(function (d) { return d.sub; }, function(d) { return d.key; })
       .enter().append("g")
       .attr('class','metCountry')
       .append("rect")
@@ -520,10 +557,20 @@
       .style('opacity', 0);
 
     svg.selectAll('.metCountry')
+      .append('text')
+      .attr('class', 'countryText')
+      .attr('dx',function (d) { return x1(d.key) -30; })
+      .attr('dy',function (d) { return y(Math.max(0, d.value)) -20; })
+      .text(function(d) {
+        return d.key;
+      })
+      .style('opacity', 0);
+
+    svg.selectAll('.metCountry')
         .on('mouseenter', function() {
-          // define hover events
+          //define hover events
           d3.select(this)
-            .select('text')
+            .selectAll('text')
             .transition()
             .duration(0)
             .style('opacity', 1)
@@ -531,19 +578,31 @@
           d3.select(this).moveToFront();
         })
         .on('mouseleave', function() {
-          // define mouseleave events
+          //define mouseleave events
           d3.select(this)
-            .select('text')
+            .selectAll('text')
             .transition()
             .style('opacity', 0)
+
+          d3.select(this).moveToBack();
         })
 
     //Move to front function
-
-    d3.selection.prototype.moveToFront = function() {  
+    indexChild = 0
+    d3.selection.prototype.moveToFront = function() { 
       return this.each(function(){
         this.parentNode.appendChild(this);
       });
+    };
+    //Move to back function
+
+    d3.selection.prototype.moveToBack = function() {  
+        return this.each(function() { 
+            var firstChild = this.parentNode.firstChild; 
+            if (firstChild) { 
+                this.parentNode.insertBefore(this, firstChild); 
+            } 
+        });
     };
 
     //Updating x and y axis
