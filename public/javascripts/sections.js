@@ -149,7 +149,7 @@ let scrollVis = function () {
       .attr('x', width / 2)
       .attr('y', (1.5 * height / 3) + (height / 5))
       .style('fill', 'crimson')
-      .text('0.3%');
+      .text('0%');
 
     g.selectAll('.welcome')
       .style('opacity', 0);
@@ -867,7 +867,7 @@ let scrollVis = function () {
    */
   function updateWelcome(progress) {
     g.selectAll('.welcome.title')
-      .text(d3.format('.1%')(0.001 + 0.035 * progress, 3))
+      .text(d3.format('.1%')(0.125 * progress, 3))
       .style('font-size', 100 + progress * 60);
   }
 

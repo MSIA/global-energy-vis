@@ -250,7 +250,6 @@ function ready(currentKey, currentYear) {
     endYear = d3.max(full_cur, function (d) {
       return +d.Year;
     });
-    currentYear = endYear;
     currentKeyPrev = currentKey;
 
     minE = d3.min(full_cur, function (d) {
