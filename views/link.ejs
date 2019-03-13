@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <title>New Energies</title>
+  <title>Link</title>
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -15,28 +15,24 @@
 
   <!-- Custom external stylesheets -->
   <link rel="stylesheet" href="/stylesheets/style.css">
-  <link rel="stylesheet" href="/stylesheets/landing.css">
+
+  <style>
+    .vertical-center {
+      min-height: 100%;
+      /* Fallback for browsers do NOT support vh unit */
+      min-height: 100vh;
+      /* These two lines are counted as one :-)       */
+      display: flex;
+      align-items: center;
+    }
+  </style>
 </head>
 
 <body>
-  <div class="bg">
-    <div class="container vertical-center">
-      <div class="row">
-        <div class="col-md-6">
-          <h1>Warming up to New Energies</h1>
-          <div class="text">
-            <p>
-              Welcome and thank you for taking the time to explore our world's relationship with energy. This platform
-              is here for you to learn more about the world's use of energy and to offer new, global perspectives. We
-              hope that the data speaks to you and inspires new thought and perhaps even sparks a passion.
-            </p>
-          </div>
-          <div class="button mx-auto">
-            <a class="btn btn-light text-center block" href="/story">Begin</a>
-          </div>
-        </div>
+  <div class="container vertical-center">
+      <div class="mx-auto text-center">
+        <h1 class="center"><a href="https://lets-get-visual.herokuapp.com">https://lets-get-visual.herokuapp.com</a></h1>
       </div>
-    </div>
   </div>
 </body>
 
@@ -48,20 +44,5 @@
   integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
   integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-<!-- Custom external scripts -->
-<script src="/javascripts/script.js"></script>
-
-<!-- Custom in-page scripts -->
-<script>
-  $(function () {
-    $('.text')
-      // .css({ 'top': '30px' })
-      // .css({ 'display': 'none' })
-      .animate({ 'top': 0 }, { "duration": 3000, "queue": false })
-      .css('visibility', 'visible').hide().fadeIn(3000);
-    $('.button').delay(6000).animate({'opacity':1}, 2000)
-  });
-</script>
 
 </html>
