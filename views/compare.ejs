@@ -1,76 +1,138 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css?family=Montserrat:300" rel="stylesheet">
+  <title>Compare</title>
 
-<style>
-  .xAxis .domain {
-    display: none;
-  }
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Playfair+Display:400,700" rel="stylesheet">
 
-  .yAxis .domain {
-    display: none;
-  }
+  <style>
+    .xAxis .domain {
+      display: none;
+    }
 
-  .yAxis text {
-    fill: #626065;
-    font-size: 12px !important;
-  }
+    .yAxis .domain {
+      display: none;
+    }
 
-  .xAxis text {
-    fill: #626065;
-    font-size: 12px !important;
-  }
+    .yAxis text {
+      fill: #626065;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px !important;
+    }
 
-  .names {
-    font-size: 12px !important;
-  }
+    .xAxis text {
+      fill: #626065;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px !important;
+    }
 
-  select {
-    overflow: auto;
-    position: absolute;
-    width: 300px;
-    height: 20px;
-  }
+    .barsText {
+      fill: #343434;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px !important;
+    }
 
-  svg {
-    border: 0.5px solid lightgrey;
-  }
+    .countryText {
+      fill: #343434;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px !important;
+    }
 
-  #titleDiv {
-    background-color: darkslategrey;
-    height: 100%;
-    width: 100%;
-    text-align: center;
-    display: inline-block;
-    font-family: 'Montserrat', sans-serif;
-    color: whitesmoke;
-  }
+    .names {
+      font-size: 12px !important;
+    }
 
-  #countries {
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-    fill: #626065;
-  }
+    select {
+      overflow: auto;
+      position: absolute;
+      width: 300px;
+      height: 20px;
+    }
 
-  #metrics {
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-    fill: #626065;
-  }
+    .value-time {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .yearName {
+      font-family: 'Montserrat', sans-serif;
+
+    }
+
+    body {
+      margin: 0;
+    }
+
+    svg {
+      border: 0.5px solid lightgrey;
+    }
+
+    .navbar {
+      font-family: 'Playfair Display', serif;
+      height: 80px;
+      background-color: #173e43;
+      color: #dddfd4;
+    }
+    .navbar h1{
+      font-size: 3em;
+    }
+
+    #countries {
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      fill: #626065;
+    }
+
+    #metrics {
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      fill: #626065;
+    }
+
+    .countryURL {
+      visibility: hidden;
+      font-size: 4px !important;
+    }
+
+    .invis {
+      visibility: hidden;
+      font-size: 4px !important;
+    }
+
+    .button1 {
+        background-color: white;
+        color: black;
+        border: 2px solid #e7e7e7;
+        font-family: 'Playfair Display', serif;
+      }
+
+      .chart {
+        width: 100%;
+        margin: auto;
+      }
+
 </style>
-
+</head>
 <body>
-  <div id="titleDiv">
+  <div class="navbar">
     <h1>Comparing Metrics Across Countries</h1>
+    <a href = "/trends/<%= country %>"><button type="button" class = "button1">View Trends</button></a>
   </div>
+  <div class="invis"><%=country%></div>
   <div id="countries">
     <u>Choose 4 countries:</u>
   </div>
+  <div class="invis"><%=country%></div>
   <div id="metrics">
     <u>Choose 4 metrics:</u>
   </div>
+  <div class="countryURL"><%=country%></div>
+  <div class = "chart"></div>
 </body>
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -95,6 +157,9 @@
       if (d.Year == yearGroup) { return d; }
     });
 
+    z = d3.scaleOrdinal()
+      .range(["#b3de69", "#fccde5", "#bc80bd", "#ffed6f"]);
+
     x0.domain(newMetrics);
     x1.domain(newCountries).rangeRound([0, x0.bandwidth()]);
     y.domain([
@@ -108,7 +173,6 @@
         { return d[newMetrics];
         });
       })]).nice();
-      console.log(y.domain());
 
 
     svg.selectAll(".yAxis")
@@ -129,7 +193,7 @@
               return d;
             }
           });
-          return { key: k, value: val[0][col], ttval: val[0][absMapping[col]] }
+          return { key: k, value: val[0][col], ttval: val[0][absMapping[col]] , ttName: absMapping[col]};
         })
       };
     });
@@ -145,7 +209,8 @@
       .attr("x", function (d) { return x1(d.key); })
       .attr("y", function (d) { return y(Math.max(0, d.value)); })
       .attr("width", x1.bandwidth())
-      .attr("height", function (d) { return Math.abs(y(0) - y(d.value)); });
+      .attr("height", function (d) { return Math.abs(y(0) - y(d.value)); })
+      .attr("fill", function (d) { return z(d.key); });
 
     //Updating legend
     svg.selectAll('.legend')
@@ -159,11 +224,46 @@
       .duration(1000)
       .text(function (d) { return d; });
 
+    //Updating text
+    svg.selectAll('.overallMetric')
+      .data(thisDat_t)
+      .selectAll('.barsText')
+      .data(function (d) { return d.sub; })
+      .transition()
+      .duration(1000)
+      .attr('dx',function (d) { return x1(d.key) -30; })
+      .attr('dy',function (d) { return y(Math.max(0, d.value)) -10; })
+      .text(function(d) {
+        if(d.ttName == "renewable_percentage") {
+          return ("% of Renewable Energy: " + d3.format(".0%")(d.ttval));
+        }
+        else if(d.ttName == "Pop_Tm") {
+          return ("Population (in M): " + d3.format(".1f")(d.ttval));
+        }
+        else {
+          return (mappingText[d.ttName] + ": " + d3.format("$.2f")(d.ttval))
+        }
+      return d.ttval})
+      .style('opacity', 0);
+
+    svg.selectAll('.overallMetric')
+      .data(thisDat_t)
+      .selectAll('.countryText')
+      .data(function (d) { return d.sub; })
+      .transition()
+      .duration(1000)
+      .attr('dx',function (d) { return x1(d.key) -30; })
+      .attr('dy',function (d) { return y(Math.max(0, d.value)) -20; })
+      .text(function(d) {
+        return d.key;
+      })
+      .style('opacity', 0);
+
   }
 
   d3.csv("/data/full.csv", function (d, i, columns) {
-    for (var i = 3, n = 19; i < n; ++i) d[columns[i]] = +d[columns[i]];
-    for (var i = 25, n = 38; i < n; ++i) d[columns[i]] = +d[columns[i]];
+    for (var i = 1, n = 17; i < n; ++i) d[columns[i]] = +d[columns[i]];
+    for (var i = 20, n = 31; i < n; ++i) d[columns[i]] = +d[columns[i]];
     d['EdExp'] = d["Education_Exp"] * d["GDP_PerCap"];
     d["HealthExp"] = d["Health_Exp"] * d["GDP_PerCap"];
     return d;
@@ -176,20 +276,27 @@
     countryList.unshift("");
     var yearList = d3.set(dat.map(function (d) { return d.Year })).values();
 
+    var firstCountry = $('.countryURL')[0]['textContent'];
     var countryIncluded = ["France", "India", "United Kingdom", "United States"];
+
+    if (countryIncluded.indexOf(firstCountry) >= 0) {
+      countryIncluded[countryIncluded.indexOf(firstCountry)] = countryIncluded[0];
+    }
+    countryIncluded[0] = firstCountry;
 
     var dropdown = d3.select('#countries');
 
     dropdown
       .append("select")
       .attr('class', 'country1')
+      .attr('disabled',false)
       .selectAll('option')
       .data(countryList).enter()
       .append('option')
       .attr("value", function (d) { return d; })
       .text(function (d) { return d; });
 
-    $('.country1').select2({ placeholder: "France" });
+    $('.country1').select2({ placeholder: countryIncluded[0] });
 
     dropdown
       .append("select")
@@ -200,7 +307,7 @@
       .attr("value", function (d) { return d; })
       .text(function (d) { return d; });
 
-    $('.country2').select2({ placeholder: "India" });
+    $('.country2').select2({ placeholder: countryIncluded[1] });
 
     dropdown
       .append("select")
@@ -211,7 +318,7 @@
       .attr("value", function (d) { return d; })
       .text(function (d) { return d; });
 
-    $('.country3').select2({ placeholder: "United Kingdom" });
+    $('.country3').select2({ placeholder: countryIncluded[2] });
 
     dropdown
       .append("select")
@@ -222,7 +329,7 @@
       .attr("value", function (d) { return d; })
       .text(function (d) { return d; });
 
-    $('.country4').select2({ placeholder: "United States" });
+    $('.country4').select2({ placeholder: countryIncluded[3] });
 
     //dropdowns for metrics
 
@@ -278,14 +385,14 @@
 
     $('.metric4').select2({ placeholder: "Population Growth" });
 
-    absMapping = { "Education_Exp": "EdExp", "GDP_Growth": "GDP_PerCap", "Pop_Growth": "Pop_T", "Health_Exp": "HealthExp", "renewable_percentage": "renewable_percentage" };
+    absMapping = { "Education_Exp": "EdExp", "GDP_Growth": "GDP_PerCap", "Pop_Growth": "Pop_Tm", "Health_Exp": "HealthExp", "renewable_percentage": "renewable_percentage" };
     //margins and svg
-    var margin = { top: 80, right: 20, bottom: 40, left: 50 };
+    var margin = { top: 80, right: 30, bottom: 40, left: 50 };
 
-    var width = 1580 - margin.left - margin.right;
-    var height = 720 - margin.top - margin.bottom;
-
-    var svg1 = d3.select("body").append("svg")
+    var div = d3.select('.chart');
+    var width = parseInt(div.style('width')) - margin.left - margin.right;
+    var height = Math.min(width / 5 * 3, 780) - margin.top - margin.bottom;
+    var svg1 = div.append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom);
 
@@ -315,7 +422,7 @@
     var yearNow = svg1.append("text")
       .attr('class', 'value-time')
       .attr('dx', 202)
-      .attr('dy', 50)
+      .attr('dy', 60)
       .attr("font-family", "sans-serif")
       .attr("font-size", 14)
       .style('fill', '#626065')
@@ -324,7 +431,7 @@
     svg1.append("text")
       .attr('class', 'yearName')
       .attr('dx', 200)
-      .attr('dy', 30)
+      .attr('dy', 40)
       .attr("font-family", "sans-serif")
       .attr("font-size", 18)
       .style('fill', '#626065')
@@ -426,7 +533,6 @@
           return d[cols];
         });
       })]).nice();
-      console.log(y.domain())
 
     //Restructuring data
     var dat_t = cols.map(function (col) {
@@ -437,7 +543,7 @@
               return d;
             }
           });
-          return { key: k, value: val[0][col], ttval: val[0][absMapping[col]] }
+          return { key: k, value: val[0][col], ttval: val[0][absMapping[col]], ttName: absMapping[col] };
         })
       };
     });
@@ -452,14 +558,84 @@
       .attr('class', 'overallMetric')
       .attr("transform", function (d) { return "translate(" + x0(d.metric) + ",0)"; })
       .selectAll("rect")
-      .data(function (d) { return d.sub; })
-      .enter().append("rect")
+      .data(function (d) { return d.sub; }, function(d) { return d.key; })
+      .enter().append("g")
+      .attr('class','metCountry')
+      .append("rect")
       .attr("x", function (d) { return x1(d.key); })
       .attr("y", function (d) { return y(Math.max(0, d.value)); })
       .attr("width", x1.bandwidth())
       .attr("height", function (d) { return Math.abs(y(0) - y(d.value)); })
       .attr("fill", function (d) { return z(d.key); });
 
+    mappingText = {"EdExp": "Expenditure per capita", "GDP_PerCap": "GDP per capita", "Pop_Tm" :"Population (in millions)", "HealthExp": "Expenditure per capita", "renewable_percentage": "% of Renewable Energy" };
+
+    svg.selectAll('.metCountry')
+      .append('text')
+      .attr('class', 'barsText')
+      .attr('dx',function (d) { return x1(d.key) -30; })
+      .attr('dy',function (d) { return y(Math.max(0, d.value)) -10; })
+      .text(function(d) {
+        if(d.ttName == "renewable_percentage") {
+          return ("% of Renewable Energy: " + d3.format(".0%")(d.ttval));
+        }
+        else if(d.ttName == "Pop_Tm") {
+          return ("Population (in M): " + d3.format(".1f")(d.ttval));
+        }
+        else {
+          return (mappingText[d.ttName] + ": " + d3.format("$.2f")(d.ttval))
+        }
+      return d.ttval})
+      .style('opacity', 0);
+
+    svg.selectAll('.metCountry')
+      .append('text')
+      .attr('class', 'countryText')
+      .attr('dx',function (d) { return x1(d.key) -30; })
+      .attr('dy',function (d) { return y(Math.max(0, d.value)) -20; })
+      .text(function(d) {
+        return d.key;
+      })
+      .style('opacity', 0);
+
+    svg.selectAll('.metCountry')
+        .on('mouseenter', function() {
+          //define hover events
+          d3.select(this)
+            .selectAll('text')
+            .transition()
+            .duration(0)
+            .style('opacity', 1)
+
+          d3.select(this).moveToFront();
+        })
+        .on('mouseleave', function() {
+          //define mouseleave events
+          d3.select(this)
+            .selectAll('text')
+            .transition()
+            .style('opacity', 0)
+
+          d3.select(this).moveToBack();
+        })
+
+    //Move to front function
+    indexChild = 0
+    d3.selection.prototype.moveToFront = function() {
+      return this.each(function(){
+        this.parentNode.appendChild(this);
+      });
+    };
+    //Move to back function
+
+    d3.selection.prototype.moveToBack = function() {
+        return this.each(function() {
+            var firstChild = this.parentNode.firstChild;
+            if (firstChild) {
+                this.parentNode.insertBefore(this, firstChild);
+            }
+        });
+    };
 
     //Updating x and y axis
     svg.append("g")
@@ -475,7 +651,7 @@
 
     //Creating a legend
     var legend = svg.append("g")
-      .attr("font-family", "sans-serif")
+      .attr("font-family", "Montserrat")
       .attr("font-size", 10)
       .attr("text-anchor", "end")
       .selectAll("g")

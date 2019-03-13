@@ -46,12 +46,20 @@
     }
     .navbar {
       font-family: 'Playfair Display', serif;
+      height: 80px;
       background-color: #173e43;
       color: #dddfd4;
     }
+    
+    .button1 {
+      background-color: white;
+      color: black;
+      border: 2px solid #e7e7e7;
+      font-family: 'Playfair Display', serif;
+    }
 
     .navbar h1 {
-      font-size: 4em;
+      font-size: 3em;
     }
   </style>
 </head>
@@ -59,6 +67,7 @@
 <body>
   <div class="navbar">
     <h1><%= country %></h1>
+    <a href = "/compare/<%= country %>"><button type="button" class = "button1">Compare Countries</button></a>
   </div>
   <div class="main">
 
@@ -79,6 +88,9 @@
         </div>
         <div class="chart-wrapper" id="chart2">
 
+        </div>
+        <div class="chart-wrapper" id="chart3">
+        
         </div>
       </div>
       <div class="col-2">
@@ -108,10 +120,10 @@
   const Country = $('.navbar>h1').text();
   wikiLoad(Country);
 
-  d3.csv('/data/energy_full.csv').then(ready)
+  d3.csv('/data/full.csv').then(ready)
     .catch(e => console.error(e));
   function ready(data) {
-    data = data.filter(d => d.Country == 'India')
+    data = data.filter(d => d.Country_Name == Country)
     console.log(data)
 
     // Reformat data
@@ -120,34 +132,55 @@
         Year: +d.Year,
         co2_milTon: d.co2_milTon ? +d.co2_milTon : null,
         primary_con_mtoe: +d.primary_con_mtoe,
-        elec_gen_twh: d.elec_gen_twh ? +d.elec_gen_twh : null,
-        hydro_gen_twh: +d.hydro_gen_twh
+        renewable_percentage: d.renewable_percentage ? +d.renewable_percentage : null,
+        geo_bio_other_con_mtoe: d.geo_bio_other_con_mtoe ? +d.geo_bio_other_con_mtoe : null,
+        hyrdo_con_mtoe: d.hyrdo_con_mtoe ? +d.hyrdo_con_mtoe : null,
+        nuc_con_mtoe: d.nuc_con_mtoe ? +d.nuc_con_mtoe : null,
+        solar_con_mtoe: d.solar_con_mtoe ? +d.solar_con_mtoe : null,
+        wind_con_mtoe: d.wind_con_mtoe ? +d.wind_con_mtoe : null,
+        Education_Exp: d.Education_Exp ? +d.Education_Exp : null,
+        Health_Exp: d.Health_Exp ? +d.Health_Exp : null
       }
     })
-
+    console.log(data);
     var chart = makeLineChart(data, 'Year', {
-      'CO2': { column: 'co2_milTon', description: 'Description for CO2; Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-      'Consumption': { column: 'primary_con_mtoe', description: 'Description for Consumption; Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }
+      'CO2': { column: 'co2_milTon', description: 'CO2 emissions in million tonnes' }
     });
     chart.bind({
       selector: '#chart1',
-      chartSize: { height: 300, width: parseInt(d3.select('.col-8').style('width')) },
-      axisLabels: { xAxis: 'Year', yAxis: 'Values' },
-      colors: ['blue', 'red']
+      chartSize: { height: 250, width: parseInt(d3.select('.col-8').style('width')) },
+      axisLabels: { xAxis: 'Year', yAxis: 'million tonnes' },
+      colors: ['#777777']
     });
     chart.render();
 
     chart = makeLineChart(data, 'Year', {
-      'Electric': { column: 'elec_gen_twh', description: 'Description for Electric; Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-      'Hydro': { column: 'hydro_gen_twh', description: 'Description for Hydro; Lorem ipsum dolor sit amet, consectetur adipiscing elit.' }
+      'Hydro': { column: 'hyrdo_con_mtoe', description: 'Hydro energy consumption in million tonnes oil equivalent' },
+      'Solar': { column: 'solar_con_mtoe', description: 'Solar energy consumption in million tonnes oil equivalent' },
+      'Wind': { column: 'wind_con_mtoe', description: 'Wind energy consumption in million tonnes oil equivalent' },
+      'Nuclear': { column: 'nuc_con_mtoe', description: 'Nuclear energy consumption in million tonnes oil equivalent' }
     });
     chart.bind({
       selector: '#chart2',
-      chartSize: { height: 300, width: parseInt(d3.select('.col-8').style('width')) },
-      axisLabels: { xAxis: 'Year', yAxis: 'Values' },
-      colors: ['green', 'orange']
+      chartSize: { height: 250, width: parseInt(d3.select('.col-8').style('width')) },
+      axisLabels: { xAxis: 'Year', yAxis: 'Consumption' },
+      colors: ['#0080ff','#cb5c0d','#008081','#7e191b']
     });
     chart.render();
+
+    chart = makeLineChart(data, 'Year', {
+      'Education Expenditure': { column: 'Education_Exp', description: 'Education expenditure as a % of GDP' },
+      'Health Expenditure': { column: 'Health_Exp', description: 'Health expenditure as a % of GDP' }
+    });
+    chart.bind({
+      selector: '#chart3',
+      chartSize: { height: 250, width: parseInt(d3.select('.col-8').style('width')) },
+      axisLabels: { xAxis: 'Year', yAxis: 'Percentage' },
+      axisFormat: { yAxis: d3.format(".0%") },
+      colors: ["#b3de69", "#bc80bd",]
+    });
+    chart.render();
+
   }
 </script>
 
