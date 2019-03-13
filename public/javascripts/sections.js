@@ -3,7 +3,7 @@ let scrollVis = function () {
   // and margins of the vis area.
   let width = 600;
   let height = 520;
-  let margin = { top: 0, left: 40, bottom: 40, right: 10 };
+  let margin = { top: 10, left: 40, bottom: 40, right: 50 };
 
   // Keep track of which visualization
   // we are on and which was the last
@@ -43,10 +43,6 @@ let scrollVis = function () {
   let yAxis = d3.axisLeft()
     .scale(yScale);
 
-  let pack = d3.pack()
-    .size([width, height])
-    .padding(1.5);
-
   // When scrolling to a new section
   // the activation function for that
   // section is called.
@@ -82,6 +78,7 @@ let scrollVis = function () {
       const countryData = getCountryData(rawData[0]);
       const worldData = getWorldData(rawData[1]);
       window.worldData = worldData;
+      window.countryData = countryData
       const barData = [
         { name: 'EQG', renewable: 83.88478497, color: 'orange' },
         { name: 'USA', renewable: 4.423864838, color: 'blue' },
@@ -128,10 +125,9 @@ let scrollVis = function () {
     // Draw wind image
     g.append('image')
       .attr('class', 'wind-img')
-      .attr('xlink:href', 'images/earth-lights.jpg')
+      .attr('xlink:href', 'images/earth-sun.jpg')
       .attr('x', 0).attr('y', 0)
-      .attr('width', width).attr('height', height)
-      .style('opacity', 0);
+      .attr('width', width).attr('height', height);
 
     // energy title
     g.append('text')
@@ -184,7 +180,7 @@ let scrollVis = function () {
       .attr('fill', 'black')
       .style('opacity', 0);
 
-    // TODO: Draw paris image
+    // Draw paris image
     g.append('image')
       .attr('class', 'paris-img')
       .attr('xlink:href', 'images/paris.jpg')
@@ -192,7 +188,7 @@ let scrollVis = function () {
       .attr('width', width).attr('height', height)
       .style('opacity', 0);
 
-    // TODO: Draw EQG image
+    // Draw EQG image
     g.append('image')
       .attr('class', 'eqg-img')
       .attr('xlink:href', 'images/earth-lights.jpg')
@@ -200,10 +196,12 @@ let scrollVis = function () {
       .attr('width', width).attr('height', height)
       .style('opacity', 0);
 
-    // TODO: Draw barchart
-    g.selectAll('.bar')
+    // Draw barchart
+    let bars = g.selectAll('.bar')
       .data(barData)
-      .enter().append('rect')
+      .enter().append('g')
+      .attr('class', 'bar');
+    bars.append('rect')
       .attr('class', 'bar')
       .attr('width', xScaleBar.bandwidth())
       .attr('x', d => xScaleBar(d.name))
@@ -211,10 +209,19 @@ let scrollVis = function () {
       .attr('y', d => yScale(d.renewable))
       .style('opacity', 0)
       .style('fill', d => d.color);
+    bars.append('text')
+      .attr('class', 'bar')
+      .attr('transform', d => `translate(${xScaleBar(d.name)}, ${yScale(d.renewable)})`)
+      .attr('dx', xScaleBar.bandwidth() / 2)
+      .attr('dy', -5)
+      .style('text-anchor', 'middle')
+      .text(d => d3.format('.1%')(d.renewable / 100))
+      .style('opacity', 0);
 
-    // linecharts
+    // EQG linecharts
     // GDP LINE
-    yScale.domain(d3.extent(countryData, d => d.gdp));
+    let data = countryData.filter(d => d.country === 'EQG');
+    yScale.domain(d3.extent(data, d => d.gdp));
     let line = d3.line()
       .curve(d3.curveNatural)
       .x(d => xScaleLine(d.year))
@@ -222,7 +229,7 @@ let scrollVis = function () {
     let path = g.append('path')
       .attr('class', 'line')
       .attr('id', 'gdp-path')
-      .attr('d', line(countryData))
+      .attr('d', line(data))
       .attr('stroke', 'green')
       .attr('stroke-width', 2)
       .attr('fill', 'none');
@@ -239,7 +246,7 @@ let scrollVis = function () {
     path = g.append('path')
       .attr('class', 'line')
       .attr('id', 'renewable-path')
-      .attr('d', line(countryData))
+      .attr('d', line(data))
       .attr('stroke', 'steelblue')
       .attr('stroke-width', 2)
       .attr('fill', 'none');
@@ -274,10 +281,68 @@ let scrollVis = function () {
       .style('opacity', 0);
 
     g.append('image')
-      .attr('class', 'image')
-      .attr('xlink:href', 'images/earth-lights.jpg')
+      .attr('class', 'ethiopia')
+      .attr('xlink:href', 'images/earth-sun.jpg')
       .attr('x', 0).attr('y', 0)
       .attr('width', width).attr('height', height)
+      .style('opacity', 0);
+
+    // Ethiopia linecharts
+    // GDP LINE
+    data = countryData.filter(d => d.country === 'Ethiopia');
+    yScale.domain(d3.extent(data, d => d.gdp));
+    line = d3.line()
+      .curve(d3.curveNatural)
+      .x(d => xScaleLine(d.year))
+      .y(d => yScale(d.gdp));
+    path = g.append('path')
+      .attr('class', 'line')
+      .attr('id', 'gdp-path2')
+      .attr('d', line(data))
+      .attr('stroke', 'green')
+      .attr('stroke-width', 2)
+      .attr('fill', 'none');
+    totalLength = path.node().getTotalLength();
+    path // make path "invisible"
+      .attr('stroke-dasharray', totalLength + ' ' + totalLength)
+      .attr('stroke-dashoffset', totalLength);
+
+    // RENEWABLE LINE
+    yScale.domain([0, 1]); // absolute scale for percents 0-100
+    line.y(d => yScale(d.renewable));
+    path = g.append('path')
+      .attr('class', 'line')
+      .attr('id', 'renewable-path2')
+      .attr('d', line(data))
+      .attr('stroke', 'steelblue')
+      .attr('stroke-width', 2)
+      .attr('fill', 'none');
+    totalLength = path.node().getTotalLength();
+    path // make path "invisible"
+      .attr('stroke-dasharray', totalLength + ' ' + totalLength)
+      .attr('stroke-dashoffset', totalLength);
+
+    // closing
+    g.append('text')
+      .attr('class', 'title closing')
+      .attr('x', width / 2)
+      .attr('y', height / 3)
+      .text('Now it\'s');
+
+    g.append('text')
+      .attr('class', 'title closing')
+      .attr('x', width / 2)
+      .attr('y', 1.5 * height / 3)
+      .text('your turn');
+
+    g.append('text')
+      .attr('class', 'sub-title closing')
+      .attr('x', width / 2)
+      .attr('y', (1.5 * height / 3) + (height / 4))
+      .style('fill', 'crimson')
+      .text('What will you uncover?');
+
+    g.selectAll('.closing')
       .style('opacity', 0);
   };
 
@@ -315,8 +380,9 @@ let scrollVis = function () {
     updateFunctions[4] = updateEQG;
     updateFunctions[6] = updateGDP;
     updateFunctions[7] = updateRenewable;
-    updateFunctions[9] = updateRenewable2;
-    updateFunctions[10] = updateGDP2;
+    updateFunctions[9] = updateGDP2;
+    updateFunctions[10] = updateRenewable2;
+    updateFunctions[11] = updateClosing;
   };
 
   /**
@@ -334,8 +400,7 @@ let scrollVis = function () {
    *
    */
 
-  // TODO: not sure if these will work - should work without the attr part
-  // would call later as `element.transition(show).attr('blah', 'blah')`
+  // call later as `element.transition(show).attr('blah', 'blah')`
   let show = d3.transition().duration(500);
   let hide = d3.transition().duration(200);
 
@@ -354,7 +419,7 @@ let scrollVis = function () {
       .transition(hide)
       .style('opacity', 0);
 
-    g.selectAll('wind-img')
+    g.selectAll('.wind-img')
       .transition(show)
       .style('opacity', 1.0);
   }
@@ -384,8 +449,7 @@ let scrollVis = function () {
       .style('opacity', 0);
 
     g.selectAll('.welcome')
-      .transition()
-      .duration(600)
+      .transition(show)
       .style('opacity', 1.0);
   }
 
@@ -582,7 +646,7 @@ let scrollVis = function () {
    */
   function showGDP2() {
     console.log('SHOW GDP2');
-    showAxes(xAxisLine);
+    showAxes(xAxisLine, yAxis);
 
     g.selectAll('.ethiopia')
       .transition(hide)
@@ -630,7 +694,7 @@ let scrollVis = function () {
       .transition(hide)
       .style('opacity', 0);
 
-    g.selectAll('.closing')
+    g.selectAll('.closing.title')
       .transition(show)
       .style('opacity', 1);
   }
@@ -679,6 +743,7 @@ let scrollVis = function () {
    *
    */
 
+  //TODO: do something with dynamic text?
   /**
    * updateEQG - increase/decrease
    * percent displayed
@@ -687,8 +752,6 @@ let scrollVis = function () {
    *  how far user has scrolled in section
    */
   function updateEQG(progress) {
-    // TODO: fix
-
     g.selectAll('.percent-title')
       .transition()
       .duration(0)
@@ -753,6 +816,20 @@ let scrollVis = function () {
   }
 
   /**
+   * updateEQG - increase/decrease
+   * percent displayed
+   *
+   * @param progress - 0.0 - 1.0 -
+   *  how far user has scrolled in section
+   */
+  function updateClosing(progress) {
+    g.selectAll('.closing.sub-title')
+      .attr('dy', progress * -50)
+      .style('opacity', 0.3 + progress * 0.7);
+  }
+
+
+  /**
    * DATA FUNCTIONS
    *
    * Used to coerce the data into the
@@ -793,7 +870,7 @@ let scrollVis = function () {
     rawData.forEach(row => {
       // row.dummy = big - (parseFloat(row.BioFuels) + parseFloat(row.Hydro) + parseFloat(row.Solar) + parseFloat(row.Other) + parseFloat(row.Wind));
       Object.keys(row).forEach(metric => {
-        if (metric == "year") return;
+        if (metric === 'year') return;
         longData.push({
           year: +row.year,
           metric: metric,
