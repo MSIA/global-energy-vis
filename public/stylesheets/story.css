@@ -37,7 +37,7 @@
 }
 
 #extra-space {
-  height: 300px;
+  height: 250px;
 }
 
 #vis {
@@ -52,13 +52,16 @@
 }
 
 #vis .title {
-  font-size:120px;
+  font-size: 100px;
   text-anchor: middle;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
 }
-
 #vis .sub-title {
-  font-size:60px;
+  font-size: 60px;
   text-anchor: middle;
+  font-family: 'Playfair Display', serif;
+  font-weight: bold;
 }
 
 .axis path,

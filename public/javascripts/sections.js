@@ -126,22 +126,30 @@ let scrollVis = function () {
     // Draw wind image
     g.append('image')
       .attr('class', 'wind-img')
-      .attr('xlink:href', 'images/earth-lights.jpg')
+      .attr('xlink:href', 'images/wind.jpg')
       .attr('x', 0).attr('y', 0)
       .attr('width', width).attr('height', height);
 
     // energy title
     g.append('text')
-      .attr('class', 'title welcome')
+      .attr('class', 'sub-title welcome')
       .attr('x', width / 2)
       .attr('y', height / 3)
-      .text('Warming Up');
-
+      .text('Global Energy Consumption')
+      .style('font-size', '50px');
     g.append('text')
       .attr('class', 'sub-title welcome')
       .attr('x', width / 2)
-      .attr('y', (height / 3) + (height / 5))
-      .text('To New Energies');
+      .attr('y', 1.3 * height / 3)
+      .text('from Renewable Sources')
+      .style('font-size', '50px');
+
+    g.append('text')
+      .attr('class', 'title welcome')
+      .attr('x', width / 2)
+      .attr('y', (1.5 * height / 3) + (height / 5))
+      .style('fill', 'crimson')
+      .text('0.3%');
 
     g.selectAll('.welcome')
       .style('opacity', 0);
@@ -339,7 +347,7 @@ let scrollVis = function () {
     g.append('text')
       .attr('class', 'sub-title closing')
       .attr('x', width / 2)
-      .attr('y', (1.5 * height / 3) + (height / 4))
+      .attr('y', (1.5 * height / 3) + (height / 4) + 15)
       .style('fill', 'crimson')
       .text('What will you uncover?');
 
@@ -797,12 +805,9 @@ let scrollVis = function () {
    *  how far user has scrolled in section
    */
   function updateWelcome(progress) {
-    g.selectAll('.percent-title')
-      .transition()
-      .duration(0)
-      .style('opacity', progress);
-    g.selectAll('.percent-title.highlight')
-      .style('font-size', progress * 120);
+    g.selectAll('.welcome.title')
+      .text(d3.format('.1%')(0.001 + 0.035 * progress, 3))
+      .style('font-size', 100 + progress * 60);
   }
 
   /**
@@ -813,8 +818,8 @@ let scrollVis = function () {
    */
   function updateEQG(progress) {
     g.selectAll('.eqg-img')
-      .attr('x', -250 * progress)
-      .attr('y', -250 * progress)
+      .attr('x', -300 * progress)
+      .attr('y', -300 * progress)
       .attr('height', height + 500 * progress)
       .attr('width', width + 500 * progress);
   }
