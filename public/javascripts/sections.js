@@ -29,7 +29,8 @@ let scrollVis = function () {
   let xScaleLine = d3.scaleLinear()
     .range([0, width]);
   let xAxisLine = d3.axisBottom()
-    .scale(xScaleLine);
+    .scale(xScaleLine)
+    .tickFormat(d3.format('d'));
 
   // Setup x for bar chart
   let xScaleBar = d3.scaleBand()
@@ -125,7 +126,7 @@ let scrollVis = function () {
     // Draw wind image
     g.append('image')
       .attr('class', 'wind-img')
-      .attr('xlink:href', 'images/earth-sun.jpg')
+      .attr('xlink:href', 'images/earth-lights.jpg')
       .attr('x', 0).attr('y', 0)
       .attr('width', width).attr('height', height);
 
@@ -167,10 +168,10 @@ let scrollVis = function () {
       .attr('class', 'bubble')
       .attr('transform', d => `translate(${place(d.metric)})`);
     bubbles.append('circle')
-      .attr('r', d => rScale(d.value))
+      .attr('r', 0) // hide bubbles at start
       .style('fill', d => color(d.metric))
       .style('stroke', 'grey')
-      .style('opacity', 0);
+      .style('opacity', 0); //TODO: may not need this
     bubbles.append('text')
       .attr('dy', '.2em')
       .attr('transform', d => d.metric === 'BioFuels' | d.metric === 'Hydro' ? 'translate(0, 0)' : 'translate(0, 50)')
@@ -191,7 +192,7 @@ let scrollVis = function () {
     // Draw EQG image
     g.append('image')
       .attr('class', 'eqg-img')
-      .attr('xlink:href', 'images/earth-lights.jpg')
+      .attr('xlink:href', 'images/eqg.png')
       .attr('x', 0).attr('y', 0)
       .attr('width', width).attr('height', height)
       .style('opacity', 0);
@@ -205,12 +206,12 @@ let scrollVis = function () {
       .attr('class', 'bar')
       .attr('width', xScaleBar.bandwidth())
       .attr('x', d => xScaleBar(d.name))
-      .attr('height', d => height - yScale(d.renewable))
-      .attr('y', d => yScale(d.renewable))
+      .attr('height', 0)
+      .attr('y', height)
       .style('opacity', 0)
       .style('fill', d => d.color);
     bars.append('text')
-      .attr('class', 'bar')
+      .attr('class', 'bar-label')
       .attr('transform', d => `translate(${xScaleBar(d.name)}, ${yScale(d.renewable)})`)
       .attr('dx', xScaleBar.bandwidth() / 2)
       .attr('dy', -5)
@@ -261,28 +262,28 @@ let scrollVis = function () {
       .attr('x1', xScaleLine(1996))
       .attr('x2', xScaleLine(1996))
       .attr('y1', height)
-      .attr('y2', height)
-      .attr('class', 'trendline')
+      .attr('y2', height) // hides line at start
+      .attr('class', 'label line')
       .style('stroke', 'grey')
       .style('stroke-dasharray', '8px 4px')
-      .style('stroke-width', 2)
-      .style('opacity', 0);
+      .style('stroke-width', 2);
     g.append('text')
       .attr('x', xScaleLine(1996) + 2)
       .attr('y', 20)
       .text('Oil Reserves')
-      .attr('class', 'label')
+      .attr('class', 'label text')
       .style('opacity', 0);
     g.append('text')
       .attr('x', xScaleLine(1996) + 2)
       .attr('y', 40)
       .text('Discovered in 1996')
-      .attr('class', 'label')
+      .attr('class', 'label text')
       .style('opacity', 0);
 
+    // imgae for Ethiopia
     g.append('image')
       .attr('class', 'ethiopia')
-      .attr('xlink:href', 'images/earth-sun.jpg')
+      .attr('xlink:href', 'images/ethiopia.png')
       .attr('x', 0).attr('y', 0)
       .attr('width', width).attr('height', height)
       .style('opacity', 0);
@@ -377,9 +378,11 @@ let scrollVis = function () {
     for (let i = 0; i < 12; i++) {
       updateFunctions[i] = function () { };
     }
+    updateFunctions[1] = updateWelcome;
     updateFunctions[4] = updateEQG;
     updateFunctions[6] = updateGDP;
     updateFunctions[7] = updateRenewable;
+    updateFunctions[8] = updateEthiopia;
     updateFunctions[9] = updateGDP2;
     updateFunctions[10] = updateRenewable2;
     updateFunctions[11] = updateClosing;
@@ -436,13 +439,13 @@ let scrollVis = function () {
     console.log('SHOW WELCOME');
 
     g.selectAll('.wind-img')
-      .transition()
-      .duration(0)
+      .transition(hide)
       .style('opacity', 0);
 
     let bubbles = g.selectAll('.bubble');
     bubbles.selectAll('circle')
       .transition(hide)
+      .attr('r', 0)
       .style('opacity', 0);
     bubbles.selectAll('text')
       .transition(hide)
@@ -473,10 +476,12 @@ let scrollVis = function () {
       .transition(hide)
       .style('opacity', 0);
 
-    let bubbles = g.selectAll('.bubble');
+    let bubbles = g.selectAll('.bubble').style('opacity', 1);
     bubbles.selectAll('circle')
+      .style('opacity', 1)
       .transition(show)
-      .style('opacity', 1);
+      .ease(d3.easeCubic)
+      .attr('r', d => rScale(d.value));
     bubbles.selectAll('text')
       .transition(show)
       .style('opacity', 1);
@@ -496,6 +501,7 @@ let scrollVis = function () {
     let bubbles = g.selectAll('.bubble');
     bubbles.selectAll('circle')
       .transition(hide)
+      .attr('r', 0)
       .style('opacity', 0);
     bubbles.selectAll('text')
       .transition(hide)
@@ -528,8 +534,8 @@ let scrollVis = function () {
     hideAxes();
     g.selectAll('.bar')
       .transition(hide)
-      // .attr('height', 0)
-      // .attr('y', 0)
+      .attr('height', 0)
+      .attr('y', height)
       .style('opacity', 0);
 
     g.selectAll('.eqg-img')
@@ -560,10 +566,24 @@ let scrollVis = function () {
     g.selectAll('.line')
       .transition(hide)
       .style('opacity', 0);
-
+    g.select('.label.line')
+      .transition(hide)
+      .style('opacity', 0)
+      .attr('y1', height);
+    g.selectAll('.label.text')
+      .transition(hide)
+      .style('opacity', 0);
+    yScale.domain([0, 100]);
     g.selectAll('.bar')
+      .style('opacity', 1.0)
       .transition(show)
-      .style('opacity', 1.0);
+      .ease(d3.easeCubic)
+      .attr('height', d => height - yScale(d.renewable))
+      .attr('y', d => yScale(d.renewable));
+    g.selectAll('.bar-label')
+      .transition(show)
+      .style('opacity', 1);
+
   }
 
   /**
@@ -576,13 +596,13 @@ let scrollVis = function () {
    */
   function showGDP() {
     console.log('SHOW GDP');
-
-    showAxes(xAxisLine, yAxis);
+    yScale.domain([0, 21736.50071]);
+    showAxes(xAxisLine, yAxis.tickFormat(d3.format('0,d')));
 
     g.selectAll('.bar')
       .transition(hide)
-      // .attr('height', 0)
-      // .attr('y', 0)
+      .attr('height', 0)
+      .attr('y', height)
       .style('opacity', 0);
 
     g.selectAll('#renewable-path')
@@ -590,6 +610,13 @@ let scrollVis = function () {
       .style('opacity', 0);
 
     g.selectAll('#gdp-path')
+      .style('opacity', 1);
+    g.select('.label.line')
+      .style('opacity', 1)
+      .transition(show)
+      .attr('y1', 0);
+    g.selectAll('.label.text')
+      .transition(show)
       .style('opacity', 1);
   }
 
@@ -603,14 +630,21 @@ let scrollVis = function () {
    */
   function showRenewable() {
     console.log('SHOW RENEWABLE');
-
-    showAxes(xAxisLine, yAxis);
+    yScale.domain([0, 1]);
+    showAxes(xAxisLine, yAxis.tickFormat(d3.format('.0%')));
 
     g.selectAll('.ethiopia')
       .transition(hide)
       .style('opacity', 0);
 
     g.selectAll('#renewable-path')
+      .style('opacity', 1);
+    g.select('.label.line')
+      .style('opacity', 1)
+      .transition(show)
+      .attr('y1', 0);
+    g.selectAll('.label.text')
+      .transition(show)
       .style('opacity', 1);
   }
 
@@ -630,6 +664,13 @@ let scrollVis = function () {
     g.selectAll('.line')
       .transition(hide)
       .style('opacity', 0);
+    g.select('.label.line')
+      .transition(hide)
+      .style('opacity', 0)
+      .attr('y1', height);
+    g.selectAll('.label.text')
+      .transition(hide)
+      .style('opacity', 0);
 
     g.selectAll('.ethiopia')
       .transition(show)
@@ -646,7 +687,8 @@ let scrollVis = function () {
    */
   function showGDP2() {
     console.log('SHOW GDP2');
-    showAxes(xAxisLine, yAxis);
+    yScale.domain([0, 44085.55618]);
+    showAxes(xAxisLine, yAxis.tickFormat(d3.format('0,d')));
 
     g.selectAll('.ethiopia')
       .transition(hide)
@@ -667,7 +709,9 @@ let scrollVis = function () {
    *
    */
   function showRenewable2() {
-    console.log('SHOW RENEWABLE');
+    console.log('SHOW RENEWABLE2');
+    yScale.domain([0, 1]);
+    showAxes(xAxisLine, yAxis.tickFormat(d3.format('.0%')));
 
     g.selectAll('.closing')
       .transition(hide)
@@ -709,12 +753,14 @@ let scrollVis = function () {
   function showAxes(xAxis, yAxis) {
     console.log('SHOW AXES' + xAxis.scale().domain() + yAxis.scale().domain());
     g.select('.x.axis')
-      .call(xAxis)
       .transition(show)
+      .ease(d3.easeCubic)
+      .call(xAxis)
       .style('opacity', 1);
     g.select('.y.axis')
-      .call(yAxis)
       .transition(show)
+      .ease(d3.easeCubic)
+      .call(yAxis)
       .style('opacity', 1);
   }
 
@@ -745,19 +791,32 @@ let scrollVis = function () {
 
   //TODO: do something with dynamic text?
   /**
-   * updateEQG - increase/decrease
-   * percent displayed
+   * updateWelcome -
    *
    * @param progress - 0.0 - 1.0 -
    *  how far user has scrolled in section
    */
-  function updateEQG(progress) {
+  function updateWelcome(progress) {
     g.selectAll('.percent-title')
       .transition()
       .duration(0)
       .style('opacity', progress);
     g.selectAll('.percent-title.highlight')
       .style('font-size', progress * 120);
+  }
+
+  /**
+   * updateEQG -
+   *
+   * @param progress - 0.0 - 1.0 -
+   *  how far user has scrolled in section
+   */
+  function updateEQG(progress) {
+    g.selectAll('.eqg-img')
+      .attr('x', -250 * progress)
+      .attr('y', -250 * progress)
+      .attr('height', height + 500 * progress)
+      .attr('width', width + 500 * progress);
   }
   /**
    * updateGDP - progressively draw more of line
@@ -785,6 +844,20 @@ let scrollVis = function () {
     let totalLength = path.node().getTotalLength();
     path
       .attr('stroke-dashoffset', totalLength - totalLength * progress);
+  }
+
+  /**
+   * updateEthiopia -
+   *
+   * @param progress - 0.0 - 1.0 -
+   *  how far user has scrolled in section
+   */
+  function updateEthiopia(progress) {
+    g.selectAll('.ethiopia')
+      .attr('x', -250 * progress)
+      .attr('y', -250 * progress)
+      .attr('height', height + 500 * progress)
+      .attr('width', width + 500 * progress);
   }
 
   /**
