@@ -23,7 +23,7 @@ let scrollVis = function () {
   // Setup rScale for bubbles
   let rScale = d3.scaleLinear()
     .range([0, width / 3]);
-  let color = d3.scaleOrdinal(d3.schemeAccent);
+  let color = d3.scaleOrdinal(d3.schemeSet3);
 
   // Setup x for line chart
   let xScaleLine = d3.scaleLinear()
@@ -81,10 +81,10 @@ let scrollVis = function () {
       window.worldData = worldData;
       window.countryData = countryData
       const barData = [
-        { name: 'EQG', renewable: 83.88478497, color: 'orange' },
-        { name: 'USA', renewable: 4.423864838, color: 'blue' },
-        { name: 'China', renewable: 32.11212548, color: 'red' },
-        { name: 'India', renewable: 56.75214783, color: 'green' },
+        { name: 'EQG', renewable: 83.88478497, color: '#FF9933' },
+        { name: 'USA', renewable: 4.423864838, color: '#6699CC' },
+        { name: 'China', renewable: 32.11212548, color: '#CC3333' },
+        { name: 'India', renewable: 56.75214783, color: '#607D3D' },
       ];
 
       xScaleLine.domain([1990, 2014]); // Will only look at these years
@@ -226,6 +226,15 @@ let scrollVis = function () {
       .style('text-anchor', 'middle')
       .text(d => d3.format('.1%')(d.renewable / 100))
       .style('opacity', 0);
+    bars.append('text')
+      .attr('class', 'bar-label')
+      .attr('transform', d => `translate(${xScaleBar(d.name)}, ${yScale(d.renewable)})`)
+      .attr('dx', xScaleBar.bandwidth() / 2)
+      .attr('dy', -25)
+      .style('text-anchor', 'middle')
+      .text(d => d.name)
+      .style('font-weight', 'bold')
+      .style('opacity', 0);
 
     // EQG linecharts
     // GDP LINE
@@ -239,7 +248,7 @@ let scrollVis = function () {
       .attr('class', 'line')
       .attr('id', 'gdp-path')
       .attr('d', line(data))
-      .attr('stroke', 'green')
+      .attr('stroke', 'steelblue')
       .attr('stroke-width', 2)
       .attr('fill', 'none');
     let totalLength = path.node().getTotalLength();
@@ -256,13 +265,43 @@ let scrollVis = function () {
       .attr('class', 'line')
       .attr('id', 'renewable-path')
       .attr('d', line(data))
-      .attr('stroke', 'steelblue')
+      .attr('stroke', 'green')
       .attr('stroke-width', 2)
       .attr('fill', 'none');
     totalLength = path.node().getTotalLength();
     path // make path "invisible"
       .attr('stroke-dasharray', totalLength + ' ' + totalLength)
       .attr('stroke-dashoffset', totalLength);
+
+    // Legend for line charts
+    let legend = g.append('g')
+      .attr('class', 'legend')
+      .attr('transform', `translate(25, 110)`)
+      .style('opacity', 0);
+    legend.append('rect')
+      .attr('class', 'gdp')
+      .attr('width', 15)
+      .attr('height', 15)
+      .style('fill', 'steelblue');
+    legend.append('text')
+      .attr('class', 'gdp')
+      .attr('transform', 'translate(20, 12)')
+      .style('fill', 'steelblue')
+      .style('font-size', '12px')
+      .text('GDP (mil USD)');
+    legend.append('rect')
+      .attr('class', 'renewable')
+      .attr('width', 15)
+      .attr('height', 15)
+      .attr('transform', 'translate(0, 25)')
+      .style('fill', 'green');
+    legend.append('text')
+      .attr('class', 'renewable')
+      .attr('transform', 'translate(20, 37)')
+      .style('fill', 'green')
+      .style('font-size', '12px')
+      .text('% Renewable');
+
 
     // Draw vertical line for oil discovery in 1996
     // style line and add label
@@ -308,7 +347,7 @@ let scrollVis = function () {
       .attr('class', 'line')
       .attr('id', 'gdp-path2')
       .attr('d', line(data))
-      .attr('stroke', 'green')
+      .attr('stroke', 'steelblue')
       .attr('stroke-width', 2)
       .attr('fill', 'none');
     totalLength = path.node().getTotalLength();
@@ -323,7 +362,7 @@ let scrollVis = function () {
       .attr('class', 'line')
       .attr('id', 'renewable-path2')
       .attr('d', line(data))
-      .attr('stroke', 'steelblue')
+      .attr('stroke', 'green')
       .attr('stroke-width', 2)
       .attr('fill', 'none');
     totalLength = path.node().getTotalLength();
@@ -581,6 +620,10 @@ let scrollVis = function () {
     g.selectAll('.label.text')
       .transition(hide)
       .style('opacity', 0);
+    g.selectAll('.legend')
+      .transition(hide)
+      .style('opacity', 0);
+
     yScale.domain([0, 100]);
     g.selectAll('.bar')
       .style('opacity', 1.0)
@@ -626,6 +669,9 @@ let scrollVis = function () {
     g.selectAll('.label.text')
       .transition(show)
       .style('opacity', 1);
+    g.selectAll('.legend')
+      .transition(show)
+      .style('opacity', 1);
   }
 
   /**
@@ -654,6 +700,9 @@ let scrollVis = function () {
     g.selectAll('.label.text')
       .transition(show)
       .style('opacity', 1);
+    g.selectAll('.legend')
+      .transition(show)
+      .style('opacity', 1);
   }
 
   /**
@@ -677,6 +726,9 @@ let scrollVis = function () {
       .style('opacity', 0)
       .attr('y1', height);
     g.selectAll('.label.text')
+      .transition(hide)
+      .style('opacity', 0);
+    g.selectAll('.legend')
       .transition(hide)
       .style('opacity', 0);
 
@@ -705,6 +757,9 @@ let scrollVis = function () {
     g.selectAll('#renewable-path2')
       .style('opacity', 0);
 
+    g.selectAll('.legend')
+      .transition(show)
+      .style('opacity', 1);
     g.selectAll('#gdp-path2')
       .style('opacity', 1);
   }
@@ -725,6 +780,9 @@ let scrollVis = function () {
       .transition(hide)
       .style('opacity', 0);
 
+    g.selectAll('.legend')
+      .transition(show)
+      .style('opacity', 1);
     g.selectAll('#renewable-path2')
       .style('opacity', 1);
   }
@@ -743,6 +801,9 @@ let scrollVis = function () {
     hideAxes();
 
     g.selectAll('.line')
+      .transition(hide)
+      .style('opacity', 0);
+    g.selectAll('.legend')
       .transition(hide)
       .style('opacity', 0);
 
