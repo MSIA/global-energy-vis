@@ -167,7 +167,7 @@ function makeLineChart(dataset, xName, yNames) {
 
       if (bindOptions.axisFormat) {
         chart.yFormatter = bindOptions.axisFormat.yAxis;
-        chart.xFormatter = bindOptions.axisFormat.xAxis;
+        chart.xFormatter = chart.formatAsNumber;
       } else {
         chart.xFormatter = chart.formatAsNumber;
         chart.yFormatter = chart.formatAsFloat;
