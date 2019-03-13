@@ -111,6 +111,11 @@
         font-family: 'Playfair Display', serif;
       }
 
+      .chart {
+        width: 100%;
+        margin: auto;
+      }
+
 </style>
 </head>
 <body>
@@ -127,6 +132,7 @@
     <u>Choose 4 metrics:</u>
   </div>
   <div class="countryURL"><%=country%></div>
+  <div class = "chart"></div>
 </body>
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -383,10 +389,10 @@
     //margins and svg
     var margin = { top: 80, right: 30, bottom: 40, left: 50 };
 
-    var width = 1580 - margin.left - margin.right;
-    var height = 720 - margin.top - margin.bottom;
-
-    var svg1 = d3.select("body").append("svg")
+    var div = d3.select('.chart');
+    var width = parseInt(div.style('width')) - margin.left - margin.right;
+    var height = Math.min(width / 5 * 3, 780) - margin.top - margin.bottom;
+    var svg1 = div.append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom);
 
