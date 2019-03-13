@@ -962,8 +962,10 @@ let scrollVis = function () {
    *  how far user has scrolled in section
    */
   function updateClosing(progress) {
+    progress = Math.min(progress, 1);
+    console.log(progress)
     g.selectAll('.closing.sub-title')
-      .attr('dy', progress * -50)
+      .attr('dy', progress * -65)
       .style('opacity', 0.3 + progress * 0.7);
   }
 
