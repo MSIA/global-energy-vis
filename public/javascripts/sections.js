@@ -3,7 +3,7 @@ let scrollVis = function () {
   // and margins of the vis area.
   let width = 600;
   let height = 520;
-  let margin = { top: 10, left: 40, bottom: 40, right: 50 };
+  let margin = { top: 10, left: 50, bottom: 40, right: 50 };
 
   // Keep track of which visualization
   // we are on and which was the last
