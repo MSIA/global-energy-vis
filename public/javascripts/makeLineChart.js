@@ -16,7 +16,7 @@ function makeLineChart(dataset, xName, yNames) {
      * Takes either a list of colors, a function or an object with the mapping already in place
      * */
     if (typeof colorOptions == 'function') {
-      return colorOptions
+      return colorOptions;
     } else if (Array.isArray(colorOptions)) {
       //  If an array is provided, map it to the domain
       var colorMap = {}, cColor = 0;
@@ -26,12 +26,12 @@ function makeLineChart(dataset, xName, yNames) {
       }
       return function (group) {
         return colorMap[group];
-      }
+      };
     } else if (typeof colorOptions == 'object') {
       // if an object is provided, assume it maps to  the colors
       return function (group) {
         return colorOptions[group];
-      }
+      };
     }
   }
 
@@ -60,12 +60,12 @@ function makeLineChart(dataset, xName, yNames) {
   function getYMax() {
     return d3.max(getYFuncts().map(function (fn) {
       return d3.max(chart.data, fn);
-    }))
+    }));
   }
 
   function prepareData() {
     // Accessor for x dimension
-    chart.xFunct = function (d) { return d[xName] };
+    chart.xFunct = function (d) { return d[xName]; };
     chart.bisectYear = d3.bisector(chart.xFunct).left;
 
     let yName, cY;
@@ -90,7 +90,7 @@ function makeLineChart(dataset, xName, yNames) {
     for (yName in chart.yNames) {
       cY = chart.groupObjs[yName];
       cY.visible = true;
-      cY.yFunct = getYFn(chart.yNames[yName].column)
+      cY.yFunct = getYFn(chart.yNames[yName].column);
     }
   }
   prepareData();
@@ -165,6 +165,14 @@ function makeLineChart(dataset, xName, yNames) {
         chart.yAxisLabel = chart.yNames[0];
       }
 
+      if (bindOptions.axisFormat) {
+        chart.yFormatter = bindOptions.axisFormat.yAxis;
+        chart.xFormatter = bindOptions.axisFormat.xAxis;
+      } else {
+        chart.xFormatter = chart.formatAsNumber;
+        chart.yFormatter = chart.formatAsFloat;
+      }
+
       if (bindOptions.colors) {
         colorFunct = updateColorFunction(bindOptions.colors);
       }
@@ -208,7 +216,7 @@ function makeLineChart(dataset, xName, yNames) {
       .style("padding-bottom", (chart.divHeight / chart.divWidth) * 100 + "%")
       .append("div").attr("class", "outer-box")
       .append("div").attr("class", "inner-box");
-      console.log('resize.' + chart.selector)
+      console.log('resize.' + chart.selector);
     chart.objs.chartDiv = d3.select(chart.selector);
     d3.select(window).on('resize.' + chart.selector, chart.update);
     chart.objs.g = chart.objs.chartDiv.append('svg')
@@ -248,7 +256,7 @@ function makeLineChart(dataset, xName, yNames) {
         .text(chart.yAxisLabel);
 
     return chart;
-  }
+  };
   chart.render = function () {
 
     var yName, cY = null;
@@ -258,8 +266,8 @@ function makeLineChart(dataset, xName, yNames) {
     function toggleSeries(yName) {
       cY = chart.groupObjs[yName];
       cY.visible = !cY.visible;
-      if (cY.visible == false) { cY.objs.legend.div.style("opacity", "0.3") } else { cY.objs.legend.div.style("opacity", "1") }
-      chart.update()
+      if (cY.visible == false) { cY.objs.legend.div.style("opacity", "0.3"); } else { cY.objs.legend.div.style("opacity", "1"); }
+      chart.update();
     }
     function getToggleFn(series) {
       return function () {
@@ -341,7 +349,7 @@ function makeLineChart(dataset, xName, yNames) {
       }).on("mousemove", mouseHover);
 
     return chart;
-  }
+  };
 
   function mouseHover() {
     let x0 = chart.xScale.invert(d3.mouse(this)[0]),
@@ -353,7 +361,7 @@ function makeLineChart(dataset, xName, yNames) {
     let yName, cY;
     for (yName in chart.groupObjs) {
       cY = chart.groupObjs[yName];
-      if (cY.visible == false) { continue }
+      if (cY.visible == false) { continue; }
       //Move the tooltip
       cY.objs.tooltip.attr("transform", "translate(" + chart.xScale(chart.xFunct(d)) + "," + chart.yScale(cY.yFunct(d)) + ")");
       //Change the text
