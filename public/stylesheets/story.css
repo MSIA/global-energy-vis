@@ -1,0 +1,89 @@
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.container {
+  width: 890px;
+}
+
+#graphic {
+  padding-top: 60px;
+}
+
+
+#sections {
+  position: relative;
+  display: inline-block;
+  width: 300px;
+  top: 0px;
+  z-index: 90;
+  padding-bottom: 200px;
+}
+
+.step {
+  margin-bottom: 300px;
+  font-size: 20px;
+  line-height: 23px;
+  color: #444444;
+}
+
+#sections h1 {
+  font-family: 'Playfair Display', serif;
+  font-weight: bold;
+  margin-bottom: 2px;
+  color: #636363;
+  line-height: 1.2em;
+}
+
+#sections p, h3 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+#extra-space {
+  height: 250px;
+}
+
+#vis {
+  display: inline-block;
+  position: fixed;
+  top: 60px;
+  z-index: 1;
+  margin-left: 0;
+  /* height: 600px; */
+  /* width: 600px; */
+  /* background-color: #ddd; */
+}
+
+#vis .title {
+  font-size: 100px;
+  text-anchor: middle;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+}
+#vis .sub-title {
+  font-size: 60px;
+  text-anchor: middle;
+  font-family: 'Playfair Display', serif;
+  font-weight: bold;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #666;
+  shape-rendering: crispEdges;
+}
+
+
+#explore {
+  display: block;
+  margin: auto;
+  width: 250px;
+  height: 50px;
+  font-size: 22px;
+  color: white;
+  background-color: black;
+}
+#explore:hover {
+  background-color: crimson;
+}
