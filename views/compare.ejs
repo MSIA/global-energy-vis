@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title>Compare</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700|Playfair+Display:400,700" rel="stylesheet">
+
+  <style>
+    .xAxis .domain {
+      display: none;
+    }
+
+    .yAxis .domain {
+      display: none;
+    }
+
+    .yAxis text {
+      fill: #626065;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px !important;
+    }
+
+    .xAxis text {
+      fill: #626065;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px !important;
+    }
+
+    .barsText {
+      fill: #343434;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px !important;
+    }
+
+    .countryText {
+      fill: #343434;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px !important;
+    }
+
+    .names {
+      font-size: 12px !important;
+    }
+
+    select {
+      overflow: auto;
+      position: absolute;
+      width: 300px;
+      height: 20px;
+    }
+
+    .value-time {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .yearName {
+      font-family: 'Montserrat', sans-serif;
+
+    }
+
+    body {
+      margin: 0;
+    }
+
+    svg {
+      border: 0.5px solid lightgrey;
+    }
+
+    .navbar {
+      font-family: 'Playfair Display', serif;
+      height: 80px;
+      background-color: #173e43;
+      color: #dddfd4;
+    }
+    .navbar h1{
+      font-size: 3em;
+    }
+
+    #countries {
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      fill: #626065;
+    }
+
+    #metrics {
+      text-align: center;
+      font-family: 'Montserrat', sans-serif;
+      fill: #626065;
+    }
+
+    .countryURL {
+      visibility: hidden;
+      font-size: 4px !important;
+    }
+
+    .invis {
+      visibility: hidden;
+      font-size: 4px !important;
+    }
+
+    .button1 {
+        background-color: white;
+        color: black;
+        border: 2px solid #e7e7e7;
+        font-family: 'Playfair Display', serif;
+      }
+
+      .chart {
+        width: 100%;
+        margin: auto;
+      }
+
+</style>
+</head>
+<body>
+  <div class="navbar">
+    <h1>Comparing <%= country %> to Other Countries</h1>
+    <a href = "/trends/<%= country %>"><button type="button" class = "button1">View Trends</button></a>
+  </div>
+  <div class="invis"><%= country %></div>
+  <div id="countries">
+    <u>Choose 4 countries:</u>
+  </div>
+  <div class="invis"><%=country%></div>
+  <div id="metrics">
+    <u>Choose 4 metrics:</u>
+  </div>
+  <div class="countryURL"><%=country%></div>
+  <div class = "chart"></div>
+</body>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://unpkg.com/d3-simple-slider"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+<script>
+
+  //defining the dataswap function
+
+  function dataswap(yearGroup, newMetrics, newCountries, svg) {
+
+    //filter countries
+    thisDataYears = datMaster.filter(function (d) {
+      if (newCountries.indexOf(d.Country_Name) >= 0) { return d; }
+    });
+
+    //filter new data for specific year
+    thisData = thisDataYears.filter(function (d) {
+      if (d.Year == yearGroup) { return d; }
+    });
+
+    z = d3.scaleOrdinal()
+      .range(["#b3de69", "#fccde5", "#bc80bd", "#ffed6f"]);
+
+    x0.domain(newMetrics);
+    x1.domain(newCountries).rangeRound([0, x0.bandwidth()]);
+    y.domain([
+      d3.min(thisDataYears, function (d) {
+        return d3.min(newMetrics, function (newMetrics) {
+          return d[newMetrics];
+        });
+      }),
+      d3.max(thisDataYears, function (d) {
+        return d3.max(newMetrics, function (newMetrics)
+        { return d[newMetrics];
+        });
+      })]).nice();
+
+
+    svg.selectAll(".yAxis")
+      .call(d3.axisLeft(y)
+        .tickFormat(d3.format(".0%")));
+
+    svg.selectAll(".xAxis")
+      .attr("transform", "translate(0," + (y(0)) + ")")
+      .call(d3.axisBottom(x0)
+        .tickFormat(function (d) { return mapping[d]; }));
+
+    //restructuring data
+    thisDat_t = newMetrics.map(function (col) {
+      return {
+        metric: col, sub: newCountries.map(function (k) {
+          var val = thisData.filter(function (d) {
+            if (d['Country_Name'] == k) {
+              return d;
+            }
+          });
+          return { key: k, value: val[0][col], ttval: val[0][absMapping[col]] , ttName: absMapping[col]};
+        })
+      };
+    });
+
+    //Updating barGroup
+    svg.selectAll('.overallMetric')
+      .data(thisDat_t)
+      .attr("transform", function (d) { return "translate(" + x0(d.metric) + ",0)"; })
+      .selectAll('rect')
+      .data(function (d) { return d.sub; })
+      .transition()
+      .duration(1000)
+      .attr("x", function (d) { return x1(d.key); })
+      .attr("y", function (d) { return y(Math.max(0, d.value)); })
+      .attr("width", x1.bandwidth())
+      .attr("height", function (d) { return Math.abs(y(0) - y(d.value)); })
+      .attr("fill", function (d) { return z(d.key); });
+
+    //Updating legend
+    svg.selectAll('.legend')
+      .data(newCountries.slice())
+      .transition()
+      .duration(1000);
+
+    svg.selectAll(".names")
+      .data(newCountries.slice())
+      .transition()
+      .duration(1000)
+      .text(function (d) { return d; });
+
+    //Updating text
+    svg.selectAll('.overallMetric')
+      .data(thisDat_t)
+      .selectAll('.barsText')
+      .data(function (d) { return d.sub; })
+      .transition()
+      .duration(1000)
+      .attr('dx',function (d) { return x1(d.key) -30; })
+      .attr('dy',function (d) { return y(Math.max(0, d.value)) -10; })
+      .text(function(d) {
+        if(d.ttName == "renewable_percentage") {
+          return ("% of Renewable Energy: " + d3.format(".0%")(d.ttval));
+        }
+        else if(d.ttName == "Pop_Tm") {
+          return ("Population (in M): " + d3.format(".1f")(d.ttval));
+        }
+        else {
+          return (mappingText[d.ttName] + ": " + d3.format("$.2f")(d.ttval))
+        }
+      return d.ttval})
+      .style('opacity', 0);
+
+    svg.selectAll('.overallMetric')
+      .data(thisDat_t)
+      .selectAll('.countryText')
+      .data(function (d) { return d.sub; })
+      .transition()
+      .duration(1000)
+      .attr('dx',function (d) { return x1(d.key) -30; })
+      .attr('dy',function (d) { return y(Math.max(0, d.value)) -20; })
+      .text(function(d) {
+        return d.key;
+      })
+      .style('opacity', 0);
+
+  }
+
+  d3.csv("/data/full.csv", function (d, i, columns) {
+    for (var i = 1, n = 17; i < n; ++i) d[columns[i]] = +d[columns[i]];
+    for (var i = 20, n = 31; i < n; ++i) d[columns[i]] = +d[columns[i]];
+    d['EdExp'] = d["Education_Exp"] * d["GDP_PerCap"];
+    d["HealthExp"] = d["Health_Exp"] * d["GDP_PerCap"];
+    return d;
+  }).then(ready)
+    .catch(e => console.error(e));
+
+  function ready(dat) {
+    datMaster = dat;
+    var countryList = d3.set(dat.map(function (d) { return d.Country_Name })).values();
+    countryList.unshift("");
+    var yearList = d3.set(dat.map(function (d) { return d.Year })).values();
+
+    var firstCountry = $('.countryURL')[0]['textContent'];
+    var countryIncluded = ["France", "India", "United Kingdom", "United States"];
+
+    if (countryIncluded.indexOf(firstCountry) >= 0) {
+      countryIncluded[countryIncluded.indexOf(firstCountry)] = countryIncluded[0];
+    }
+    countryIncluded[0] = firstCountry;
+
+    var dropdown = d3.select('#countries');
+
+    dropdown
+      .append("select")
+      .attr('class', 'country1')
+      .attr('disabled',false)
+      .selectAll('option')
+      .data(countryList).enter()
+      .append('option')
+      .attr("value", function (d) { return d; })
+      .text(function (d) { return d; });
+
+    $('.country1').select2({ placeholder: countryIncluded[0] });
+
+    dropdown
+      .append("select")
+      .attr('class', 'country2')
+      .selectAll('option')
+      .data(countryList).enter()
+      .append('option')
+      .attr("value", function (d) { return d; })
+      .text(function (d) { return d; });
+
+    $('.country2').select2({ placeholder: countryIncluded[1] });
+
+    dropdown
+      .append("select")
+      .attr('class', 'country3')
+      .selectAll('option')
+      .data(countryList).enter()
+      .append('option')
+      .attr("value", function (d) { return d; })
+      .text(function (d) { return d; });
+
+    $('.country3').select2({ placeholder: countryIncluded[2] });
+
+    dropdown
+      .append("select")
+      .attr('class', 'country4')
+      .selectAll('option')
+      .data(countryList).enter()
+      .append('option')
+      .attr("value", function (d) { return d; })
+      .text(function (d) { return d; });
+
+    $('.country4').select2({ placeholder: countryIncluded[3] });
+
+    //dropdowns for metrics
+
+    var metricList = ["", 'renewable_percentage', 'Education_Exp', 'GDP_Growth', 'Health_Exp', 'Pop_Growth'];
+    var cols = ['renewable_percentage', 'GDP_Growth', 'Health_Exp', 'Pop_Growth'];
+
+    mapping = { "Education_Exp": "Education Expenditure", "GDP_Growth": "GDP Growth", "Pop_Growth": "Population Growth", "Health_Exp": "Health Expenditure", "renewable_percentage": "% Renewable Energy" };
+    var mappingRev = { "Education Expenditure": "Education_Exp", "GDP Growth": "GDP_Growth", "Population Growth": "Pop_Growth", "Health Expenditure": "Health_Exp", "% Renewable Energy": "renewable_percentage" };
+
+    var dropdown2 = d3.select('#metrics');
+
+    dropdown2
+      .append("select")
+      .attr('class', 'metric1')
+      .selectAll('option')
+      .data(metricList).enter()
+      .append('option')
+      .attr("value", function (d) { return d; })
+      .text(function (d) { return mapping[d]; });
+
+    $('.metric1').select2({ placeholder: "% Renewable Energy" });
+
+    dropdown2
+      .append("select")
+      .attr('class', 'metric2')
+      .selectAll('option')
+      .data(metricList).enter()
+      .append('option')
+      .attr("value", function (d) { return d; })
+      .text(function (d) { return mapping[d]; });
+
+    $('.metric2').select2({ placeholder: "GDP Growth" });
+
+    dropdown2
+      .append("select")
+      .attr('class', 'metric3')
+      .selectAll('option')
+      .data(metricList).enter()
+      .append('option')
+      .attr("value", function (d) { return d; })
+      .text(function (d) { return mapping[d]; });
+
+    $('.metric3').select2({ placeholder: "Health Expenditure" });
+
+    dropdown2
+      .append("select")
+      .attr('class', 'metric4')
+      .selectAll('option')
+      .data(metricList).enter()
+      .append('option')
+      .attr("value", function (d) { return d; })
+      .text(function (d) { return mapping[d]; });
+
+    $('.metric4').select2({ placeholder: "Population Growth" });
+
+    absMapping = { "Education_Exp": "EdExp", "GDP_Growth": "GDP_PerCap", "Pop_Growth": "Pop_Tm", "Health_Exp": "HealthExp", "renewable_percentage": "renewable_percentage" };
+    //margins and svg
+    var margin = { top: 80, right: 30, bottom: 40, left: 50 };
+
+    var div = d3.select('.chart');
+    var width = parseInt(div.style('width')) - margin.left - margin.right;
+    var height = Math.min(width / 5 * 3, 780) - margin.top - margin.bottom;
+    var svg1 = div.append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom);
+
+    var svg = svg1
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    //Scale definitions
+    //For the country
+    x0 = d3.scaleBand()
+      .rangeRound([0, width])
+      .paddingInner(0.1);
+
+    //For the metric
+    x1 = d3.scaleBand()
+      .padding(0.05);
+
+    //for the y-axis
+    y = d3.scaleLinear()
+      .rangeRound([height, 0]);
+
+    //For the country
+    z = d3.scaleOrdinal()
+      .range(["#b3de69", "#fccde5", "#bc80bd", "#ffed6f"]);
+
+
+    var yearNow = svg1.append("text")
+      .attr('class', 'value-time')
+      .attr('dx', 202)
+      .attr('dy', 60)
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 14)
+      .style('fill', '#626065')
+      .text(2000);
+
+    svg1.append("text")
+      .attr('class', 'yearName')
+      .attr('dx', 200)
+      .attr('dy', 40)
+      .attr("font-family", "sans-serif")
+      .attr("font-size", 18)
+      .style('fill', '#626065')
+      .text("Year");
+
+
+    var sliderTime = d3
+      .sliderBottom()
+      .min(d3.min(yearList))
+      .max(d3.max(yearList))
+      .step(1)
+      .width(1000)
+      .tickFormat(d3.format('.4'))
+      .tickValues(yearList)
+      .default(2000)
+      .on('onchange', changeYear);
+
+    function changeYear() {
+      yearNow.text(sliderTime.value());
+      dataswap(sliderTime.value(), cols, countryIncluded, svg);
+    };
+
+    var gTime = svg1.append("g")
+      .attr('class', 'slider-time')
+      .attr('width', 500)
+      .attr('height', 100)
+      .attr('transform', 'translate(280,30)');
+
+    gTime.call(sliderTime);
+
+    $('.country1').on('change', function (e) {
+      var c1 = $(".country1 option:selected").text();
+      countryIncluded[0] = c1;
+      dataswap(sliderTime.value(), cols, countryIncluded, svg);
+    });
+
+    $('.country2').on('change', function (e) {
+      var c2 = $(".country2 option:selected").text();
+      countryIncluded[1] = c2;
+      dataswap(sliderTime.value(), cols, countryIncluded, svg);
+    });
+
+    $('.country3').on('change', function (e) {
+      var c3 = $(".country3 option:selected").text();
+      countryIncluded[2] = c3;
+      dataswap(sliderTime.value(), cols, countryIncluded, svg);
+    });
+
+    $('.country4').on('change', function (e) {
+      var c4 = $(".country4 option:selected").text();
+      countryIncluded[3] = c4;
+      dataswap(sliderTime.value(), cols, countryIncluded, svg);
+    });
+
+    $('.metric1').on('change', function (e) {
+      var c1 = $(".metric1 option:selected").text();
+      cols[0] = mappingRev[c1];
+      dataswap(sliderTime.value(), cols, countryIncluded, svg);
+    });
+
+    $('.metric2').on('change', function (e) {
+      var c2 = $(".metric2 option:selected").text();
+      cols[1] = mappingRev[c2];
+      dataswap(sliderTime.value(), cols, countryIncluded, svg);
+    });
+
+    $('.metric3').on('change', function (e) {
+      var c3 = $(".metric3 option:selected").text();
+      cols[2] = mappingRev[c3];
+      dataswap(sliderTime.value(), cols, countryIncluded, svg);
+    });
+
+    $('.metric4').on('change', function (e) {
+      var c4 = $(".metric4 option:selected").text();
+      cols[3] = mappingRev[c4];
+      dataswap(sliderTime.value(), cols, countryIncluded, svg);
+    });
+
+    var dataYears = dat.filter(function (d) {
+      if (countryIncluded.indexOf(d.Country_Name) >= 0) { return d; }
+    });
+
+
+    var data = dataYears.filter(function (d) {
+      if (d.Year == 2000) { return d; }
+    });
+
+    //Setting the domain
+    x0.domain(cols);
+    x1.domain(countryIncluded).rangeRound([0, x0.bandwidth()]);
+    y.domain([
+      d3.min(dataYears, function (d) {
+        return d3.min(cols, function (cols) {
+          return d[cols];
+        });
+      }),
+      d3.max(dataYears, function (d) {
+        return d3.max(cols, function (cols) {
+          return d[cols];
+        });
+      })]).nice();
+
+    //Restructuring data
+    var dat_t = cols.map(function (col) {
+      return {
+        metric: col, sub: countryIncluded.map(function (k) {
+          var val = data.filter(function (d) {
+            if (d['Country_Name'] == k) {
+              return d;
+            }
+          });
+          return { key: k, value: val[0][col], ttval: val[0][absMapping[col]], ttName: absMapping[col] };
+        })
+      };
+    });
+
+    //Creating groups for bar
+
+    var barGroup = svg.append("g")
+      .attr('class', 'barGroup')
+      .selectAll("g")
+      .data(dat_t)
+      .enter().append("g")
+      .attr('class', 'overallMetric')
+      .attr("transform", function (d) { return "translate(" + x0(d.metric) + ",0)"; })
+      .selectAll("rect")
+      .data(function (d) { return d.sub; }, function(d) { return d.key; })
+      .enter().append("g")
+      .attr('class','metCountry')
+      .append("rect")
+      .attr("x", function (d) { return x1(d.key); })
+      .attr("y", function (d) { return y(Math.max(0, d.value)); })
+      .attr("width", x1.bandwidth())
+      .attr("height", function (d) { return Math.abs(y(0) - y(d.value)); })
+      .attr("fill", function (d) { return z(d.key); });
+
+    mappingText = {"EdExp": "Expenditure per capita", "GDP_PerCap": "GDP per capita", "Pop_Tm" :"Population (in millions)", "HealthExp": "Expenditure per capita", "renewable_percentage": "% of Renewable Energy" };
+
+    svg.selectAll('.metCountry')
+      .append('text')
+      .attr('class', 'barsText')
+      .attr('dx',function (d) { return x1(d.key) -30; })
+      .attr('dy',function (d) { return y(Math.max(0, d.value)) -10; })
+      .text(function(d) {
+        if(d.ttName == "renewable_percentage") {
+          return ("% of Renewable Energy: " + d3.format(".0%")(d.ttval));
+        }
+        else if(d.ttName == "Pop_Tm") {
+          return ("Population (in M): " + d3.format(".1f")(d.ttval));
+        }
+        else {
+          return (mappingText[d.ttName] + ": " + d3.format("$.2f")(d.ttval))
+        }
+      return d.ttval})
+      .style('opacity', 0);
+
+    svg.selectAll('.metCountry')
+      .append('text')
+      .attr('class', 'countryText')
+      .attr('dx',function (d) { return x1(d.key) -30; })
+      .attr('dy',function (d) { return y(Math.max(0, d.value)) -20; })
+      .text(function(d) {
+        return d.key;
+      })
+      .style('opacity', 0);
+
+    svg.selectAll('.metCountry')
+        .on('mouseenter', function() {
+          //define hover events
+          d3.select(this)
+            .selectAll('text')
+            .transition()
+            .duration(0)
+            .style('opacity', 1)
+
+          d3.select(this).moveToFront();
+        })
+        .on('mouseleave', function() {
+          //define mouseleave events
+          d3.select(this)
+            .selectAll('text')
+            .transition()
+            .style('opacity', 0)
+
+          d3.select(this).moveToBack();
+        })
+
+    //Move to front function
+    indexChild = 0
+    d3.selection.prototype.moveToFront = function() {
+      return this.each(function(){
+        this.parentNode.appendChild(this);
+      });
+    };
+    //Move to back function
+
+    d3.selection.prototype.moveToBack = function() {
+        return this.each(function() {
+            var firstChild = this.parentNode.firstChild;
+            if (firstChild) {
+                this.parentNode.insertBefore(this, firstChild);
+            }
+        });
+    };
+
+    //Updating x and y axis
+    svg.append("g")
+      .attr("class", "xAxis")
+      .attr("transform", "translate(0," + (y(0)) + ")")
+      .call(d3.axisBottom(x0)
+        .tickFormat(function (d) { return mapping[d]; }));
+
+    svg.append("g")
+      .attr("class", "yAxis")
+      .call(d3.axisLeft(y)
+        .tickFormat(d3.format(".0%")));
+
+    //Creating a legend
+    var legend = svg.append("g")
+      .attr("font-family", "Montserrat")
+      .attr("font-size", 10)
+      .attr("text-anchor", "end")
+      .selectAll("g")
+      .data(countryIncluded.slice())
+      .enter().append("g")
+      .attr('class', 'legend')
+      .attr("transform", function (d, i) { return "translate(" + (-500 + i * 150) + "," + 0 + ")"; });
+
+    legend.append("rect")
+      .attr("x", width - 19)
+      .attr("width", 19)
+      .attr("height", 19)
+      .attr("fill", z);
+
+    legend.append("text")
+      .attr('class', 'names')
+      .attr("x", width - 24)
+      .attr("y", 9.5)
+      .attr("dy", "0.32em")
+      .style('fill', '#626065')
+      .text(function (d) { return d; });
+
+    // svg.call(tooltip) // draws the tooltip;
+
+  };
+
+</script>
